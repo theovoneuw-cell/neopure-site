@@ -2606,22 +2606,54 @@ body { background: #20184d; color: var(--np-white); }
   .container { padding-inline: 20px; }
 
   /* HERO ----------------------------------------------------------------- */
-  .hero-top { gap: 16px; margin-bottom: 28px; }
-  .hero-meta { font-size: 0.72rem; letter-spacing: 0.16em; }
-  .hero-tag { font-size: 0.72rem; letter-spacing: 0.18em; gap: 10px; }
-  .hero-tag-bar { width: 22px; }
-  .hero-title { font-size: clamp(3rem, 16vw, 5rem); margin-bottom: 14px; }
-  .hero-slogan { font-size: 1.05rem; margin-bottom: 30px; max-width: 100%; }
-  .hero-sectors { gap: 12px; margin-bottom: 30px; max-width: 100%; }
-  .hero-sector a { padding: 12px 14px; gap: 12px; }
-  .hero-sector-name { font-size: 1rem; }
-  .hero-sector-sub { font-size: 0.78rem; }
-  .hero-actions { gap: 14px 18px; }
-  .hero-actions .btn-primary { width: 100%; justify-content: center; }
-  .hero-link { width: 100%; text-align: left; }
-  .hero-socials { margin-left: 0; gap: 8px; }
-  .hero-social { width: 40px; height: 40px; }
-  .hero-scroll { display: none; }
+  .hero { padding: 100px 0 120px; }
+  .hero-top {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 56px;            /* plus d'air avant le titre */
+  }
+  .hero-tag      { font-size: 0.72rem; letter-spacing: 0.18em; gap: 12px; }
+  .hero-tag-bar  { width: 26px; }
+  .hero-meta     { font-size: 0.7rem; letter-spacing: 0.16em; gap: 12px; opacity: 0.75; }
+
+  .hero-title    { font-size: clamp(3rem, 16vw, 5rem); margin-bottom: 24px; line-height: 0.95; }
+  .hero-slogan   { font-size: 1.1rem; margin-bottom: 48px; max-width: 100%; }
+
+  /* Pavés 01 / 02 : plus de padding, plus d'aération */
+  .hero-sectors  { gap: 16px; margin-bottom: 56px; max-width: 100%; }
+  .hero-sector a {
+    padding: 16px 18px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+  .hero-sector-idx { font-size: 0.74rem; padding-top: 0; align-self: center; }
+  .hero-sector-name { font-size: 1.05rem; }
+  .hero-sector-sub { font-size: 0.8rem; margin-top: 4px; }
+
+  /* Actions : bouton plein puis lien aligné naturel, puis socials sur leur ligne */
+  .hero-actions { gap: 28px 20px; align-items: flex-start; flex-wrap: wrap; }
+  .hero-actions .btn-primary {
+    width: 100%;
+    justify-content: center;
+    min-height: 56px;
+    font-size: 1rem;
+  }
+  /* Lien éditorial : largeur = texte (pas de bande underline 100 %) */
+  .hero-link {
+    width: auto;
+    text-align: left;
+    font-size: 1rem;
+  }
+  /* Socials : icônes plus grosses, plus d'air, en bas */
+  .hero-socials {
+    margin-left: 0;
+    margin-top: 4px;
+    gap: 14px;
+    width: 100%;
+  }
+  .hero-social { width: 48px; height: 48px; }
+  .hero-social svg { width: 20px; height: 20px; }
+  .hero-scroll  { display: none; }
 
   /* STATS + CLIENTS ----------------------------------------------------- */
   .stats-collab-head { margin-bottom: 8px; }
