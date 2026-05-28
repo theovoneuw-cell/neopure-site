@@ -674,30 +674,33 @@ section { position: relative; }
 /* Corps : stats (gauche) + clients (droite) */
 .stats-collab-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 64px;
   align-items: start;
 }
+/* Évite que le marquee max-content explose la largeur de la colonne */
+.stats, .collab { min-width: 0; }
 
-/* MARQUEE LOGOS CLIENTS — bulles rondes blanches qui défilent.
-   Desktop : auto-scroll infini (pause au survol).
-   Mobile  : touch-scroll horizontal avec snap.            */
+/* MUR DE STICKERS CLIENTS — bulles tiltées, lévitation indépendante, shimmer au survol.
+   Desktop : marquee infini (pause au survol).
+   Mobile  : swipe horizontal avec snap. */
 .collab-marquee {
   position: relative;
-  margin-top: 18px;
+  margin-top: 22px;
+  padding: 26px 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
 }
 .collab-track {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 26px;
   list-style: none;
   margin: 0;
-  padding: 6px 0;
+  padding: 0;
   width: max-content;
-  animation: collabFlow 40s linear infinite;
+  animation: collabFlow 48s linear infinite;
 }
 .collab-marquee:hover .collab-track { animation-play-state: paused; }
 @keyframes collabFlow {
@@ -706,37 +709,68 @@ section { position: relative; }
 }
 
 .collab-bubble {
-  flex: 0 0 auto;
-  width: 92px;
-  height: 92px;
+  flex: 0 0 94px;
+  width: 94px;
+  height: 94px;
+  min-width: 94px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
+  position: relative;
   background: #fff;
-  display: grid;
-  place-items: center;
-  padding: 16px;
+  overflow: hidden;                  /* clip le carré du logo en rond */
+  padding: 0;                        /* le logo remplit toute la bulle */
+  box-sizing: border-box;
   box-shadow:
-    0 12px 28px -8px rgba(0, 0, 0, 0.45),
-    0 0 0 2px rgba(255, 255, 255, 0.06);
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    0 16px 34px -10px rgba(123, 47, 240, 0.42),
+    0 4px 10px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  animation: collabBob 6s ease-in-out infinite alternate;
+  --tilt: 0deg;
+  transform: rotate(var(--tilt));
 }
+@keyframes collabBob {
+  from { translate: 0 -7px; }
+  to   { translate: 0 7px; }
+}
+/* Tilts variés + tempo de lévitation décalé pour un rendu organique */
+.collab-bubble:nth-child(8n+1) { --tilt: -5deg; animation-duration: 5.4s; }
+.collab-bubble:nth-child(8n+2) { --tilt:  3deg; animation-duration: 6.2s; animation-delay: -1s; }
+.collab-bubble:nth-child(8n+3) { --tilt: -2deg; animation-duration: 5.8s; animation-delay: -2s; }
+.collab-bubble:nth-child(8n+4) { --tilt:  6deg; animation-duration: 6.6s; animation-delay: -0.5s; }
+.collab-bubble:nth-child(8n+5) { --tilt: -7deg; animation-duration: 5.2s; animation-delay: -1.5s; }
+.collab-bubble:nth-child(8n+6) { --tilt:  2deg; animation-duration: 6.8s; animation-delay: -3s; }
+.collab-bubble:nth-child(8n+7) { --tilt: -3deg; animation-duration: 5.6s; animation-delay: -0.8s; }
+.collab-bubble:nth-child(8n)   { --tilt:  4deg; animation-duration: 6.4s; animation-delay: -2.4s; }
+
 .collab-bubble:hover {
-  transform: translateY(-4px) scale(1.05);
+  transform: rotate(0) scale(1.12);
   box-shadow:
-    0 18px 34px -8px rgba(123, 47, 240, 0.45),
-    0 0 0 2px rgba(34, 211, 206, 0.35);
+    0 28px 52px -12px rgba(123, 47, 240, 0.65),
+    0 0 0 3px rgba(34, 211, 206, 0.55),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  animation-play-state: paused;
+  z-index: 2;
 }
+
+/* Logo : remplit toute la bulle, ses bords carrés sont clippés par overflow:hidden */
 .collab-bubble img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* Tablette : on empile dès qu'on perd la place pour 2 colonnes lisibles */
+@media (max-width: 980px) {
+  .stats-collab-body { grid-template-columns: minmax(0, 1fr); gap: 44px; }
 }
 
 /* Mobile : on coupe le marquee, l'utilisateur swipe les bulles uniques (pas de doublons) */
 @media (max-width: 720px) {
-  .stats-collab-body { grid-template-columns: 1fr; gap: 44px; }
   /* Le bloc clients reste centré horizontalement */
   .collab { text-align: center; width: 100%; }
   .collab-title { text-align: center; display: block; width: 100%; margin: 0 auto 18px; }
@@ -760,7 +794,11 @@ section { position: relative; }
   }
   .collab-bubble {
     scroll-snap-align: center;
-    width: 84px; height: 84px;
+    flex: 0 0 84px;
+    width: 84px;
+    height: 84px;
+    min-width: 84px;
+    aspect-ratio: 1 / 1;
     padding: 14px;
   }
   /* Les duplicates seraient redondants en swipe → masqués */
