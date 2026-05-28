@@ -799,7 +799,7 @@ section { position: relative; }
     height: 84px;
     min-width: 84px;
     aspect-ratio: 1 / 1;
-    padding: 14px;
+    padding: 0;
   }
   /* Les duplicates seraient redondants en swipe → masqués */
   .collab-bubble--dup { display: none; }
@@ -2428,7 +2428,7 @@ section { position: relative; }
   .h-active .stats-collab .collab { min-width: 360px; max-width: 420px; }
   /* Le marquee a une largeur définie pour boucler proprement dans le coverflow */
   .h-active .stats-collab .collab-marquee { width: 100%; }
-  .h-active .stats-collab .collab-bubble { width: 86px; height: 86px; padding: 14px; }
+  .h-active .stats-collab .collab-bubble { width: 86px; height: 86px; padding: 0; }
 
   /* — GALERIE → frise horizontale — */
   .h-active .gallery-section.panel { min-width: auto; padding-inline: clamp(32px, 4vw, 80px); }
