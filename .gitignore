@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dépendances (si jamais on en ajoute plus tard)
+node_modules/
+
+# Fichiers de travail / backups
+*.bak
+*.tmp
+~$*
