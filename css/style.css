@@ -2483,6 +2483,129 @@ body { background: #20184d; color: var(--np-white); }
 /* Services : on garde juste le halo, plus de bloc navy plein */
 .services { color: #fff; }
 
+/* ==========================================================================
+   14. MOBILE TUNING — finitions pour passer impeccable en < 1025 px
+   ========================================================================== */
+
+/* Tablette (≤ 1024 px) — réduit l'aération des grandes sections */
+@media (max-width: 1024px) {
+  .hero { padding: 80px 0 90px; }
+  .hero-inner { max-width: 100%; }
+  .stats-collab { padding: 80px 0; }
+  .services { padding: 80px 0; }
+  .team { padding: 80px 0; }
+  .contact { padding: 80px 0 0; }
+  .map-panel { padding: 80px 0 100px; }
+}
+
+/* Smartphone (≤ 720 px) — restructuration pour l'écran tactile */
+@media (max-width: 720px) {
+  /* Espaces de section plus serrés */
+  .hero { padding: 70px 0 80px; min-height: auto; }
+  .stats-collab, .services, .team, .map-panel { padding: 64px 0; }
+  .contact { padding: 64px 0 0; }
+  .container { padding-inline: 20px; }
+
+  /* HERO ----------------------------------------------------------------- */
+  .hero-top { gap: 16px; margin-bottom: 28px; }
+  .hero-meta { font-size: 0.72rem; letter-spacing: 0.16em; }
+  .hero-tag { font-size: 0.72rem; letter-spacing: 0.18em; gap: 10px; }
+  .hero-tag-bar { width: 22px; }
+  .hero-title { font-size: clamp(3rem, 16vw, 5rem); margin-bottom: 14px; }
+  .hero-slogan { font-size: 1.05rem; margin-bottom: 30px; max-width: 100%; }
+  .hero-sectors { gap: 12px; margin-bottom: 30px; max-width: 100%; }
+  .hero-sector a { padding: 12px 14px; gap: 12px; }
+  .hero-sector-name { font-size: 1rem; }
+  .hero-sector-sub { font-size: 0.78rem; }
+  .hero-actions { gap: 14px 18px; }
+  .hero-actions .btn-primary { width: 100%; justify-content: center; }
+  .hero-link { width: 100%; text-align: left; }
+  .hero-socials { margin-left: 0; gap: 8px; }
+  .hero-social { width: 40px; height: 40px; }
+  .hero-scroll { display: none; }
+
+  /* STATS + CLIENTS ----------------------------------------------------- */
+  .stats-collab-head { margin-bottom: 8px; }
+  .stats-collab-heading { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+  .stats-collab-inner { gap: 36px; }
+  .stats { gap: 18px; }
+  .stat { padding: 22px 22px 20px; border-radius: 18px; }
+  .stat-num { font-size: clamp(2.4rem, 11vw, 3.6rem); }
+  .stat::before { font-size: clamp(6rem, 22vw, 8rem); }
+  .collab-list { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .collab-card { height: 76px; padding: 12px; }
+  .collab-card-name { font-size: 0.88rem; }
+
+  /* SERVICES ------------------------------------------------------------ */
+  .services-lead { font-size: clamp(1.05rem, 4.5vw, 1.4rem); }
+  .services-title { font-size: clamp(1.8rem, 8vw, 2.6rem); margin-bottom: 18px; }
+  .sectors { gap: 0; }
+  .sector { padding: 28px 22px; border-radius: 18px; max-width: 100%; }
+  .sector::before { font-size: clamp(7rem, 28vw, 11rem); }
+  .sector-badge { font-size: clamp(1.6rem, 7vw, 2rem); }
+  .sector-tagline { font-size: 0.92rem; }
+  .sector-list li { font-size: 0.96rem; padding: 14px 0; }
+  .sector-bridge { padding: 14px 0; }
+  .sector-bridge-mark { font-size: clamp(1.8rem, 7vw, 2.4rem); }
+  .services-cta { gap: 16px 22px; margin-top: 32px; flex-direction: column; align-items: stretch; text-align: center; }
+  .services-cta .btn-primary { width: 100%; }
+
+  /* TEAM ---------------------------------------------------------------- */
+  .team-inner { gap: 28px; }
+  .team-visual { max-width: 280px; margin: 0 auto; width: 100%; }
+  .team-photo { aspect-ratio: 4 / 5; font-size: 1.1rem; }
+  .team-content h2 { font-size: clamp(1.7rem, 7vw, 2.3rem); margin-bottom: 16px; }
+  .team-content p { font-size: 0.96rem; }
+
+  /* CONTACT ------------------------------------------------------------- */
+  .contact-inner { gap: 32px; }
+  .contact-title { font-size: clamp(1.7rem, 7vw, 2.2rem); margin-bottom: 18px; }
+  .contact-form { gap: 14px; }
+  .field input, .field textarea { padding: 14px 14px; font-size: 1rem; min-height: 50px; }
+  .field textarea { min-height: 120px; }
+  /* Chips : tap targets plus confortables */
+  .chip { padding: 10px 16px; font-size: 0.88rem; }
+  .field--chips .chips { gap: 8px; }
+  /* Carte info en compact */
+  .contact-info { padding: 28px 22px; border-radius: 18px; }
+  .contact-info h3 { font-size: 1.1rem; }
+  .contact-list a { font-size: 1rem; }
+  .contact-socials a { width: 46px; height: 46px; }
+
+  /* CARTE / LOCALISATION ----------------------------------------------- */
+  .map-panel { gap: 34px; }
+  .map-radar { width: min(82vw, 320px); }
+  .map-caption { max-width: 100%; padding-inline: 20px; }
+  .map-caption h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .map-caption-text { font-size: 0.96rem; }
+
+  /* FOOTER ------------------------------------------------------------- */
+  .footer-inner { padding: 44px 20px 28px; gap: 24px; }
+  .footer-links { gap: 8px; }
+  .footer-bottom p { padding-inline: 20px; }
+
+  /* MENU / BURGER ------------------------------------------------------ */
+  .menu-btn { width: 52px; height: 52px; top: 16px; right: 16px; }
+  .brand-float { font-size: 1.05rem; top: 16px; left: 18px; }
+  .menu-list a { font-size: clamp(2rem, 9vw, 3.6rem); }
+
+  /* Preloader plus compact */
+  .preloader-sectors { width: min(280px, 80vw); }
+  .preloader-logo { font-size: clamp(2rem, 9vw, 2.6rem); }
+}
+
+/* Très petits écrans (≤ 380 px — iPhone SE, anciens Android) */
+@media (max-width: 380px) {
+  .container { padding-inline: 16px; }
+  .hero-title { font-size: clamp(2.6rem, 14vw, 3.4rem); }
+  .hero-actions .btn-primary { font-size: 0.92rem; padding: 13px 22px; }
+  .sector-badge { font-size: 1.5rem; }
+  .stat-num { font-size: 2.4rem; }
+  .stat::before { font-size: 6rem; }
+  .sector::before { font-size: 7rem; }
+  .contact-info::before { font-size: 6rem; }
+}
+
 /* 9. ACCESSIBILITÉ — reduced motion ======================================== */
 @media (prefers-reduced-motion: reduce) {
   .world-bg { animation: none; }
