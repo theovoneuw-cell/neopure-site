@@ -1,36 +1,119 @@
 /* ==========================================================================
    NEOPURE — Feuille de styles principale
-   Organisation :
-   1. Design tokens (variables)
-   2. Reset & base
-   3. Utilitaires (container, glass, boutons, reveal)
-   4. Header / navigation
-   5. Hero
-   6. Marquee
-   7. Responsive
    ========================================================================== */
 
-/* 1. DESIGN TOKENS ========================================================= */
+/* 0. WEBFONTS — Gotham auto-hébergées depuis assets/brand/Gotham/ ========== */
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-XLight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Black.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-Ultra.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-BookItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('../assets/brand/Gotham/Gotham-BlackItalic.otf') format('opentype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 1. DESIGN TOKENS — Palette officielle Neopure =========================== */
 :root {
-  /* Couleurs de marque */
-  --np-magenta: #e94fd8;
-  --np-purple:  #a435f0;
-  --np-violet:  #7b2ff0;
-  --np-pink:    #f46ff0;
-  --np-cyan:    #22d3ce;
+  /* Couleurs de marque (charte officielle) */
+  --np-cyan:      #35F2F2;    /* RGB 53, 242, 242 — accent vif */
+  --np-violet:    #BC6BF2;    /* RGB 188, 107, 242 — violet principal */
+  --np-lavender:  #D694F2;    /* RGB 214, 148, 242 — lavande médium */
+  --np-rose:      #F1C4F2;    /* RGB 241, 196, 242 — rose pâle */
+  --np-indigo:    #151626;    /* RGB 21, 22, 38 — indigo profond (base sombre) */
+
+  /* Alias rétrocompatibles avec les anciens noms (pour ne rien casser) */
+  --np-magenta:   var(--np-lavender);
+  --np-purple:    var(--np-violet);
+  --np-pink:      var(--np-rose);
 
   /* Neutres */
-  --np-navy:    #13172a;
-  --np-navy-2:  #1b2138;
-  --np-ink:     #15192b;
-  --np-muted:   #5b6178;
-  --np-line:    #e7e8ef;
-  --np-white:   #ffffff;
-  --np-bg:      #ffffff;
+  --np-navy:      #151626;
+  --np-navy-2:    #1f2040;
+  --np-ink:       #151626;
+  --np-muted:     #6a6b85;
+  --np-line:      #e7e8ef;
+  --np-white:     #ffffff;
+  --np-bg:        #ffffff;
 
-  /* Dégradés */
-  --grad-brand: linear-gradient(120deg, #e94fd8 0%, #a435f0 58%, #7b2ff0 100%);
-  --grad-soft:  linear-gradient(120deg, #f46ff0 0%, #a435f0 100%);
+  /* Dégradés signature (cyan → lavande → violet) */
+  --grad-brand:   linear-gradient(120deg, #35F2F2 0%, #D694F2 50%, #BC6BF2 100%);
+  --grad-soft:    linear-gradient(120deg, #F1C4F2 0%, #BC6BF2 100%);
 
   /* Verre (glassmorphisme) */
   --glass-bg:     rgba(255, 255, 255, 0.10);
@@ -38,18 +121,18 @@
   --glass-border: rgba(255, 255, 255, 0.30);
   --glass-blur:   16px;
 
-  /* Typo — police unique premium (esprit Apple / Airbnb) */
-  --font-head: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Typo — Gotham (charte officielle) */
+  --font-head: 'Gotham', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: 'Gotham', system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Rayons & ombres */
   --r-sm: 10px;
   --r-md: 16px;
   --r-lg: 24px;
   --r-pill: 999px;
-  --shadow-sm: 0 4px 18px rgba(20, 16, 40, 0.08);
-  --shadow-md: 0 12px 40px rgba(20, 16, 40, 0.14);
-  --shadow-glow: 0 10px 40px rgba(164, 53, 240, 0.35);
+  --shadow-sm: 0 4px 18px rgba(21, 22, 38, 0.08);
+  --shadow-md: 0 12px 40px rgba(21, 22, 38, 0.14);
+  --shadow-glow: 0 10px 40px rgba(188, 107, 242, 0.40);
 
   /* Layout */
   --container: 1180px;
@@ -67,7 +150,7 @@ html {
   -webkit-text-size-adjust: 100%;
   /* Fond peint dès le 1er paint → pas de flash noir du navigateur (mode sombre OS)
      entre le refresh et l'apparition du fond du body/world-bg. */
-  background-color: #20184d;
+  background-color: #151626;
 }
 
 body {
@@ -166,7 +249,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   background-image: linear-gradient(90deg, #e94fd8 0%, #a435f0 55%, #7b2ff0 100%);
   box-shadow: var(--shadow-glow);
 }
-.btn-primary:hover { box-shadow: 0 14px 50px rgba(164, 53, 240, 0.5); }
+.btn-primary:hover { box-shadow: 0 14px 50px rgba(188, 107, 242, 0.5); }
 
 .btn-ghost {
   color: var(--np-white);
@@ -225,19 +308,19 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
   font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
-  color: var(--np-ink);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  color: #fff;
 }
-.brand .brand-dot { color: var(--np-cyan); }
-.is-scrolled .brand { color: var(--np-ink); }
-/* En haut (hero sombre) le logo est clair */
-.site-header:not(.is-scrolled) .brand { color: #fff; }
+.brand-mark {
+  height: 1.4em; width: auto;
+  margin-right: -0.05em;
+}
 
 .nav-links {
   display: flex;
@@ -298,6 +381,27 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: #fff;
   padding: 40px 0 70px;
 }
+/* ===== INNOVATION : N géant en watermark, ancrage de marque éditorial ===== */
+.hero::before {
+  content: "";
+  position: absolute;
+  right: -8%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-8deg);
+  width: 65vw;
+  max-width: 720px;
+  height: 65vw;
+  max-height: 720px;
+  background: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
+  opacity: 0.07;
+  z-index: 0;
+  pointer-events: none;
+  animation: heroWatermark 12s var(--ease) infinite alternate;
+}
+@keyframes heroWatermark {
+  from { transform: translateY(-50%) rotate(-8deg) scale(1); opacity: 0.05; }
+  to   { transform: translateY(-50%) rotate(-6deg) scale(1.04); opacity: 0.09; }
+}
 
 /* Fond dégradé animé (léger, GPU-friendly) */
 .hero-bg {
@@ -305,10 +409,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: -20%;
   z-index: -2;
   background:
-    radial-gradient(55% 70% at 20% 25%, rgba(244, 111, 240, 0.42), rgba(244, 111, 240, 0) 72%),
-    radial-gradient(60% 75% at 80% 20%, rgba(164, 53, 240, 0.42), rgba(164, 53, 240, 0) 72%),
-    radial-gradient(65% 80% at 60% 85%, rgba(34, 211, 206, 0.30), rgba(34, 211, 206, 0) 72%),
-    linear-gradient(135deg, #34195e 0%, #5f2496 45%, #b03ad8 100%);
+    radial-gradient(55% 70% at 20% 25%, rgba(214, 148, 242, 0.42), rgba(214, 148, 242, 0) 72%),
+    radial-gradient(60% 75% at 80% 20%, rgba(188, 107, 242, 0.42), rgba(188, 107, 242, 0) 72%),
+    radial-gradient(65% 80% at 60% 85%, rgba(53, 242, 242, 0.30), rgba(53, 242, 242, 0) 72%),
+    linear-gradient(135deg, #1f1545 0%, #5a2a93 45%, #BC6BF2 100%);
   background-size: 160% 160%;
   animation: heroShift 18s var(--ease) infinite alternate;
 }
@@ -387,41 +491,44 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-badge .pulse {
   width: 8px; height: 8px; border-radius: 50%;
   background: var(--np-cyan);
-  box-shadow: 0 0 0 0 rgba(34, 211, 206, 0.7);
+  box-shadow: 0 0 0 0 rgba(53, 242, 242, 0.7);
   animation: pulse 2s infinite;
 }
 @keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(34, 211, 206, 0.7); }
-  70%  { box-shadow: 0 0 0 12px rgba(34, 211, 206, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 211, 206, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(53, 242, 242, 0.7); }
+  70%  { box-shadow: 0 0 0 12px rgba(53, 242, 242, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(53, 242, 242, 0); }
 }
 
 .hero-title {
   font-size: clamp(3.2rem, 11vw, 7rem);
   line-height: 0.98;
   margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
 }
-/* Point de marque : un vrai rond lumineux (le glyphe "." faisait un carré bas) */
-.hero-title .dot {
-  position: relative;
-  color: transparent;
+/* Le N gradient officiel à la place du "." + "N" textuel — c'est l'âme visuelle */
+.hero-title .hero-mark {
+  height: 1.05em;
+  width: auto;
+  display: block;
+  margin-right: -0.06em;          /* colle le N à "eopure" comme dans le wordmark officiel */
+  filter: drop-shadow(0 0 28px rgba(188, 107, 242, 0.45));
+  animation: heroLogoPulse 4.4s var(--ease) infinite alternate;
 }
-.hero-title .dot::after {
-  content: "";
-  position: absolute;
-  left: 0.02em;
-  bottom: 0.07em;
-  width: 0.16em;
-  height: 0.16em;
-  border-radius: 50%;
-  background: var(--np-cyan);
-  box-shadow: 0 0 24px rgba(34, 211, 206, 0.65);
+@keyframes heroLogoPulse {
+  from { filter: drop-shadow(0 0 22px rgba(53, 242, 242, 0.35)); }
+  to   { filter: drop-shadow(0 0 38px rgba(188, 107, 242, 0.65)); }
 }
-.hero-title .word {
-  background: linear-gradient(120deg, #ffffff 0%, #f3d9ff 50%, #c9b8ff 100%);
+.hero-title .hero-word {
+  background: linear-gradient(120deg, #ffffff 0%, #F1C4F2 60%, #D694F2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  font-weight: 800;
+  font-family: var(--font-head);
+  letter-spacing: -0.04em;
 }
 
 .hero-tagline {
@@ -465,7 +572,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   width: 32px;
   height: 1.5px;
   background: var(--np-cyan);
-  box-shadow: 0 0 12px rgba(34, 211, 206, 0.5);
+  box-shadow: 0 0 12px rgba(53, 242, 242, 0.5);
 }
 .hero-tag-x {
   display: inline-block;
@@ -721,7 +828,7 @@ section { position: relative; }
   padding: 0;                        /* le logo remplit toute la bulle */
   box-sizing: border-box;
   box-shadow:
-    0 16px 34px -10px rgba(123, 47, 240, 0.42),
+    0 16px 34px -10px rgba(188, 107, 242, 0.42),
     0 4px 10px rgba(0, 0, 0, 0.32),
     inset 0 0 0 1px rgba(0, 0, 0, 0.05);
   transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
@@ -746,8 +853,8 @@ section { position: relative; }
 .collab-bubble:hover {
   transform: rotate(0) scale(1.12);
   box-shadow:
-    0 28px 52px -12px rgba(123, 47, 240, 0.65),
-    0 0 0 3px rgba(34, 211, 206, 0.55),
+    0 28px 52px -12px rgba(188, 107, 242, 0.65),
+    0 0 0 3px rgba(53, 242, 242, 0.55),
     inset 0 0 0 1px rgba(0, 0, 0, 0.08);
   animation-play-state: paused;
   z-index: 2;
@@ -852,26 +959,26 @@ section { position: relative; }
   transition: left 0.5s var(--ease), right 0.5s var(--ease);
 }
 .stat:nth-of-type(1) {
-  border-top-color: rgba(34, 211, 206, 0.4);
+  border-top-color: rgba(53, 242, 242, 0.4);
   box-shadow:
-    0 0 0 0.5px rgba(34, 211, 206, 0.12),
-    0 24px 70px -28px rgba(34, 211, 206, 0.35),
+    0 0 0 0.5px rgba(53, 242, 242, 0.12),
+    0 24px 70px -28px rgba(53, 242, 242, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .stat:nth-of-type(1)::after {
   background: linear-gradient(90deg, transparent, var(--np-cyan), transparent);
-  box-shadow: 0 0 16px rgba(34, 211, 206, 0.6);
+  box-shadow: 0 0 16px rgba(53, 242, 242, 0.6);
 }
 .stat:nth-of-type(2) {
-  border-top-color: rgba(244, 111, 240, 0.4);
+  border-top-color: rgba(214, 148, 242, 0.4);
   box-shadow:
-    0 0 0 0.5px rgba(244, 111, 240, 0.12),
-    0 24px 70px -28px rgba(244, 111, 240, 0.4),
+    0 0 0 0.5px rgba(214, 148, 242, 0.12),
+    0 24px 70px -28px rgba(214, 148, 242, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .stat:nth-of-type(2)::after {
   background: linear-gradient(90deg, transparent, var(--np-pink), transparent);
-  box-shadow: 0 0 16px rgba(244, 111, 240, 0.6);
+  box-shadow: 0 0 16px rgba(214, 148, 242, 0.6);
 }
 .stat:hover {
   transform: translateY(-6px);
@@ -1065,7 +1172,7 @@ section { position: relative; }
 .service-card:hover {
   transform: translateY(-8px);
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(244, 111, 240, 0.5);
+  border-color: rgba(214, 148, 242, 0.5);
 }
 .service-icon {
   display: grid;
@@ -1129,8 +1236,8 @@ section { position: relative; }
 .sector-head, .sector-list { position: relative; z-index: 1; }
 
 /* Ligne d'accent en haut (remplace le simple border-top 3px) */
-.sector--com   { border-top-color: rgba(34, 211, 206, 0.4); }
-.sector--event { border-top-color: rgba(123, 47, 240, 0.45); }
+.sector--com   { border-top-color: rgba(53, 242, 242, 0.4); }
+.sector--event { border-top-color: rgba(188, 107, 242, 0.45); }
 .sector--com::after,
 .sector--event::after {
   content: "";
@@ -1144,24 +1251,24 @@ section { position: relative; }
 }
 .sector--com::after {
   background: linear-gradient(90deg, transparent, var(--np-cyan), transparent);
-  box-shadow: 0 0 16px rgba(34, 211, 206, 0.6);
+  box-shadow: 0 0 16px rgba(53, 242, 242, 0.6);
 }
 .sector--event::after {
   background: linear-gradient(90deg, transparent, var(--np-violet), transparent);
-  box-shadow: 0 0 16px rgba(123, 47, 240, 0.6);
+  box-shadow: 0 0 16px rgba(188, 107, 242, 0.6);
 }
 
 /* Aura colorée projetée sous la carte selon le secteur */
 .sector--com {
   box-shadow:
-    0 0 0 0.5px rgba(34, 211, 206, 0.12),
-    0 24px 70px -28px rgba(34, 211, 206, 0.35),
+    0 0 0 0.5px rgba(53, 242, 242, 0.12),
+    0 24px 70px -28px rgba(53, 242, 242, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .sector--event {
   box-shadow:
-    0 0 0 0.5px rgba(123, 47, 240, 0.14),
-    0 24px 70px -28px rgba(123, 47, 240, 0.4),
+    0 0 0 0.5px rgba(188, 107, 242, 0.14),
+    0 24px 70px -28px rgba(188, 107, 242, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -1175,14 +1282,14 @@ section { position: relative; }
 }
 .sector--com:hover {
   box-shadow:
-    0 0 0 0.5px rgba(34, 211, 206, 0.35),
-    0 36px 90px -22px rgba(34, 211, 206, 0.55),
+    0 0 0 0.5px rgba(53, 242, 242, 0.35),
+    0 36px 90px -22px rgba(53, 242, 242, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .sector--event:hover {
   box-shadow:
-    0 0 0 0.5px rgba(123, 47, 240, 0.4),
-    0 36px 90px -22px rgba(123, 47, 240, 0.6),
+    0 0 0 0.5px rgba(188, 107, 242, 0.4),
+    0 36px 90px -22px rgba(188, 107, 242, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .sector:hover::after { left: 12px; right: 12px; }
@@ -1394,7 +1501,7 @@ section { position: relative; }
 .field input:focus, .field textarea:focus {
   outline: none;
   border-color: var(--np-purple);
-  box-shadow: 0 0 0 3px rgba(164, 53, 240, 0.15);
+  box-shadow: 0 0 0 3px rgba(188, 107, 242, 0.15);
 }
 .contact-form .btn { align-self: flex-start; margin-top: 4px; }
 .form-note { font-size: 0.8rem; color: var(--np-muted); margin: 4px 0 0; }
@@ -1427,10 +1534,10 @@ section { position: relative; }
   transform: translateY(-1px);
 }
 .chip.is-active {
-  color: #0c0a1a;
+  color: #151626;
   background: linear-gradient(100deg, var(--np-cyan), #7b2ff0);
   border-color: transparent;
-  box-shadow: 0 6px 18px -4px rgba(123, 47, 240, 0.55);
+  box-shadow: 0 6px 18px -4px rgba(188, 107, 242, 0.55);
 }
 .chip:focus-visible {
   outline: 2px solid var(--np-cyan);
@@ -1459,13 +1566,13 @@ section { position: relative; }
     radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 65%),
     rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-top-color: rgba(123, 47, 240, 0.45);
+  border-top-color: rgba(188, 107, 242, 0.45);
   color: #fff;
   overflow: hidden;
   isolation: isolate;
   box-shadow:
-    0 0 0 0.5px rgba(123, 47, 240, 0.14),
-    0 24px 70px -28px rgba(123, 47, 240, 0.4),
+    0 0 0 0.5px rgba(188, 107, 242, 0.14),
+    0 24px 70px -28px rgba(188, 107, 242, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
@@ -1495,14 +1602,14 @@ section { position: relative; }
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(90deg, transparent, var(--np-violet), transparent);
-  box-shadow: 0 0 16px rgba(123, 47, 240, 0.6);
+  box-shadow: 0 0 16px rgba(188, 107, 242, 0.6);
   transition: left 0.5s var(--ease), right 0.5s var(--ease);
 }
 .contact-info:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 0 0 0.5px rgba(123, 47, 240, 0.35),
-    0 36px 90px -22px rgba(123, 47, 240, 0.6),
+    0 0 0 0.5px rgba(188, 107, 242, 0.35),
+    0 36px 90px -22px rgba(188, 107, 242, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.18);
 }
@@ -1620,7 +1727,7 @@ section { position: relative; }
   z-index: 10000;
   display: grid;
   place-items: center;
-  background: #0c0a1a;
+  background: #151626;
   transition: opacity 0.35s linear, visibility 0.35s linear;
   /* Filet de sécurité : disparaît même sans JS */
   animation: preAuto 0s linear 6s forwards;
@@ -1650,7 +1757,7 @@ section { position: relative; }
 .preloader-tag-bar {
   width: 30px; height: 1.5px;
   background: var(--np-cyan);
-  box-shadow: 0 0 12px rgba(34, 211, 206, 0.55);
+  box-shadow: 0 0 12px rgba(53, 242, 242, 0.55);
 }
 .preloader-tag-x {
   color: var(--np-cyan);
@@ -1706,12 +1813,12 @@ section { position: relative; }
 }
 .preloader-sector--com .preloader-sector-bar span {
   background: var(--np-cyan);
-  box-shadow: 0 0 10px rgba(34, 211, 206, 0.7);
+  box-shadow: 0 0 10px rgba(53, 242, 242, 0.7);
   animation: preBarFill 2.6s var(--ease) 0.2s forwards;
 }
 .preloader-sector--event .preloader-sector-bar span {
   background: var(--np-violet);
-  box-shadow: 0 0 10px rgba(123, 47, 240, 0.7);
+  box-shadow: 0 0 10px rgba(188, 107, 242, 0.7);
   animation: preBarFill 3s var(--ease) 0.5s forwards;
 }
 @keyframes preBarFill { to { transform: scaleX(1); } }
@@ -1731,15 +1838,23 @@ section { position: relative; }
 }
 
 .preloader-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
   font-family: var(--font-head);
-  font-weight: 700;
+  font-weight: 800;
   font-size: clamp(2.2rem, 7vw, 3rem);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: #fff;
   opacity: 0;
   animation: preIn 0.7s var(--ease) forwards;
 }
-.preloader-logo .brand-dot { color: var(--np-cyan); }
+.preloader-mark {
+  height: 1.1em;
+  width: auto;
+  margin-right: -0.06em;
+  filter: drop-shadow(0 0 22px rgba(188, 107, 242, 0.55));
+}
 .preloader-bar {
   width: 170px;
   height: 3px;
@@ -1815,7 +1930,7 @@ section { position: relative; }
 .cursor-ring {
   width: 30px; height: 30px;
   margin: -15px 0 0 -15px;
-  border: 1.5px solid rgba(34, 211, 206, 0.7);
+  border: 1.5px solid rgba(53, 242, 242, 0.7);
   transition: width 0.25s var(--ease), height 0.25s var(--ease),
               margin 0.25s var(--ease), background-color 0.25s var(--ease),
               border-color 0.25s var(--ease);
@@ -1823,7 +1938,7 @@ section { position: relative; }
 .cursor.is-hover .cursor-ring {
   width: 44px; height: 44px;
   margin: -22px 0 0 -22px;
-  background: rgba(34, 211, 206, 0.08);
+  background: rgba(53, 242, 242, 0.08);
   border-color: var(--np-cyan);
 }
 .cursor-label {
@@ -1833,7 +1948,7 @@ section { position: relative; }
   padding: 4px 11px;
   border-radius: var(--r-pill);
   background: var(--np-cyan);
-  color: #0c0a1a;
+  color: #151626;
   font-family: var(--font-head);
   font-weight: 600;
   font-size: 0.72rem;
@@ -1899,10 +2014,10 @@ section { position: relative; }
 
 .b-views {
   background: var(--np-cyan);
-  color: #0c0a1a;
+  color: #151626;
   transform: rotate(2deg);
 }
-.b-views svg { color: #0c0a1a; }
+.b-views svg { color: #151626; }
 .b-views small { color: rgba(12, 10, 26, 0.65); opacity: 1; }
 
 .b-comments {
@@ -1929,11 +2044,11 @@ section { position: relative; }
 
 .b-story {
   background: var(--np-cyan);
-  color: #0c0a1a;
+  color: #151626;
   transform: rotate(-3deg);
 }
 .b-story .bubble-ico { background: rgba(0, 0, 0, 0.16); }
-.b-story .bubble-ico svg { color: #0c0a1a; }
+.b-story .bubble-ico svg { color: #151626; }
 .b-story .bubble-lines em { color: rgba(12, 10, 26, 0.6); opacity: 1; }
 
 .b-follow {
@@ -1949,7 +2064,7 @@ section { position: relative; }
   transform: rotate(4deg);
 }
 .b-followers .bubble-lines em { color: rgba(255, 255, 255, 0.55); opacity: 1; }
-.b-followers .bubble-ico.up { background: rgba(34, 211, 206, 0.18); }
+.b-followers .bubble-ico.up { background: rgba(53, 242, 242, 0.18); }
 .b-followers .bubble-ico.up svg { color: var(--np-cyan); }
 
 .bubble--circle {
@@ -2006,11 +2121,18 @@ section { position: relative; }
 
 /* 10h. MENU ÉVOLUTIF (flottant — plus de barre en haut) ------------------- */
 .brand-float {
-  position: fixed; top: 24px; left: 30px; z-index: 200;
-  font-family: var(--font-head); font-weight: 700; font-size: 1.3rem;
-  letter-spacing: -0.02em; color: #fff;
+  position: fixed; top: 22px; left: 30px; z-index: 200;
+  display: inline-flex; align-items: center; gap: 0;
+  font-family: var(--font-head); font-weight: 800; font-size: 1.25rem;
+  letter-spacing: -0.03em; color: #fff;
+  transition: transform 0.3s var(--ease), filter 0.3s var(--ease);
 }
-.brand-float .brand-dot { color: var(--np-cyan); }
+.brand-float:hover { transform: scale(1.06); }
+.brand-float-mark {
+  height: 1.45em; width: auto;
+  margin-right: -0.06em;
+  filter: drop-shadow(0 0 12px rgba(188, 107, 242, 0.55));
+}
 
 .menu-btn {
   position: fixed; top: 20px; right: 26px; z-index: 400;
@@ -2046,8 +2168,8 @@ section { position: relative; }
   justify-content: space-between;
   padding: max(72px, 9vh) clamp(22px, 6vw, 44px) max(36px, 5vh);
   background:
-    radial-gradient(80% 60% at 18% 12%, rgba(123, 47, 240, 0.22), rgba(123, 47, 240, 0) 60%),
-    radial-gradient(70% 60% at 88% 90%, rgba(233, 79, 216, 0.18), rgba(233, 79, 216, 0) 60%),
+    radial-gradient(80% 60% at 18% 12%, rgba(188, 107, 242, 0.22), rgba(188, 107, 242, 0) 60%),
+    radial-gradient(70% 60% at 88% 90%, rgba(188, 107, 242, 0.18), rgba(188, 107, 242, 0) 60%),
     rgba(15, 12, 35, 0.94);
   backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
   opacity: 0; visibility: hidden;
@@ -2197,7 +2319,7 @@ section { position: relative; }
   transform: scaleX(0);
   transform-origin: left;
   background: var(--grad-brand);
-  box-shadow: 0 0 12px rgba(164, 53, 240, 0.6);
+  box-shadow: 0 0 12px rgba(188, 107, 242, 0.6);
   transition: transform 0.05s linear;
 }
 
@@ -2233,7 +2355,7 @@ section { position: relative; }
   .side-nav a.is-active .side-dot {
     background: var(--np-cyan);
     transform: scale(1.4);
-    box-shadow: 0 0 12px rgba(34, 211, 206, 0.9);
+    box-shadow: 0 0 12px rgba(53, 242, 242, 0.9);
   }
 }
 
@@ -2272,7 +2394,7 @@ section { position: relative; }
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.10),
-    0 0 60px -10px rgba(123, 47, 240, 0.4),
+    0 0 60px -10px rgba(188, 107, 242, 0.4),
     inset 0 0 0 6px rgba(255, 255, 255, 0.04);
 }
 /* Voile coloré par-dessus la carte pour la fondre dans l'univers violet */
@@ -2283,7 +2405,7 @@ section { position: relative; }
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(70% 70% at 50% 50%, rgba(123, 47, 240, 0.18), rgba(123, 47, 240, 0.42) 100%);
+    radial-gradient(70% 70% at 50% 50%, rgba(188, 107, 242, 0.18), rgba(188, 107, 242, 0.42) 100%);
   mix-blend-mode: color;
 }
 #map {
@@ -2306,7 +2428,7 @@ section { position: relative; }
      pour laisser le nom de la ville (au centre) parfaitement lisible. */
   transform: translate(-50%, calc(-100% - 22px));
   z-index: 5;
-  filter: drop-shadow(0 6px 16px rgba(34, 211, 206, 0.55))
+  filter: drop-shadow(0 6px 16px rgba(53, 242, 242, 0.55))
           drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
   animation: pinFloat 3.2s ease-in-out infinite alternate;
 }
@@ -2337,8 +2459,8 @@ section { position: relative; }
   inset: 0;
   z-index: 3;
   background:
-    linear-gradient(rgba(34, 211, 206, 0.12), rgba(34, 211, 206, 0.12)) 50% 0 / 1px 100% no-repeat,
-    linear-gradient(rgba(34, 211, 206, 0.12), rgba(34, 211, 206, 0.12)) 0 50% / 100% 1px no-repeat;
+    linear-gradient(rgba(53, 242, 242, 0.12), rgba(53, 242, 242, 0.12)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(rgba(53, 242, 242, 0.12), rgba(53, 242, 242, 0.12)) 0 50% / 100% 1px no-repeat;
   pointer-events: none;
 }
 .map-caption { max-width: 460px; }
@@ -2566,12 +2688,12 @@ section { position: relative; }
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(72% 92% at 14% 22%, rgba(164, 53, 240, 0.48), rgba(164, 53, 240, 0) 72%),
-    radial-gradient(66% 86% at 86% 26%, rgba(233, 79, 216, 0.42), rgba(233, 79, 216, 0) 72%),
-    radial-gradient(70% 84% at 78% 82%, rgba(34, 211, 206, 0.26), rgba(34, 211, 206, 0) 72%),
-    radial-gradient(78% 90% at 28% 92%, rgba(123, 47, 240, 0.40), rgba(123, 47, 240, 0) 74%),
-    #20184d00;
-  background-color: #20184d;
+    radial-gradient(72% 92% at 14% 22%, rgba(188, 107, 242, 0.45), rgba(188, 107, 242, 0) 72%),
+    radial-gradient(66% 86% at 86% 26%, rgba(214, 148, 242, 0.40), rgba(214, 148, 242, 0) 72%),
+    radial-gradient(70% 84% at 78% 82%, rgba(53, 242, 242, 0.28), rgba(53, 242, 242, 0) 72%),
+    radial-gradient(78% 90% at 28% 92%, rgba(241, 196, 242, 0.18), rgba(241, 196, 242, 0) 74%),
+    #15162600;
+  background-color: #151626;
   background-size: 165% 165%;
   animation: worldDrift 26s var(--ease) infinite alternate;
 }
@@ -2581,7 +2703,7 @@ section { position: relative; }
 }
 
 /* Base sombre */
-body { background: #20184d; color: var(--np-white); }
+body { background: #151626; color: var(--np-white); }
 .eyebrow { color: var(--np-pink); }
 
 /* Sections : transparentes → le canvas continu traverse tout */
@@ -2619,7 +2741,7 @@ body { background: #20184d; color: var(--np-white); }
 .field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
 .field input:focus, .field textarea:focus {
   border-color: var(--np-pink);
-  box-shadow: 0 0 0 3px rgba(233, 79, 216, 0.18);
+  box-shadow: 0 0 0 3px rgba(188, 107, 242, 0.18);
 }
 .form-note { color: rgba(255, 255, 255, 0.5); }
 
@@ -2736,8 +2858,9 @@ body { background: #20184d; color: var(--np-white); }
   .hero-social svg { width: 20px; height: 20px; }
   .hero-scroll  { display: none; }
 
-  /* Le point cyan de .Neopure : aligné avec le titre centré */
-  .hero-title .dot::after { left: 0.04em; }
+  /* Hero-title centré sur mobile : on règle le flex-flow et la taille du N */
+  .hero-title { justify-content: center; }
+  .hero-title .hero-mark { height: 1em; }
 
   /* STATS + CLIENTS ----------------------------------------------------- */
   .stats-collab-head { margin-bottom: 8px; }

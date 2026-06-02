@@ -21,3 +21,8 @@ node_modules/
 *.bak
 *.tmp
 ~$*
+
+# Brand assets trop volumineux (gardés localement uniquement)
+assets/brand/PLAQUETTE_NEOPURECOM_2026.pdf
+assets/brand/__MACOSX/
+assets/brand/**/__MACOSX/

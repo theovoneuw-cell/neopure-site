@@ -10,7 +10,7 @@
   <meta name="keywords" content="agence de communication, événementiel, community management, social media, photo, vidéo, DJ, team building, séminaire, organisation d'événement, Montpellier" />
   <meta name="author" content="Neopure" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#20184d" />
+  <meta name="theme-color" content="#151626" />
   <link rel="canonical" href="https://neopure.fr/" />
 
   <!-- ============ Open Graph (Facebook, LinkedIn…) ============ -->
@@ -20,21 +20,21 @@
   <meta property="og:title" content="Neopure — Agence de communication & événementiel" />
   <meta property="og:description" content="La Com' & L'Event : on fait briller ta marque sur les réseaux et on orchestre tes événements de A à Z." />
   <meta property="og:url" content="https://neopure.fr/" />
-  <meta property="og:image" content="https://neopure.fr/assets/og-image.jpg" />
+  <meta property="og:image" content="https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png" />
 
   <!-- ============ Twitter Card ============ -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Neopure — Agence de communication & événementiel" />
   <meta name="twitter:description" content="La Com' & L'Event : on fait briller ta marque sur les réseaux et on orchestre tes événements de A à Z." />
-  <meta name="twitter:image" content="https://neopure.fr/assets/og-image.jpg" />
+  <meta name="twitter:image" content="https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png" />
 
   <!-- ============ Favicon ============ -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" href="assets/brand/Logo_N_Degrade_SF.png" />
+  <link rel="apple-touch-icon" href="assets/brand/Logo_N_Degrade_SF.png" />
 
-  <!-- ============ Polices (Google Fonts) ============ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
+  <!-- ============ Polices : Gotham auto-hébergée (charte officielle) ============ -->
+  <!-- Les fontes sont chargées en self-host via @font-face dans css/style.css
+       depuis assets/brand/Gotham/ - plus de dépendance Google Fonts. -->
 
   <!-- ============ Carte (Leaflet) ============ -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -51,7 +51,7 @@
     "name": "Neopure",
     "description": "Agence de communication & événementiel à Montpellier. La Com' : réseaux sociaux, création de contenus, stratégie digitale. L'Event : coordination, DJ, photo & vidéo, team building, communication évènementielle.",
     "url": "https://neopure.fr/",
-    "image": "https://neopure.fr/assets/og-image.jpg",
+    "image": "https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png",
     "telephone": "+33611670705",
     "email": "neopurecom@gmail.com",
     "address": {
@@ -79,7 +79,10 @@
         <span>Communication <span class="preloader-tag-x">×</span> Événementiel</span>
       </div>
 
-      <div class="preloader-logo"><span class="brand-dot">.</span>Neopure</div>
+      <div class="preloader-logo">
+        <img class="preloader-mark" src="assets/brand/Logo_N_Degrade_SF.png" alt="" />
+        <span>eopure</span>
+      </div>
 
       <div class="preloader-sectors">
         <div class="preloader-sector preloader-sector--com">
@@ -112,7 +115,10 @@
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><span></span></div>
 
   <!-- ====================== MARQUE FLOTTANTE + MENU ÉVOLUTIF (pas de barre) ====================== -->
-  <a href="#top" class="brand-float" aria-label="Neopure — accueil"><span class="brand-dot">.</span>Neopure</a>
+  <a href="#top" class="brand-float" aria-label="Neopure — accueil">
+    <img class="brand-float-mark" src="assets/brand/Logo_N_Degrade_SF.png" alt="" />
+    <span>eopure</span>
+  </a>
 
   <button class="menu-btn" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuOverlay">
     <span class="menu-ring" aria-hidden="true"></span>
@@ -203,8 +209,9 @@
           </span>
         </header>
 
-        <h1 class="hero-title reveal" data-delay="1">
-          <span class="dot">.</span><span class="word">Neopure</span>
+        <h1 class="hero-title reveal" data-delay="1" aria-label="Neopure">
+          <img class="hero-mark" src="assets/brand/Logo_N_Degrade_SF.png" alt="" aria-hidden="true" />
+          <span class="hero-word" aria-hidden="true">eopure</span>
         </h1>
 
         <p class="hero-slogan reveal" data-delay="2">
@@ -568,7 +575,10 @@
   <footer class="site-footer panel">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <a href="#top" class="brand"><span class="brand-dot">.</span>Neopure</a>
+        <a href="#top" class="brand">
+          <img class="brand-mark" src="assets/brand/Logo_N_Blanc_SF.png" alt="" />
+          <span>eopure</span>
+        </a>
         <p>Agence de communication &amp; événementiel.<br />On fait briller ta marque, on orchestre tes événements.</p>
         <div class="footer-socials">
           <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" data-magnetic data-cursor="Instagram" aria-label="Instagram @neopure_com">
