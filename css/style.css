@@ -501,34 +501,21 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 .hero-title {
-  font-size: clamp(3.2rem, 11vw, 7rem);
-  line-height: 0.98;
   margin-bottom: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-}
-/* Le N gradient officiel à la place du "." + "N" textuel — c'est l'âme visuelle */
-.hero-title .hero-mark {
-  height: 1.05em;
-  width: auto;
   display: block;
-  margin-right: -0.06em;          /* colle le N à "eopure" comme dans le wordmark officiel */
-  filter: drop-shadow(0 0 28px rgba(188, 107, 242, 0.45));
+  line-height: 1;
+}
+/* Wordmark officiel "Neopure" en blanc, dimensionné comme un grand titre */
+.hero-title .hero-logo {
+  display: block;
+  width: clamp(280px, 56vw, 640px);
+  height: auto;
+  filter: drop-shadow(0 0 32px rgba(188, 107, 242, 0.45));
   animation: heroLogoPulse 4.4s var(--ease) infinite alternate;
 }
 @keyframes heroLogoPulse {
-  from { filter: drop-shadow(0 0 22px rgba(53, 242, 242, 0.35)); }
-  to   { filter: drop-shadow(0 0 38px rgba(188, 107, 242, 0.65)); }
-}
-.hero-title .hero-word {
-  background: linear-gradient(120deg, #ffffff 0%, #F1C4F2 60%, #D694F2 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 800;
-  font-family: var(--font-head);
-  letter-spacing: -0.04em;
+  from { filter: drop-shadow(0 0 24px rgba(53, 242, 242, 0.35)); }
+  to   { filter: drop-shadow(0 0 40px rgba(188, 107, 242, 0.65)); }
 }
 
 .hero-tagline {
@@ -2858,9 +2845,9 @@ body { background: #151626; color: var(--np-white); }
   .hero-social svg { width: 20px; height: 20px; }
   .hero-scroll  { display: none; }
 
-  /* Hero-title centré sur mobile : on règle le flex-flow et la taille du N */
-  .hero-title { justify-content: center; }
-  .hero-title .hero-mark { height: 1em; }
+  /* Wordmark centré sur mobile */
+  .hero-title { text-align: center; }
+  .hero-title .hero-logo { margin: 0 auto; width: min(82vw, 480px); }
 
   /* STATS + CLIENTS ----------------------------------------------------- */
   .stats-collab-head { margin-bottom: 8px; }
