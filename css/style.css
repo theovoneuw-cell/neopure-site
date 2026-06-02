@@ -1345,7 +1345,7 @@ section { position: relative; }
   padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-family: var(--font-head);
-  font-weight: 500;                    /* Gotham Medium — lisible sans surcharge */
+  font-weight: 400;                    /* Gotham Book — aéré, pas écrasant */
   font-size: 1.02rem;
   line-height: 1.25;
   color: #fff;
