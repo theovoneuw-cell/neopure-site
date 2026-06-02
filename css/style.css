@@ -787,7 +787,8 @@ section { position: relative; }
 .collab-marquee {
   position: relative;
   margin-top: 24px;
-  padding: 18px 0;
+  /* padding vertical large : laisse respirer l'ombre/halo des tuiles sans le couper */
+  padding: 34px 0;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
@@ -801,6 +802,9 @@ section { position: relative; }
   padding: 0;
   width: max-content;
   animation: collabFlow 46s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .collab-marquee:hover .collab-track { animation-play-state: paused; }
 @keyframes collabFlow {
@@ -812,8 +816,11 @@ section { position: relative; }
    taille uniforme. La source étant carrée, cover remplit sans couper ni laisser
    de blanc. Posée sur le fond sombre avec une fine bordure et un halo de marque. */
 .collab-card {
-  flex: 0 0 auto;
+  /* Dimensions verrouillées : pas de recalcul / déformation pendant le défilé 3D */
+  flex: 0 0 132px;
   width: 132px;
+  min-width: 132px;
+  max-width: 132px;
   height: 132px;
   border-radius: 18px;
   overflow: hidden;
@@ -821,9 +828,12 @@ section { position: relative; }
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    0 18px 38px -18px rgba(188, 107, 242, 0.5),
-    0 6px 14px -8px rgba(0, 0, 0, 0.45);
-  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
+    0 10px 24px -12px rgba(188, 107, 242, 0.55),
+    0 4px 10px -6px rgba(0, 0, 0, 0.45);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }
 .collab-card img {
   width: 100%;
@@ -849,11 +859,11 @@ section { position: relative; }
   pointer-events: none;
 }
 .collab-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-5px);
   border-color: transparent;
   box-shadow:
-    0 28px 56px -18px rgba(188, 107, 242, 0.75),
-    0 8px 18px -8px rgba(0, 0, 0, 0.5);
+    0 16px 32px -14px rgba(188, 107, 242, 0.7),
+    0 6px 14px -8px rgba(0, 0, 0, 0.5);
 }
 .collab-card:hover::after { opacity: 1; }
 
