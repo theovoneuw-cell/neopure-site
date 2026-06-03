@@ -1037,22 +1037,37 @@ section { position: relative; }
 }
 .gallery-heading-strong { color: var(--np-ink); }
 
+/* Galerie compacte : UNE seule rangée horizontale qui défile (swipe) → peu de hauteur */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 150px;
-  grid-auto-flow: dense;             /* comble les trous de la mosaïque */
+  display: flex;
+  align-items: center;
   gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 2px 12px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
 }
+.gallery::-webkit-scrollbar { display: none; }
 .gallery-item {
   position: relative;
   margin: 0;
+  flex: 0 0 auto;
+  height: clamp(280px, 38vw, 380px);
+  aspect-ratio: 3 / 4;               /* portrait par défaut */
+  scroll-snap-align: center;
   border-radius: var(--r-md);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
 }
+/* Accents d'aspect (au lieu de spans grille) */
+.gallery-item.g-wide { aspect-ratio: 4 / 3; }
+.gallery-item.g-vid  { aspect-ratio: 1 / 1; height: clamp(220px, 30vw, 300px); }
 /* Photo & vidéo : plein cadre, désaturé au repos → couleur + zoom doux au survol */
 .gallery-item img,
 .gallery-item video {
@@ -1131,12 +1146,7 @@ section { position: relative; }
 }
 .gallery-item:hover::after { opacity: 1; }
 
-/* Bento : accents tall / wide pour les PHOTOS (dense comble le reste) */
-.gallery-item.g-tall { grid-row: span 2; }
-.gallery-item.g-wide { grid-column: span 2; }
-.gallery-item.g-big  { grid-row: span 2; grid-column: span 2; }
-/* Vidéos : toujours petites tuiles 1×1, jamais agrandies → restent nettes */
-.gallery-item.g-vid  { grid-row: span 1; grid-column: span 1; }
+/* (Les accents d'aspect g-wide / g-vid sont définis sur .gallery-item ci-dessus) */
 
 /* 7c. SERVICES ------------------------------------------------------------- */
 .services {
@@ -1736,10 +1746,9 @@ section { position: relative; }
   .nav-actions .btn { display: none; }
   .nav-actions .nav-toggle { display: block; }
 
-  /* Galerie mobile : bento 2 colonnes, vidéos verticales en hauteur double */
-  .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
-  .gallery-item.g-wide { grid-column: span 2; }
-  .gallery-item.g-tall { grid-row: span 2; grid-column: span 1; }
+  /* Galerie mobile : rangée horizontale compacte (tuiles un peu plus petites) */
+  .gallery-item { height: clamp(240px, 64vw, 300px); }
+  .gallery-item.g-vid { height: clamp(190px, 50vw, 240px); }
   .footer-inner { flex-direction: column; gap: 28px; }
 }
 
@@ -2597,9 +2606,12 @@ section { position: relative; }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
-    grid-template-columns: none;
-    grid-auto-rows: auto;
     gap: 16px;
+    overflow: visible;               /* pas de scroll interne : intégré au coverflow */
+    scroll-snap-type: none;
+    padding: 0;
+    -webkit-mask-image: none;
+            mask-image: none;
   }
   /* Filmstrip : hauteur fixe, largeur dérivée de l'aspect → rythme dynamique */
   .h-active .gallery-section .gallery-item {
