@@ -839,12 +839,32 @@ section { position: relative; }
   height: 100%;
   object-fit: cover;                 /* tuile carrée + image carrée = remplissage parfait */
   display: block;
+  /* Repos : légèrement désaturé/assombri → feed cohérent et élégant */
+  filter: saturate(0.82) brightness(0.9);
+  transform: scale(1.01);            /* évite les bords blancs au scale-down inverse */
+  transition: filter 0.55s var(--ease), transform 0.7s var(--ease);
+}
+/* Survol : l'image reprend toute sa couleur et zoome doucement (contenu par le clip) */
+.collab-card:hover img {
+  filter: saturate(1.12) brightness(1.04);
+  transform: scale(1.09);
+}
+/* Sheen glassy permanent en haut de chaque tuile */
+.collab-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 28%);
+  pointer-events: none;
 }
 /* Liseré dégradé de marque qui s'allume au survol (overlay en bordure interne) */
 .collab-card::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 2;
   border-radius: inherit;
   padding: 1.5px;
   background: linear-gradient(145deg, var(--np-cyan), var(--np-violet));
