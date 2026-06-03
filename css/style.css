@@ -1131,10 +1131,12 @@ section { position: relative; }
 }
 .gallery-item:hover::after { opacity: 1; }
 
-/* Bento : accents tall (vidéos verticales) / wide (paysages) — dense comble le reste */
+/* Bento : accents tall / wide pour les PHOTOS (dense comble le reste) */
 .gallery-item.g-tall { grid-row: span 2; }
 .gallery-item.g-wide { grid-column: span 2; }
 .gallery-item.g-big  { grid-row: span 2; grid-column: span 2; }
+/* Vidéos : toujours petites tuiles 1×1, jamais agrandies → restent nettes */
+.gallery-item.g-vid  { grid-row: span 1; grid-column: span 1; }
 
 /* 7c. SERVICES ------------------------------------------------------------- */
 .services {
@@ -2609,6 +2611,12 @@ section { position: relative; }
   }
   .h-active .gallery-section .gallery-item.g-tall { aspect-ratio: 9 / 16; }   /* reels verticaux */
   .h-active .gallery-section .gallery-item.g-wide { aspect-ratio: 16 / 10; }  /* paysages */
+  /* Vidéos : tuiles plus petites et carrées → pas d'étirement de la basse def */
+  .h-active .gallery-section .gallery-item.g-vid {
+    height: 42vh;
+    aspect-ratio: 1 / 1;
+    align-self: center;
+  }
 
   /* — SERVICES — */
   .h-active .services .container {
