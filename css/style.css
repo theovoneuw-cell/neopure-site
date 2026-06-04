@@ -318,9 +318,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   letter-spacing: -0.03em;
   color: #fff;
 }
-.brand-mark {
-  height: 1.4em; width: auto;
-  margin-right: -0.05em;
+.brand-logo {
+  height: 34px; width: auto;
+  display: block;
 }
 
 .nav-links {
@@ -892,34 +892,29 @@ section { position: relative; }
   .stats-collab-body { grid-template-columns: minmax(0, 1fr); gap: 44px; }
 }
 
-/* Mobile : swipe horizontal avec snap (pas de doublons) */
+/* Mobile : défilement automatique continu (marquee), comme en desktop */
 @media (max-width: 720px) {
   .collab { text-align: center; width: 100%; }
   .collab-title { text-align: center; display: block; width: 100%; margin: 0 auto 18px; }
   .collab-marquee {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    overflow: hidden;
     width: 100%;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   }
-  .collab-marquee::-webkit-scrollbar { display: none; }
   .collab-track {
-    animation: none;
+    animation: collabFlow 34s linear infinite;  /* un peu plus rapide sur mobile */
     width: max-content;
     gap: 14px;
     padding-block: 4px;
     margin: 0;
   }
   .collab-card {
-    scroll-snap-align: center;
-    width: 124px;
-    height: 124px;
+    width: 104px;
+    height: 104px;
   }
-  .collab-card--dup { display: none; }
+  /* Doublons visibles : indispensables pour la boucle infinie sans saut */
+  .collab-card--dup { display: block; }
 }
 .stats { display: flex; flex-direction: column; gap: 24px; }
 .stat {
@@ -1762,12 +1757,13 @@ section { position: relative; }
   display: grid;
   place-items: center;
   background: #151626;
-  transition: opacity 0.35s linear, visibility 0.35s linear;
-  /* Filet de sécurité : disparaît même sans JS */
-  animation: preAuto 0s linear 6s forwards;
+  transition: opacity 0.4s ease;
 }
-.preloader.is-done { opacity: 0; visibility: hidden; }
-@keyframes preAuto { to { opacity: 0; visibility: hidden; } }
+/* Sortie : opacité seule (la transition sur visibility provoquait un flash Firefox) */
+.preloader.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
 
 .preloader-inner {
   display: flex;
@@ -1874,19 +1870,14 @@ section { position: relative; }
 .preloader-logo {
   display: inline-flex;
   align-items: center;
-  gap: 0;
-  font-family: var(--font-head);
-  font-weight: 800;
-  font-size: clamp(2.2rem, 7vw, 3rem);
-  letter-spacing: -0.03em;
-  color: #fff;
+  justify-content: center;
   opacity: 0;
   animation: preIn 0.7s var(--ease) forwards;
 }
-.preloader-mark {
-  height: 1.1em;
+.preloader-logo-img {
+  height: clamp(46px, 10vw, 68px);
   width: auto;
-  margin-right: -0.06em;
+  display: block;
   filter: drop-shadow(0 0 22px rgba(188, 107, 242, 0.55));
 }
 .preloader-bar {
@@ -2160,8 +2151,8 @@ section { position: relative; }
   transition: transform 0.3s var(--ease), filter 0.3s var(--ease);
 }
 .brand-float:hover { transform: scale(1.08); }
-.brand-float-mark {
-  height: 56px;                    /* Logo seul, bien visible */
+.brand-float-logo {
+  height: 68px;                    /* Icône N dégradé en coin — bien visible */
   width: auto;
   display: block;
   filter: drop-shadow(0 0 16px rgba(188, 107, 242, 0.5))
@@ -2505,7 +2496,7 @@ section { position: relative; }
 @media (max-width: 860px) {
   .bubble { display: none; } /* mobile : on masque les bulles décoratives pour éviter l'encombrement */
   .brand-float { top: 18px; left: 18px; }
-  .brand-float-mark { height: 48px; }
+  .brand-float-logo { height: 58px; }
   .menu-btn { width: 54px; height: 54px; top: 16px; right: 18px; }
 }
 
@@ -2835,13 +2826,12 @@ body { background: #151626; color: var(--np-white); }
 /* Smartphone (≤ 720 px) — restructuration pour l'écran tactile */
 @media (max-width: 720px) {
   /* Espaces de section plus serrés */
-  .hero { padding: 70px 0 80px; min-height: auto; }
   .stats-collab, .services, .team, .map-panel { padding: 64px 0; }
   .contact { padding: 64px 0 0; }
   .container { padding-inline: 20px; }
 
   /* HERO — centré sur mobile (l'éditorial gauche-aligné est gardé pour desktop) */
-  .hero { padding: 100px 0 120px; text-align: center; }
+  .hero { padding: 100px 0 120px; min-height: auto; text-align: center; }
   .hero-inner { margin: 0 auto; }
 
   .hero-top {
@@ -2961,12 +2951,12 @@ body { background: #151626; color: var(--np-white); }
   /* MENU / BURGER ------------------------------------------------------ */
   .menu-btn { width: 52px; height: 52px; top: 16px; right: 16px; }
   .brand-float { top: 14px; left: 16px; }
-  .brand-float-mark { height: 44px; }
+  .brand-float-logo { height: 52px; }
   .menu-list a { font-size: clamp(2rem, 9vw, 3.6rem); }
 
   /* Preloader plus compact */
   .preloader-sectors { width: min(280px, 80vw); }
-  .preloader-logo { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .preloader-logo-img { height: clamp(40px, 12vw, 56px); }
 }
 
 /* Très petits écrans (≤ 380 px — iPhone SE, anciens Android) */

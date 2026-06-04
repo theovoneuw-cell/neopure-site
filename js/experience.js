@@ -15,19 +15,25 @@
      1. INTRO DE MARQUE (preloader)
      ======================================================================= */
   var pre = document.getElementById("preloader");
+  var preDone = false;
+  function removePre() { if (pre && pre.parentNode) pre.parentNode.removeChild(pre); }
   function hidePreloader() {
-    if (!pre) return;
-    pre.classList.add("is-done");
+    if (preDone || !pre) return;          // idempotent : ne s'exécute qu'une fois
+    preDone = true;
     document.body.classList.add("is-loaded");
-    setTimeout(function () { if (pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 400);
+    pre.classList.add("is-done");
+    // Retrait à la fin du fondu (ou fallback) → plus de réapparition possible
+    pre.addEventListener("transitionend", removePre, { once: true });
+    setTimeout(removePre, 700);
   }
   function killPreloaderImmediately() {
     if (!pre) return;
+    preDone = true;
     document.body.classList.add("is-loaded");
-    if (pre.parentNode) pre.parentNode.removeChild(pre);
+    removePre();
   }
   // On ne montre le preloader qu'à la toute 1re visite de la session.
-  // Sur refresh / navigation interne, on le retire instantanément (pas de flash noir).
+  // Sur refresh / navigation interne, on le retire instantanément (pas de flash).
   var alreadySeen = false;
   try { alreadySeen = sessionStorage.getItem("np_seen") === "1"; } catch (e) {}
   if (pre) {
@@ -35,7 +41,7 @@
       killPreloaderImmediately();
     } else {
       window.addEventListener("load", function () { setTimeout(hidePreloader, 1900); });
-      setTimeout(hidePreloader, 4200); // filet de sécurité
+      setTimeout(hidePreloader, 4200); // filet de sécurité si "load" tarde
     }
     try { sessionStorage.setItem("np_seen", "1"); } catch (e) {}
   }
