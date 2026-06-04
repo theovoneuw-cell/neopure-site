@@ -386,13 +386,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero::before {
   content: "";
   position: absolute;
-  right: -12%;
+  right: 2%;
   top: 50%;
   transform: translateY(-50%) rotate(-8deg);
-  width: 55vw;
-  max-width: 600px;
-  height: 55vw;
-  max-height: 600px;
+  width: 48vw;
+  max-width: 540px;
+  height: 48vw;
+  max-height: 540px;
   background: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
   opacity: 0.1;
   z-index: 0;
