@@ -8,6 +8,33 @@
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* Verrou de scroll robuste (iOS Safari inclus) : empêche la page de défiler
+     DERRIÈRE une modale, tout en autorisant le scroll À L'INTÉRIEUR d'un élément.
+     overflow:hidden sur body ne suffit pas sur iOS → on bloque aussi wheel/touchmove. */
+  function makeScrollLock() {
+    var prevent = null;
+    return {
+      lock: function (allowEl) {
+        if (prevent) return;
+        prevent = function (e) {
+          // Autorise le geste s'il se produit dans la zone défilable de la modale
+          if (allowEl && allowEl.contains(e.target)) return;
+          e.preventDefault();
+        };
+        document.addEventListener("wheel", prevent, { passive: false });
+        document.addEventListener("touchmove", prevent, { passive: false });
+        document.body.style.overflow = "hidden";
+      },
+      unlock: function () {
+        if (!prevent) return;
+        document.removeEventListener("wheel", prevent, { passive: false });
+        document.removeEventListener("touchmove", prevent, { passive: false });
+        document.body.style.overflow = "";
+        prevent = null;
+      }
+    };
+  }
+
   /* 1. Menu évolutif (pastille flottante → overlay plein écran) ------------- */
   var btn = document.getElementById("menuBtn");
   var overlay = document.getElementById("menuOverlay");
@@ -150,6 +177,7 @@
     var btnNext = document.getElementById("lbNext");
     var items = Array.prototype.slice.call(document.querySelectorAll(".gallery-item"));
     if (!lb || !stage || !items.length) return;
+    var lock = makeScrollLock();
 
     // Construit la liste des médias (type + source) à partir de la galerie
     var media = items.map(function (fig) {
@@ -189,12 +217,12 @@
       render(i);
       lb.classList.add("is-open");
       lb.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      lock.lock(null);                       // lightbox : aucun scroll d'arrière-plan
     }
     function close() {
       lb.classList.remove("is-open");
       lb.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      lock.unlock();
       // stoppe toute vidéo en cours pour libérer le son
       setTimeout(function () { stage.innerHTML = ""; }, 400);
       current = -1;
@@ -220,6 +248,52 @@
       if (e.key === "Escape") close();
       else if (e.key === "ArrowLeft") go(-1);
       else if (e.key === "ArrowRight") go(1);
+    });
+  })();
+
+  /* 9. Modale légale : clic sur un lien légal → bulle de lecture ------------- */
+  (function () {
+    var modal = document.getElementById("legalModal");
+    var body = document.getElementById("legalBody");
+    var btnClose = document.getElementById("legalClose");
+    var links = document.querySelectorAll("[data-legal]");
+    if (!modal || !body || !links.length) return;
+
+    var lock = makeScrollLock();
+    var lastFocus = null;
+
+    function open(key) {
+      var doc = document.querySelector('[data-legal-doc="' + key + '"]');
+      if (!doc) return;
+      lastFocus = document.activeElement;
+      body.innerHTML = doc.innerHTML;
+      body.scrollTop = 0;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      lock.lock(body);                       // autorise le scroll DANS la bulle uniquement
+      if (btnClose) btnClose.focus();
+    }
+    function close() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      lock.unlock();
+      setTimeout(function () { body.innerHTML = ""; }, 400);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    links.forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        open(a.getAttribute("data-legal"));
+      });
+    });
+    if (btnClose) btnClose.addEventListener("click", close);
+    // Clic sur le fond (hors panneau) → ferme
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
     });
   })();
 })();

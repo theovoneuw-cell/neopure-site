@@ -394,14 +394,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   height: 55vw;
   max-height: 600px;
   background: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
-  opacity: 0.04;
+  opacity: 0.1;
   z-index: 0;
   pointer-events: none;
   animation: heroWatermark 14s var(--ease) infinite alternate;
 }
 @keyframes heroWatermark {
-  from { transform: translateY(-50%) rotate(-8deg) scale(1); opacity: 0.03; }
-  to   { transform: translateY(-50%) rotate(-6deg) scale(1.03); opacity: 0.06; }
+  from { transform: translateY(-50%) rotate(-8deg) scale(1); opacity: 0.08; }
+  to   { transform: translateY(-50%) rotate(-6deg) scale(1.04); opacity: 0.13; }
 }
 /* Pas de watermark sur mobile (l'écran est déjà chargé) */
 @media (max-width: 720px) {
@@ -431,7 +431,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(75% 75% at 50% 50%, rgba(23, 20, 48, 0), rgba(23, 20, 48, 0.38) 90%);
+  /* Vignette plus marquée + assombrissement bas → profondeur, le texte ressort */
+  background:
+    radial-gradient(70% 70% at 38% 42%, rgba(23, 20, 48, 0), rgba(23, 20, 48, 0.55) 92%),
+    linear-gradient(180deg, rgba(23, 20, 48, 0) 55%, rgba(15, 12, 35, 0.35) 100%);
 }
 
 /* Formes de verre flottantes */
@@ -664,8 +667,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .hero-link:hover::after { transform: scaleX(0.6); transform-origin: right; }
 
-/* Socials en icônes seules (plus de pills XXL qui faisaient SaaS) */
-.hero-socials { display: inline-flex; gap: 10px; margin-left: auto; }
+/* Socials en icônes seules (plus de pills XXL qui faisaient SaaS) —
+   regroupés avec les actions via un fin séparateur (plus de dérive à droite) */
+.hero-socials { display: inline-flex; align-items: center; gap: 10px; }
+.hero-socials::before {
+  content: "";
+  width: 1px;
+  height: 26px;
+  margin-right: 8px;
+  background: rgba(255, 255, 255, 0.18);
+}
 .hero-social {
   display: grid;
   place-items: center;
@@ -2410,19 +2421,20 @@ section { position: relative; }
   gap: 44px;
   text-align: center;
 }
+/* Carte = carte rectangulaire à coins arrondis, IDENTIQUE web & mobile */
 .map-radar {
   position: relative;
-  width: min(78vw, 380px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
+  width: min(82vw, 520px);
+  aspect-ratio: 4 / 3;
+  border-radius: 22px;
   overflow: hidden;
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.10),
-    0 0 60px -10px rgba(188, 107, 242, 0.4),
-    inset 0 0 0 6px rgba(255, 255, 255, 0.04);
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 0 60px -12px rgba(188, 107, 242, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
-/* Voile coloré par-dessus la carte pour la fondre dans l'univers violet */
+/* Voile coloré léger par-dessus la carte pour la fondre dans l'univers violet */
 .map-radar::before {
   content: "";
   position: absolute;
@@ -2430,7 +2442,7 @@ section { position: relative; }
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(70% 70% at 50% 50%, rgba(188, 107, 242, 0.18), rgba(188, 107, 242, 0.42) 100%);
+    radial-gradient(85% 85% at 50% 45%, rgba(188, 107, 242, 0.08), rgba(123, 47, 240, 0.28) 100%);
   mix-blend-mode: color;
 }
 #map {
@@ -2438,9 +2450,8 @@ section { position: relative; }
   height: 100%;
   background: #2a1e60;
   z-index: 0;
-  /* Tuiles claires Voyager teintées en violet : on désature, on assombrit
-     un poil pour rester dans l'ambiance, mais clairement plus lumineux qu'avant */
-  filter: saturate(0.6) brightness(0.85) hue-rotate(15deg);
+  /* Tuiles Voyager teintées violet, mais plus lisibles qu'avant */
+  filter: saturate(0.72) brightness(0.92) hue-rotate(12deg);
 }
 .leaflet-container { font-family: var(--font-body); background: #2a1e60; }
 
@@ -2477,16 +2488,6 @@ section { position: relative; }
 @keyframes ping {
   0%   { width: 16px; height: 16px; opacity: 0.9; }
   100% { width: 150%; height: 150%; opacity: 0; }
-}
-/* Croisillon radar discret */
-.radar-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background:
-    linear-gradient(rgba(53, 242, 242, 0.12), rgba(53, 242, 242, 0.12)) 50% 0 / 1px 100% no-repeat,
-    linear-gradient(rgba(53, 242, 242, 0.12), rgba(53, 242, 242, 0.12)) 0 50% / 100% 1px no-repeat;
-  pointer-events: none;
 }
 .map-caption { max-width: 460px; }
 .map-caption h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 6px 0 16px; }
@@ -2668,7 +2669,7 @@ section { position: relative; }
     padding: 0 6vw;
     text-align: left;
   }
-  .h-active .map-panel .map-radar { width: min(58vh, 440px); }
+  .h-active .map-panel .map-radar { width: min(46vw, 620px); }
   .h-active .map-panel .map-caption { text-align: left; }
 
   /* — FOOTER → dernier panneau — */
@@ -2938,7 +2939,7 @@ body { background: #151626; color: var(--np-white); }
 
   /* CARTE / LOCALISATION ----------------------------------------------- */
   .map-panel { gap: 34px; }
-  .map-radar { width: min(82vw, 320px); }
+  .map-radar { width: min(88vw, 460px); }
   .map-caption { max-width: 100%; padding-inline: 20px; }
   .map-caption h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
   .map-caption-text { font-size: 0.96rem; }
@@ -3110,4 +3111,163 @@ body { background: #151626; color: var(--np-white); }
   .lb-stage { transition: opacity 0.2s linear; transform: none; }
   .lightbox.is-open .lb-stage { transform: none; }
   .lb-close:hover { transform: none; }
+}
+
+/* ==========================================================================
+   16. MODALE LÉGALE — bulle de lecture (T&C, confidentialité, mentions…)
+   ========================================================================== */
+.legal-store { display: none !important; }
+
+.legal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 56px);
+  background: rgba(10, 9, 22, 0.78);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
+  /* Le fond sombre ne défile pas la page derrière (iOS) */
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+.legal-modal.is-open { opacity: 1; visibility: visible; }
+
+.legal-panel {
+  position: relative;
+  width: min(680px, 100%);
+  max-height: 86vh;            /* repli pour vieux navigateurs */
+  max-height: 86dvh;           /* stable : ne saute pas quand la barre mobile apparaît/disparaît */
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(188, 107, 242, 0.16), rgba(188, 107, 242, 0) 55%),
+    rgba(20, 18, 42, 0.96);
+  box-shadow:
+    0 40px 100px -30px rgba(0, 0, 0, 0.8),
+    0 0 60px -10px rgba(188, 107, 242, 0.4);
+  transform: translateY(18px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
+}
+.legal-modal.is-open .legal-panel { transform: none; opacity: 1; }
+
+/* Croix de fermeture */
+.legal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.legal-close:hover { background: rgba(255, 255, 255, 0.16); transform: rotate(90deg); border-color: var(--np-cyan); }
+
+/* Contenu défilable */
+.legal-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;            /* le scroll ne chaîne pas vers la page (iOS) */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overflow-wrap: anywhere;
+  padding: clamp(34px, 5vw, 52px) clamp(26px, 5vw, 48px) clamp(30px, 5vw, 46px);
+  color: rgba(255, 255, 255, 0.84);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 107, 242, 0.5) transparent;
+}
+/* Alignement à gauche FORCÉ : neutralise toute justification externe
+   (extension navigateur, mode lecture, leaflet…) qui étirait les espaces. */
+.legal-body,
+.legal-body p,
+.legal-body h2,
+.legal-body h3,
+.legal-body li,
+.legal-body span {
+  text-align: left !important;
+  text-justify: auto;
+}
+.legal-body::-webkit-scrollbar { width: 8px; }
+.legal-body::-webkit-scrollbar-thumb { background: rgba(188, 107, 242, 0.45); border-radius: 8px; }
+/* Confort de lecture : on borne la longueur de ligne */
+.legal-body > * { max-width: 60ch; }
+
+.legal-eyebrow {
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--np-cyan);
+  margin: 0 0 10px;
+  /* Réserve l'espace de la croix pour que l'en-tête ne passe pas dessous */
+  padding-right: 44px;
+}
+.legal-body h2 {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
+  margin: 0 0 8px;
+  padding-right: 44px;
+}
+.legal-updated {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.legal-body h3 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin: 30px 0 10px;
+}
+.legal-body h3:first-of-type { margin-top: 0; }
+.legal-body p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 14px;
+}
+.legal-body p:last-child { margin-bottom: 0; }
+.legal-body strong { color: #fff; font-weight: 600; }
+.legal-body em { color: rgba(255, 255, 255, 0.7); }
+.legal-body a { color: var(--np-cyan); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.legal-body a:hover { color: #fff; }
+.legal-contact {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 720px) {
+  .legal-panel { max-height: 90vh; max-height: 90dvh; border-radius: 18px; }
+  .legal-close { width: 40px; height: 40px; font-size: 1.5rem; top: 12px; right: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legal-panel { transition: opacity 0.2s linear; transform: none; }
+  .legal-modal.is-open .legal-panel { transform: none; }
+  .legal-close:hover { transform: none; }
 }
