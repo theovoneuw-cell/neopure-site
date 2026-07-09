@@ -417,7 +417,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(28px, 5vw, 76px);         /* éditorial | carte vidéo */
   text-align: left;
   overflow: hidden;
   color: #fff;
@@ -439,8 +438,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   z-index: 0;
   pointer-events: none;
 }
-/* La carte vidéo remplace le watermark côté droit → on le masque pour ne pas surcharger */
-.hero:has(.hero-media)::before { display: none; }
+/* La vidéo plein écran remplace le watermark → on le masque pour ne pas surcharger */
+.hero:has(.hero-video)::before { display: none; }
 /* Pas de watermark sur mobile (l'écran est déjà chargé) */
 @media (max-width: 720px) {
   .hero::before { display: none; }
@@ -472,56 +471,65 @@ ul { margin: 0; padding: 0; list-style: none; }
     linear-gradient(180deg, rgba(23, 20, 48, 0) 55%, rgba(15, 12, 35, 0.35) 100%);
 }
 
-/* ===== Carte vidéo du hero — format story NATIF, jamais agrandie (nette) =====
-   Le dégradé de la charte reste visible tout autour et un halo l'enveloppe. */
-.hero-media {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.hero-media-card {
-  position: relative;
-  height: min(80vh, 700px);          /* grande, mais bornée → la vidéo n'est jamais upscalée */
-  aspect-ratio: 9 / 16;              /* format story natif = zéro rognage */
-  max-width: 40vw;
-  border-radius: 30px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 40px 100px -30px rgba(0, 0, 0, 0.65),
-    0 0 90px -20px rgba(188, 107, 242, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-}
-/* Halo diffus derrière la carte, dans les tons charte → l'ancre dans le fond */
-.hero-media-card::before {
-  content: "";
-  position: absolute;
-  inset: -14%;
-  z-index: -1;
-  background: radial-gradient(60% 60% at 50% 45%, rgba(185, 42, 250, 0.5), rgba(53, 242, 242, 0.14) 55%, transparent 72%);
-  filter: blur(28px);
-  pointer-events: none;
-}
+/* ===== Vidéo plein écran du hero ===== */
 .hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;                 /* la carte étant déjà en 9/16, le rognage est négligeable */
+  object-fit: cover;
   object-position: center;
-  display: block;
 }
-/* Léger voile bas sur la carte pour une finition premium */
-.hero-media-card::after {
+/* Le dégradé statique s'efface : la vidéo prend toute la place. */
+.hero:has(.hero-video) .hero-bg { display: none; }
+/* Voile sombre par-dessus la vidéo (z-index 1) : logo/slogan/CTA lisibles. */
+.hero:has(.hero-video)::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(15, 6, 26, 0) 60%, rgba(15, 6, 26, 0.35) 100%);
+  background:
+    radial-gradient(80% 80% at 40% 42%, rgba(20, 8, 32, 0.28), rgba(18, 6, 30, 0.70) 95%),
+    linear-gradient(180deg, rgba(20, 8, 32, 0.32) 0%, rgba(12, 4, 22, 0.58) 100%);
 }
 
-.hero-inner { position: relative; z-index: 2; max-width: 560px; width: 100%; flex: 1 1 520px; margin: 0; }
+/* ===== Grille/texture par-dessus la vidéo (z-index 2) : masque la compression ===== */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Fine grille régulière : lignes verticales + horizontales très discrètes. */
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(0deg,  rgba(0, 0, 0, 0.10)       0 1px, transparent 1px 4px);
+  background-size: 4px 4px;
+  mix-blend-mode: soft-light;
+  opacity: 0.85;
+}
+/* Léger vignettage foncé aux bords pour ancrer la vidéo dans le fond charte. */
+.hero-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(15, 6, 26, 0.5) 100%);
+}
+
+.hero-inner { position: relative; z-index: 3; max-width: 980px; width: 100%; }
+/* Foyer sombre diffus derrière le contenu éditorial : le logo/slogan/CTA
+   ressortent même quand la vidéo est claire ou chargée derrière. */
+.hero:has(.hero-video) .hero-inner::before {
+  content: "";
+  position: absolute;
+  inset: -8% -10%;
+  z-index: -1;
+  background: radial-gradient(58% 62% at 32% 46%, rgba(10, 4, 20, 0.6), rgba(10, 4, 20, 0) 74%);
+  filter: blur(26px);
+  pointer-events: none;
+}
 
 /* — Hero éditorial : en-tête (badge gauche / méta droite) — */
 .hero-top {
@@ -549,12 +557,16 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   line-height: 1;
 }
-/* Wordmark officiel "Neopure" en blanc, dimensionné comme un grand titre */
+/* Wordmark officiel "Neopure" en blanc, dimensionné comme un grand titre.
+   Double ombre : un halo violet (marque) + une ombre sombre nette → il claque
+   sur la vidéo et se détache immédiatement à l'arrivée sur le site. */
 .hero-title .hero-logo {
   display: block;
   width: clamp(280px, 56vw, 640px);
   height: auto;
-  filter: drop-shadow(0 0 32px rgba(188, 107, 242, 0.45));
+  filter:
+    drop-shadow(0 0 42px rgba(188, 107, 242, 0.6))
+    drop-shadow(0 6px 24px rgba(0, 0, 0, 0.55));
 }
 
 .hero-tagline {
@@ -592,7 +604,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
 }
 .hero-tag-bar {
   width: 32px;
@@ -618,12 +631,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-slogan {
   font-family: var(--font-head);
   font-style: italic;
-  font-size: clamp(1.1rem, 2.3vw, 1.45rem);
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem);
   line-height: 1.35;
-  font-weight: 400;                     /* Gotham Book italic, plus aéré */
+  font-weight: 500;                     /* Gotham Medium italic : plus présent, plus lisible */
   margin: 0 0 40px;
   max-width: 36ch;
-  color: rgba(255, 255, 255, 0.88);
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
 }
 
 /* — Bloc « 01 La Com' / 02 L'Event » dans le hero (dual identity visible) — */
@@ -2237,14 +2251,17 @@ section { position: relative; }
     pointer-events: auto;            /* on rétablit la capture de clic au niveau de chaque panneau */
   }
 
-  /* — HERO — plein écran, éditorial | carte vidéo, centré — */
-  .h-active .hero.panel { min-width: 100vw; padding: 0 clamp(40px, 6vw, 120px); }
-  .h-active .hero .hero-media-card { height: min(78vh, 660px); max-width: min(38vw, 380px); }
-  /* En scroll horizontal seulement : on fond les bords du hero vers le fond
-     sombre pour éviter une arête nette avec les panneaux voisins transparents. */
-  .h-active .hero-bg {
-    -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 14%, #000 86%, transparent 96%);
-            mask-image: linear-gradient(90deg, transparent 4%, #000 14%, #000 86%, transparent 96%);
+  /* — HERO — plein écran, déjà centré — */
+  .h-active .hero.panel { min-width: 100vw; padding: 0; }
+  /* En scroll horizontal : on fond UNIQUEMENT le bord DROIT de la vidéo (et de
+     ses voiles) vers le dégradé du fond → transition douce hero → reste du site.
+     Le côté gauche (logo) reste net. */
+  .h-active .hero-bg,
+  .h-active .hero-video,
+  .h-active .hero-grid,
+  .h-active .hero:has(.hero-video)::after {
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 93%, transparent 100%);
+            mask-image: linear-gradient(90deg, #000 0%, #000 93%, transparent 100%);
   }
 
   /* — STATS + COLLAB — */
@@ -2357,7 +2374,9 @@ section { position: relative; }
     max-width: none;
   }
   .h-active .contact .contact-form-wrap { width: 420px; }
-  .h-active .contact .contact-info { width: 300px; }
+  /* La carte Horaires (courte) se centre verticalement par rapport au
+     formulaire, sans déplacer l'ancrage haut de ce dernier. */
+  .h-active .contact .contact-info { width: 300px; align-self: center; }
 
   /* — CARTE RADAR → en ligne (radar | texte) — */
   .h-active .map-panel.panel {
@@ -2545,14 +2564,6 @@ body { background: transparent; color: var(--np-white); }
   .map-panel { padding: 80px 0 100px; }
 }
 
-/* Tablette & desktop étroit (≤ 1000 px) : on empile éditorial puis carte vidéo */
-@media (max-width: 1000px) {
-  .hero { flex-direction: column; gap: 40px; }
-  .hero-inner { max-width: 620px; flex: 0 1 auto; }
-  .hero-media { width: 100%; }
-  .hero-media-card { height: auto; width: min(60vw, 300px); max-width: 300px; aspect-ratio: 9 / 16; }
-}
-
 /* Smartphone (≤ 720 px) — restructuration pour l'écran tactile */
 @media (max-width: 720px) {
   /* Espaces de section plus serrés */
@@ -2563,7 +2574,6 @@ body { background: transparent; color: var(--np-white); }
   /* HERO — centré sur mobile (l'éditorial gauche-aligné est gardé pour desktop) */
   .hero { padding: 100px 0 120px; min-height: auto; text-align: center; }
   .hero-inner { margin: 0 auto; }
-  .hero-media-card { width: min(72vw, 280px); max-width: 280px; }
 
   .hero-top {
     display: flex; flex-direction: column; align-items: center;
