@@ -655,13 +655,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 16px;
   padding: 14px 18px 14px 16px;
   border-radius: var(--r-md);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-left: 3px solid var(--np-cyan);
-  transition: background-color 0.3s var(--ease), transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 8px 26px -14px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s var(--ease), transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 .hero-sector--event a { border-left-color: var(--np-violet); }
-.hero-sector a:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-3px); }
+.hero-sector a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-3px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 14px 34px -16px rgba(53, 242, 242, 0.4);
+}
 .hero-sector-idx {
   font-family: var(--font-head);
   font-weight: 700;
@@ -996,9 +1003,11 @@ section { position: relative; }
   padding: 28px 28px 24px;
   border-radius: 20px;
   background:
-    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 65%),
-    rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 65%),
+    rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   overflow: hidden;
   isolation: isolate;
   transition: transform 0.5s var(--ease), background-color 0.4s var(--ease),
@@ -1149,18 +1158,22 @@ section { position: relative; }
   position: relative;
   margin: 0;
   flex: 0 0 auto;
-  height: clamp(280px, 38vw, 380px);
-  aspect-ratio: 3 / 4;               /* portrait par défaut */
+  height: clamp(300px, 52vw, 430px);
+  aspect-ratio: 2 / 3;               /* photos verticales */
   scroll-snap-align: center;
-  border-radius: var(--r-md);
+  border-radius: 18px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.5s var(--ease);
 }
-/* Accents d'aspect (au lieu de spans grille) */
-.gallery-item.g-wide { aspect-ratio: 4 / 3; }
-.gallery-item.g-vid  { aspect-ratio: 1 / 1; height: clamp(220px, 30vw, 300px); }
+/* Tout en vertical « story » : mêmes hauteurs, formats cohérents */
+.gallery-item.g-wide { aspect-ratio: 4 / 5; }              /* accent un peu plus large, reste vertical */
+.gallery-item.g-tall,
+.gallery-item.g-vid  { aspect-ratio: 9 / 16; }             /* vidéos = format story, MÊME hauteur que les photos */
+/* Zigzag subtil : rythme moderne de « mur de reels » */
+.gallery-item:nth-child(even) { transform: translateY(20px); }
+.gallery-item:nth-child(even):hover { transform: translateY(14px); }
 /* Photo & vidéo : plein cadre, désaturé au repos → couleur + zoom doux au survol */
 .gallery-item img,
 .gallery-item video {
@@ -1183,27 +1196,64 @@ section { position: relative; }
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  width: 54px; height: 54px;
+  width: 66px; height: 66px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   color: #fff;
-  background: rgba(21, 22, 38, 0.35);
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  /* Verre dépoli */
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 10px 30px -6px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -10px 22px -10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s var(--ease), background-color 0.4s var(--ease),
+              box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+  pointer-events: none;
+}
+/* Anneau en dégradé charte (cyan → violet) */
+.media-play::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(140deg, var(--np-cyan), var(--np-violet));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0.6;
+  transition: opacity 0.4s var(--ease);
+}
+/* Reflet de verre en haut */
+.media-play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(72% 55% at 50% 20%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 62%);
   pointer-events: none;
 }
 .media-play svg {
-  width: 20px; height: 20px;
+  position: relative;
+  z-index: 1;
+  width: 24px; height: 24px;
   margin-left: 3px;                  /* recentre optiquement le triangle */
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
 }
 .gallery-item:hover .media-play {
-  transform: translate(-50%, -50%) scale(1.08);
-  background: rgba(21, 22, 38, 0.2);
-  border-color: var(--np-cyan);
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.68);
+  box-shadow:
+    0 14px 42px -8px rgba(53, 242, 242, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -10px 22px -10px rgba(0, 0, 0, 0.3);
 }
+.gallery-item:hover .media-play::before { opacity: 1; }
 /* Sheen glassy + liseré dégradé au survol (cohérent avec les tuiles clients) */
 .gallery-item::before {
   content: "";
@@ -1331,9 +1381,11 @@ section { position: relative; }
   padding: 36px 32px;
   border-radius: 22px;
   background:
-    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 65%),
-    rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 65%),
+    rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   overflow: hidden;
   isolation: isolate;
   transition: transform 0.5s var(--ease), background-color 0.4s var(--ease),
@@ -1699,8 +1751,11 @@ section { position: relative; }
   font-size: 0.85rem;
   padding: 8px 14px;
   border-radius: var(--r-pill);
-  background: rgba(18, 8, 28, 0.32);
+  background: rgba(18, 8, 28, 0.3);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.92);
   cursor: pointer;
   transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
@@ -1882,9 +1937,12 @@ section { position: relative; }
   .nav-actions .btn { display: none; }
   .nav-actions .nav-toggle { display: block; }
 
-  /* Galerie mobile : rangée horizontale compacte (tuiles un peu plus petites) */
-  .gallery-item { height: clamp(240px, 64vw, 300px); }
-  .gallery-item.g-vid { height: clamp(190px, 50vw, 240px); }
+  /* Galerie mobile : mur de stories, vidéos et photos à la MÊME hauteur */
+  .gallery-item,
+  .gallery-item.g-vid,
+  .gallery-item.g-tall { height: clamp(300px, 80vw, 400px); }
+  /* Zigzag réduit sur petit écran */
+  .gallery-item:nth-child(even) { transform: translateY(12px); }
   .footer-inner { flex-direction: column; gap: 28px; }
 }
 
@@ -1903,16 +1961,22 @@ section { position: relative; }
 /* 10h. MENU ÉVOLUTIF (flottant — plus de barre en haut) ------------------- */
 .brand-float {
   position: fixed; top: 20px; left: 24px; z-index: 200;
-  display: inline-flex; align-items: center;
-  transition: transform 0.3s var(--ease), filter 0.3s var(--ease);
+  display: grid; place-items: center;
+  width: 62px; height: 62px; border-radius: 50%;
+  /* Bulle glassmorphique, assortie au bouton menu (symétrie des deux coins) */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s var(--ease), background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
-.brand-float:hover { transform: scale(1.08); }
+.brand-float:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.14); }
 .brand-float-logo {
-  height: 68px;                    /* Icône N dégradé en coin — bien visible */
+  height: 40px;                    /* Icône N dégradé, centrée dans la bulle */
   width: auto;
   display: block;
-  filter: drop-shadow(0 0 16px rgba(188, 107, 242, 0.5))
-          drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 
 .menu-btn {
@@ -2203,8 +2267,8 @@ section { position: relative; }
 
 /* 11. RESPONSIVE — interactions ------------------------------------------- */
 @media (max-width: 860px) {
-  .brand-float { top: 18px; left: 18px; }
-  .brand-float-logo { height: 58px; }
+  .brand-float { top: 16px; left: 18px; width: 54px; height: 54px; }
+  .brand-float-logo { height: 34px; }
   .menu-btn { width: 54px; height: 54px; top: 16px; right: 18px; }
 }
 
@@ -2253,15 +2317,19 @@ section { position: relative; }
 
   /* — HERO — plein écran, déjà centré — */
   .h-active .hero.panel { min-width: 100vw; padding: 0; }
-  /* En scroll horizontal : on fond UNIQUEMENT le bord DROIT de la vidéo (et de
-     ses voiles) vers le dégradé du fond → transition douce hero → reste du site.
-     Le côté gauche (logo) reste net. */
-  .h-active .hero-bg,
-  .h-active .hero-video,
-  .h-active .hero-grid,
+  /* En scroll horizontal : le bord DROIT de la vidéo se FOND vers le violet
+     profond de la charte (au lieu de devenir transparent et de révéler d'un
+     coup la bande magenta vive). Dégradé multi-paliers = transition douce et
+     élégante. Le côté gauche (logo) reste net. */
   .h-active .hero:has(.hero-video)::after {
-    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 93%, transparent 100%);
-            mask-image: linear-gradient(90deg, #000 0%, #000 93%, transparent 100%);
+    background:
+      linear-gradient(90deg,
+        transparent 68%,
+        rgba(47, 23, 59, 0.30) 82%,
+        rgba(47, 23, 59, 0.72) 92%,
+        #2f173b 99%),
+      radial-gradient(80% 80% at 40% 42%, rgba(20, 8, 32, 0.28), rgba(18, 6, 30, 0.70) 95%),
+      linear-gradient(180deg, rgba(20, 8, 32, 0.32) 0%, rgba(12, 4, 22, 0.58) 100%);
   }
 
   /* — STATS + COLLAB — */
@@ -2293,12 +2361,21 @@ section { position: relative; }
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2.4vh;
+    gap: 2.2vh;
     height: 100vh;
     width: auto;
     max-width: none;
+    padding-top: 8vh;                 /* zone de sécurité sous le menu flottant */
+    padding-bottom: 3vh;
   }
-  .h-active .gallery-section .gallery-heading { margin: 0; text-align: left; max-width: 760px; }
+  .h-active .gallery-section .gallery-heading {
+    margin: 0 auto;
+    text-align: center;
+    max-width: min(96vw, 1320px);      /* assez large pour tenir sur une ligne en desktop */
+    font-size: clamp(1.15rem, 2.05vw, 1.8rem);
+  }
+  /* Accroche centrée juste sous le titre (on annule la marge négative de base) */
+  .h-active .gallery-section .gallery-accroche { margin: 0 auto; max-width: 640px; }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
@@ -2309,22 +2386,24 @@ section { position: relative; }
     -webkit-mask-image: none;
             mask-image: none;
   }
-  /* Filmstrip : hauteur fixe, largeur dérivée de l'aspect → rythme dynamique */
+  /* Mur de stories : hauteur fixe uniforme, largeur dérivée de l'aspect vertical */
   .h-active .gallery-section .gallery-item {
     height: 56vh;
     width: auto;
-    aspect-ratio: 3 / 4;             /* portrait par défaut */
+    aspect-ratio: 2 / 3;             /* photos verticales */
     grid-row: auto;
     grid-column: auto;
   }
-  .h-active .gallery-section .gallery-item.g-tall { aspect-ratio: 9 / 16; }   /* reels verticaux */
-  .h-active .gallery-section .gallery-item.g-wide { aspect-ratio: 16 / 10; }  /* paysages */
-  /* Vidéos : tuiles plus petites et carrées → pas d'étirement de la basse def */
+  .h-active .gallery-section .gallery-item.g-wide { aspect-ratio: 4 / 5; }    /* accent un peu plus large */
+  /* Vidéos = format story 9/16, MÊME hauteur que les photos (plus de carré rikiki) */
+  .h-active .gallery-section .gallery-item.g-tall,
   .h-active .gallery-section .gallery-item.g-vid {
-    height: 38vh;
-    aspect-ratio: 1 / 1;
-    align-self: center;
+    height: 56vh;
+    aspect-ratio: 9 / 16;
+    align-self: auto;
   }
+  /* Zigzag conservé en frise horizontale */
+  .h-active .gallery-section .gallery-item:nth-child(even) { transform: translateY(24px); }
 
   /* — SERVICES — */
   .h-active .services .container {
@@ -2506,15 +2585,18 @@ body { background: transparent; color: var(--np-white); }
   text-shadow: 0 1px 6px rgba(20, 6, 32, 0.5);
 }
 .field input, .field textarea {
-  background: rgba(18, 8, 28, 0.42);
+  background: rgba(18, 8, 28, 0.38);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
   border-color: rgba(255, 255, 255, 0.28);
   color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.58); }
 .field input:focus, .field textarea:focus {
   border-color: var(--np-cyan);
-  background: rgba(18, 8, 28, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22);
+  background: rgba(18, 8, 28, 0.5);
+  box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 .form-note { color: rgba(255, 255, 255, 0.68); }
 
@@ -2690,8 +2772,8 @@ body { background: transparent; color: var(--np-white); }
 
   /* MENU / BURGER ------------------------------------------------------ */
   .menu-btn { width: 52px; height: 52px; top: 16px; right: 16px; }
-  .brand-float { top: 14px; left: 16px; }
-  .brand-float-logo { height: 52px; }
+  .brand-float { top: 14px; left: 16px; width: 50px; height: 50px; }
+  .brand-float-logo { height: 32px; }
   .menu-list a { font-size: clamp(2rem, 9vw, 3.6rem); }
 }
 
