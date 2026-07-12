@@ -176,8 +176,8 @@ h1, h2, h3, h4 {
   margin: 0 0 0.4em;
   letter-spacing: -0.03em;
   /* Léger relief : garde les titres lisibles quelle que soit la zone du
-     dégradé (vif ou profond) derrière eux. */
-  text-shadow: 0 2px 16px rgba(15, 5, 26, 0.35);
+     dégradé (vif ou profond) derrière eux. Ombre adoucie (retour client). */
+  text-shadow: 0 1px 10px rgba(15, 5, 26, 0.24);
 }
 
 p { margin: 0 0 1rem; font-weight: 400; }
@@ -208,8 +208,51 @@ ul { margin: 0; padding: 0; list-style: none; }
   background-clip: text;
   color: transparent;
   /* Ombre portée derrière le texte en dégradé : le détache du fond charte,
-     vif ou profond, sans altérer les couleurs de la charte elle-même. */
-  filter: drop-shadow(0 2px 14px rgba(15, 5, 26, 0.4));
+     vif ou profond. Adoucie (retour client : ombres trop marquées). */
+  filter: drop-shadow(0 1px 9px rgba(15, 5, 26, 0.3));
+}
+
+/* ===== TITRES DE SECTION — blanc lisible + frémissement cyan =============
+   Retour client : le texte en dégradé rendait « violet sur violet »,
+   illisible. On repasse les mots mis en avant en BLANC (contraste net sur
+   le fond charte) avec un léger reflet cyan qui balaie le texte pour qu'il
+   ne soit pas « juste posé ». Contraste préservé, identité conservée. */
+.stats-collab-heading em,
+.gallery-heading .gradient-text,
+.services-title .gradient-text,
+.services-lead-q,
+.team-content h2 .gradient-text,
+.map-caption h2 .gradient-text,
+.contact-title.gradient-text {
+  background: linear-gradient(100deg,
+    #ffffff 0%, #ffffff 42%,
+    var(--np-cyan) 55%,
+    #ffffff 70%, #ffffff 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 1px 8px rgba(15, 5, 26, 0.28));
+  animation: headingSheen 7.5s ease-in-out infinite;
+}
+@keyframes headingSheen {
+  0%   { background-position: 0% center; }
+  100% { background-position: -220% center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stats-collab-heading em,
+  .gallery-heading .gradient-text,
+  .services-title .gradient-text,
+  .services-lead-q,
+  .team-content h2 .gradient-text,
+  .map-caption h2 .gradient-text,
+  .contact-title.gradient-text {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+  }
 }
 
 .eyebrow {
@@ -291,21 +334,6 @@ ul { margin: 0; padding: 0; list-style: none; }
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 .btn-book svg { width: 18px; height: 18px; }
-
-.btn-ghost {
-  color: var(--np-white);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.22); }
-
-.btn-dark {
-  color: #fff;
-  background: var(--np-navy);
-}
-.btn-dark:hover { background: #20263f; }
 
 /* Animation reveal au scroll (pilotée par main.js) */
 .reveal {
@@ -568,6 +596,31 @@ ul { margin: 0; padding: 0; list-style: none; }
     drop-shadow(0 0 42px rgba(188, 107, 242, 0.6))
     drop-shadow(0 6px 24px rgba(0, 0, 0, 0.55));
 }
+/* Logo vivant (retour client : « une animation de notre logo ») :
+   entrée en fondu/échelle à l'arrivée, puis halo qui respire doucement
+   entre le violet et le cyan de la charte. Le logo étant une image (PNG),
+   on anime son aura plutôt que ses tracés. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title .hero-logo {
+    animation:
+      logoIn 1.1s var(--ease) both,
+      logoAura 5.5s ease-in-out 1.1s infinite;
+  }
+  @keyframes logoIn {
+    0%   { opacity: 0; transform: scale(0.92) translateY(8px); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes logoAura {
+    0%, 100% {
+      filter: drop-shadow(0 0 42px rgba(188, 107, 242, 0.6))
+              drop-shadow(0 6px 24px rgba(0, 0, 0, 0.55));
+    }
+    50% {
+      filter: drop-shadow(0 0 60px rgba(53, 242, 242, 0.55))
+              drop-shadow(0 6px 24px rgba(0, 0, 0, 0.55));
+    }
+  }
+}
 
 .hero-tagline {
   font-family: var(--font-head);
@@ -754,37 +807,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-
-/* 6. MARQUEE =============================================================== */
-.marquee {
-  background: var(--np-navy);
-  color: #fff;
-  padding: 18px 0;
-  overflow: hidden;
-  white-space: nowrap;
-  border-block: 1px solid rgba(255, 255, 255, 0.08);
-}
-.marquee-track {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  animation: marquee 28s linear infinite;
-}
-.marquee:hover .marquee-track { animation-play-state: paused; }
-.marquee-item {
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-style: italic;
-  font-size: 1.15rem;
-  letter-spacing: 0.02em;
-  padding: 0 28px;
-  color: var(--np-pink);
-}
-.marquee-item .sep { color: var(--np-cyan); margin-left: 56px; }
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
 
 /* 7. SECTIONS GÉNÉRIQUES =================================================== */
 section { position: relative; }
@@ -1323,47 +1345,6 @@ section { position: relative; }
   font-size: clamp(2rem, 5vw, 3.2rem);
   margin-bottom: 14px;
 }
-.services-intro {
-  position: relative;
-  text-align: center;
-  font-family: var(--font-head);
-  font-weight: 400;                    /* Gotham Book — texte courant */
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 auto 46px;
-  max-width: 640px;
-}
-.services-intro strong { color: #fff; font-weight: 700; }
-.services-grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.service-card {
-  padding: 32px 26px;
-  border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  transition: transform 0.35s var(--ease), background-color 0.35s var(--ease), border-color 0.35s var(--ease);
-}
-.service-card:hover {
-  transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(214, 148, 242, 0.5);
-}
-.service-icon {
-  display: grid;
-  place-items: center;
-  width: 56px; height: 56px;
-  margin-bottom: 22px;
-  border-radius: 14px;
-  background: var(--grad-brand);
-  color: #fff;
-}
-.service-icon svg { width: 28px; height: 28px; }
-.service-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
-.service-card p { color: rgba(255, 255, 255, 0.72); font-size: 0.96rem; margin: 0; }
 .services-cta { position: relative; text-align: center; margin-top: 48px; }
 
 /* 7c-bis. DEUX SECTEURS (Communication / Événementiel) -------------------- */
@@ -1674,25 +1655,6 @@ section { position: relative; }
   text-align: center;
 }
 .team-photo { width: 100%; }
-.team-more {
-  display: inline-block;               /* pas de flex → "→" ne se détache jamais */
-  margin-top: 22px;
-  font-family: var(--font-head);
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-  padding-bottom: 3px;
-  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
-}
-.team-more:hover { border-color: var(--np-cyan); }
-.team-more .tm-arrow {
-  display: inline-block;
-  margin-left: 6px;
-  color: var(--np-cyan);
-  transition: transform 0.25s var(--ease);
-}
-.team-more:hover .tm-arrow { transform: translateX(3px); }
 
 /* 7e. CONTACT -------------------------------------------------------------- */
 .contact {
@@ -1856,24 +1818,6 @@ section { position: relative; }
 }
 .contact-socials a:hover { background: var(--grad-brand); transform: translateY(-3px); }
 .contact-socials svg { width: 20px; height: 20px; }
-
-.contact-map { margin-top: 64px; }
-.map-ph {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 280px;
-  background:
-    repeating-linear-gradient(45deg, #eceaf5 0 12px, #f4f3fa 12px 24px);
-  color: var(--np-muted);
-  text-align: center;
-}
-.map-ph strong { font-family: var(--font-head); color: var(--np-ink); font-size: 1.1rem; }
-.map-ph em { font-size: 0.82rem; }
-.map-ph .ci-ico { color: var(--np-purple); }
-.map-ph .ci-ico svg { width: 32px; height: 32px; }
 
 /* 7f. FOOTER --------------------------------------------------------------- */
 .site-footer { background: var(--np-navy); color: #fff; }
@@ -2127,19 +2071,6 @@ section { position: relative; }
 
 /* 10i. Réseaux du hero (Instagram + WhatsApp) + réseaux du footer --------- */
 .hero-socials { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-.hero-ig {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 9px 17px; border-radius: var(--r-pill);
-  font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
-}
-.hero-ig:hover { background: rgba(255, 255, 255, 0.16); border-color: var(--np-pink); }
-.hero-wa:hover { border-color: #25d366; }
-.hero-ig svg { width: 18px; height: 18px; }
 
 /* 10j. NAV LATÉRALE ÉVOLUTIVE (desktop) — surligne la section courante ---- */
 .side-nav { display: none; }
@@ -2207,10 +2138,13 @@ section { position: relative; }
   aspect-ratio: 4 / 3;
   border-radius: 22px;
   overflow: hidden;
+  /* Halo double charte (violet + cyan) : la carte rayonne comme les autres
+     cartes du site, plus une aura scanner discrète. */
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 0 60px -12px rgba(188, 107, 242, 0.4),
+    0 24px 60px -18px rgba(188, 107, 242, 0.45),
+    0 0 48px -14px rgba(53, 242, 242, 0.35),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 /* Voile coloré par-dessus la carte pour la teinter aux couleurs de la charte */
@@ -2252,14 +2186,125 @@ section { position: relative; }
   position: absolute;
   left: 50%; top: 50%;
   width: 28px; height: 38px;
-  /* La pointe du pin remonte de 22px au-dessus du centre géographique,
-     pour laisser le nom de la ville (au centre) parfaitement lisible. */
-  transform: translate(-50%, calc(-100% - 22px));
+  /* La pointe du pin remonte au-dessus du centre géographique pour laisser
+     le nom de la ville (au centre) parfaitement lisible ET dégagé — le pin
+     ne touche plus les lettres (retour client : « arrange »). */
+  transform: translate(-50%, calc(-100% - 34px));
   z-index: 5;
   filter: drop-shadow(0 6px 16px rgba(53, 242, 242, 0.55))
           drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 .radar-core svg { display: block; width: 100%; height: 100%; }
+
+/* ===== Balayage radar : cône lumineux qui tourne autour du centre ===== */
+.radar-sweep {
+  position: absolute;
+  left: 50%; top: 50%;
+  /* Grand carré centré : la rotation couvre toujours la carte, sans coin vide. */
+  width: 160%; aspect-ratio: 1;
+  z-index: 2;
+  pointer-events: none;
+  background: conic-gradient(from 0deg at 50% 50%,
+    rgba(53, 242, 242, 0)    0deg,
+    rgba(53, 242, 242, 0.30) 26deg,
+    rgba(188, 107, 242, 0.10) 52deg,
+    rgba(53, 242, 242, 0)    72deg,
+    rgba(53, 242, 242, 0)    360deg);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: radarSweep 6s linear infinite;
+}
+@keyframes radarSweep { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* ===== Ondes concentriques émanant du point Montpellier (centre) ===== */
+.radar-rings {
+  position: absolute;
+  /* Alignées sur la pointe du pin (au-dessus du nom de ville), pas sur le
+     centre géographique : les ondes n'éclatent plus sur les lettres. */
+  left: 50%; top: calc(50% - 34px);
+  z-index: 3;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.radar-rings i {
+  position: absolute;
+  left: 0; top: 0;
+  width: 30px; height: 30px;
+  margin: -15px 0 0 -15px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(53, 242, 242, 0.55);
+  opacity: 0;
+  animation: radarPing 4.2s ease-out infinite;
+}
+.radar-rings i:nth-child(2) { animation-delay: 1.4s; }
+.radar-rings i:nth-child(3) { animation-delay: 2.8s; }
+@keyframes radarPing {
+  0%   { transform: scale(0.25); opacity: 0; border-color: rgba(53, 242, 242, 0.75); }
+  22%  { opacity: 0.65; }
+  100% { transform: scale(7); opacity: 0; border-color: rgba(188, 107, 242, 0.15); }
+}
+
+/* ===== Cible lumineuse au centre géographique (« on fait mouche ») ===== */
+.radar-target {
+  position: absolute;
+  /* Pile sous la pointe du pin (au-dessus du nom de ville) : « on fait mouche »
+     sans se poser sur les lettres. */
+  left: 50%; top: calc(50% - 34px);
+  z-index: 4;
+  width: 9px; height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--np-cyan);
+  box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22), 0 0 14px 2px rgba(53, 242, 242, 0.7);
+  animation: radarTarget 4.2s ease-in-out infinite;
+}
+@keyframes radarTarget {
+  0%, 100% { transform: scale(1);   opacity: 0.9; }
+  50%      { transform: scale(1.35); opacity: 1; }
+}
+
+/* ===== Cadre de marque : liseré dégradé + ligne d'accent (signature du site) ===== */
+.radar-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  border-radius: inherit;
+}
+/* Liseré dégradé cyan→violet, comme les tuiles galerie/clients */
+.radar-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(145deg, var(--np-cyan), var(--np-violet));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0.6;
+}
+/* Ligne d'accent lumineuse en haut (comme .stat / .sector / .contact-info) */
+.radar-frame::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 22px; right: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--np-cyan), var(--np-violet), transparent);
+  box-shadow: 0 0 16px rgba(53, 242, 242, 0.6);
+}
+
+/* Radar : mouvements figés si l'utilisateur réduit les animations */
+@media (prefers-reduced-motion: reduce) {
+  .radar-sweep { animation: none; opacity: 0.5; }
+  .radar-rings i { animation: none; opacity: 0.28; transform: scale(3.4); }
+  .radar-rings i:nth-child(2) { transform: scale(5.4); opacity: 0.18; }
+  .radar-rings i:nth-child(3) { display: none; }
+  .radar-target { animation: none; }
+}
+
 .map-caption { max-width: 460px; }
 .map-caption h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 6px 0 16px; }
 .map-caption-text { color: rgba(255, 255, 255, 0.72); margin-bottom: 26px; }
@@ -2487,6 +2532,20 @@ section { position: relative; }
     padding-bottom: clamp(72px, 9vh, 96px);
   }
 
+  /* Desktop peu haut : le panneau Services empilait lead + titre + 2 cartes +
+     CTA au point de dépasser 100vh → le haut (« L'algo ? C'est notre pote »)
+     passait sous le menu flottant et le CTA du bas était rogné (retour client :
+     « des trucs qui cachent des trucs »). On compresse pour que tout tienne. */
+  @media (max-height: 900px) {
+    .h-active .services .container { gap: 2.2vh; }
+    .h-active .services .services-lead { margin-bottom: 0; }
+    .h-active .services .sector { padding: 20px 22px; }
+    .h-active .services .sector-head { margin-bottom: 14px; }
+    .h-active .services .sector-tagline { margin-top: 10px; }
+    .h-active .services .sector-list li { padding: 9px 0; }
+    .h-active .services .services-cta { margin-top: 0; }
+  }
+
   /* — FOOTER → dernier panneau — */
   .h-active .site-footer.panel {
     flex-direction: column;
@@ -2503,31 +2562,27 @@ section { position: relative; }
   .h-active .site-footer .footer-bottom { border: none; padding: 22px 0 0; }
   .h-active .site-footer .footer-bottom .container { padding-inline: 0; }
 
-  /* — MARQUEE → bande verticale (frise) — */
-  .h-active .marquee.vstrip.panel {
-    min-width: 98px;
-    padding: 0;
-    overflow: hidden;
-    border-block: none;
-    border-inline: 1px solid rgba(255, 255, 255, 0.08);
-    align-items: stretch;
+}
+
+/* 12b. DESKTOP PEU HAUT (ex. 1366×768) — le panneau Contact fait 100vh sans
+   scroll interne ; sur un écran court, le formulaire (haut) débordait et le
+   bouton « Envoyer » passait SOUS le pli, donc inatteignable (le scroll
+   vertical pilote l'horizontale). On compresse l'espacement du formulaire
+   pour que tout, bouton compris, tienne dans la hauteur visible. */
+@media (min-width: 1025px) and (max-height: 860px) {
+  .h-active .contact .contact-inner {
+    padding-top: clamp(52px, 6.5vh, 72px);
+    padding-bottom: clamp(36px, 5vh, 60px);
   }
-  .h-active .marquee.vstrip .marquee-track {
-    flex-direction: column;
-    width: 100%;
-    height: max-content;
-    animation: marqueeV 26s linear infinite;
-  }
-  .h-active .marquee.vstrip .marquee-item {
-    writing-mode: vertical-rl;
-    padding: 30px 0;
-    margin: 0 auto;
-  }
-  .h-active .marquee.vstrip .marquee-item .sep { margin: 56px 0 0; }
-  @keyframes marqueeV {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-  }
+  .h-active .contact .contact-title { margin-bottom: 14px; }
+  .h-active .contact .contact-form { gap: 10px; }
+  .h-active .contact .field { gap: 4px; }
+  .h-active .contact .field label { font-size: 0.82rem; }
+  .h-active .contact .field input { min-height: 42px; padding: 9px 13px; }
+  .h-active .contact .field textarea { min-height: 60px; }
+  .h-active .contact .field--chips .chips { gap: 6px; }
+  .h-active .contact .chip { padding: 6px 12px; }
+  .h-active .contact .form-note { margin-top: 2px; }
 }
 
 /* 13. THÈME CONTINU (canvas unique, anti-compartiment) ===================== */
@@ -3291,4 +3346,264 @@ body { background: transparent; color: var(--np-white); }
   .legal-panel { transition: opacity 0.2s linear; transform: none; }
   .legal-modal.is-open .legal-panel { transform: none; }
   .legal-close:hover { transform: none; }
+}
+
+/* ==========================================================================
+   PRELOADER « LOGO BUILD » — intro de marque (inspiration paloha.fr)
+   Scène sombre continue. Le signe « .N » se balaie au centre, les lettres
+   « eopure » sortent de derrière le signe (une seule image clippée →
+   alignement parfait), la signature se pose, le compteur file à 100 %,
+   puis cinq colonnes glissent vers le haut en cascade pour révéler le site.
+   ========================================================================== */
+
+/* Pendant le chargement : on fige le scroll de la page. */
+html.np-loading, html.np-loading body { overflow: hidden; }
+
+.np-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  color: #fff;
+  overflow: hidden;
+  pointer-events: none;
+}
+.np-loader.is-gone { display: none; }
+
+/* ---- Cinq colonnes qui, réunies, forment la scène sombre continue -------- */
+/* Même monde que le site (world-bg), un cran plus sombre. Chaque colonne
+   affiche SA tranche de la même image plein écran (position négative) →
+   scène parfaitement continue, aucune couture. 1vw de chevauchement à
+   droite pour qu'aucun liseré n'apparaisse entre colonnes. */
+.np-cols i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 21vw;
+  left: calc(var(--i) * 20vw);
+  background-color: #23122f;
+  background-image:
+    radial-gradient(90% 70% at 50% -14%, rgba(194, 31, 240, 0.24), transparent 60%),
+    radial-gradient(55% 50% at 16% 20%, rgba(53, 242, 242, 0.14), transparent 62%),
+    radial-gradient(75% 62% at 86% 112%, rgba(120, 42, 165, 0.42), transparent 60%);
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  background-position: calc(var(--i) * -20vw) 0;
+  will-change: transform;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  transition-delay: calc(0.1s + var(--i) * 0.07s);
+}
+.np-loader.is-done .np-cols i { transform: translateY(-101%); }
+
+/* ---- Lockup de marque (au-dessus des colonnes) --------------------------- */
+.np-lockup {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.np-brand-box { position: relative; width: min(640px, 82vw); }
+
+/* Géométrie MESURÉE dans le canal alpha du PNG (2611 × 548) :
+   point x 15,9→18,7 % · N x 20,5→37,8 % · lettres x 37,2→83,9 %.
+   Étape 1 (.is-mark)  : balayage du seul « .N » (clip 14→38 %), le signe
+   étant recentré à l'écran via translateX(+24 %).
+   Étape 2 (.is-open)  : le clip s'ouvre jusqu'à 88 % pendant que l'image
+   revient à translateX(0) → les lettres sortent de derrière le signe et
+   le lockup complet se recentre, comme sur paloha.fr. */
+.np-brand-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  /* scale(1.07) : le signe arrive « proche caméra », puis se pose à 1 quand
+     les lettres sortent → sensation de dolly-out, profondeur cinéma. */
+  transform: translateX(24%) scale(1.07);
+  /* Clips en POLYGONE 6 points (tous les états doivent partager le même
+     nombre de points pour s'interpoler). État de départ : replié à x 14 %. */
+  clip-path: polygon(14% 0%, 14% 0%, 14% 44.7%, 14% 44.7%, 14% 100%, 14% 100%);
+  transition:
+    clip-path 0.6s cubic-bezier(0.65, 0, 0.25, 1),
+    opacity   0.3s ease;
+}
+.np-loader.is-mark .np-brand-img {
+  opacity: 1;
+  /* Le N (x fin 37,8 %) et le « e » (x début 37,15 %) SE CHEVAUCHENT en x :
+     une coupe verticale sacrifie forcément l'un des deux. Mais pas en y —
+     dans cette zone le N vit en haut (y ≤ 43,4 %) et le « e » en bas
+     (y ≥ 46 %). D'où un bord droit EN ESCALIER, marche à y 44,7 % :
+     38,2 % en haut → pointe du N entière ; 36,9 % en bas → zéro « e ». */
+  clip-path: polygon(14% 0%, 38.2% 0%, 38.2% 44.7%, 36.9% 44.7%, 36.9% 100%, 14% 100%);
+}
+.np-loader.is-open .np-brand-img {
+  /* Ouvert jusqu'à 88 % (fin des lettres + marge), escalier résorbé. */
+  clip-path: polygon(14% 0%, 88% 0%, 88% 44.7%, 88% 44.7%, 88% 100%, 14% 100%);
+  transform: translateX(0) scale(1);
+  transition:
+    clip-path 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+    transform 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+/* Signature sous les lettres, calée à droite du wordmark (comme la
+   « AGENCE DE COM' » de la référence). */
+.np-tagline {
+  position: absolute;
+  right: 12%;
+  top: 97%;
+  margin: 0;
+  font-family: 'Gotham', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(0.58rem, 1.6vw, 0.78rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.np-loader.is-sign .np-tagline { opacity: 1; transform: translateY(0); }
+/* Mobile : la signature est plus large que le lockup → on la centre dessous. */
+@media (max-width: 560px) {
+  .np-tagline {
+    right: 50%;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    transform: translateX(50%) translateY(10px);
+  }
+  .np-loader.is-sign .np-tagline { transform: translateX(50%) translateY(0); }
+}
+.np-tagline b {
+  font-weight: 500;
+  color: transparent;
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Respiration : micro-zoom très lent du lockup pendant l'attente — la scène
+   reste vivante sans jamais attirer l'œil. */
+.np-loader.is-sign .np-brand-box {
+  animation: npBreath 7s ease-in-out 1s infinite;
+}
+@keyframes npBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
+
+/* ---- Sortie « push caméra » : le lockup zoome vers le spectateur avec un
+   voile de flou pendant que les colonnes partent (déclarée APRÈS la
+   respiration pour la remplacer). ---- */
+.np-loader.is-done .np-brand-box {
+  animation: npExitZoom 0.5s cubic-bezier(0.55, 0, 0.68, 0.19) forwards;
+}
+@keyframes npExitZoom {
+  to {
+    opacity: 0;
+    transform: scale(1.16) translateY(-8px);
+    filter: blur(8px);
+  }
+}
+
+/* ---- Settle zoom : le hero se pose de 1.055 → 1 pendant la cascade des
+   colonnes (appliqué à .hero-inner : aucun enfant en position fixed). ---- */
+html.np-reveal .hero-inner {
+  animation: npSettle 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@keyframes npSettle {
+  from { transform: scale(1.055); }
+  to   { transform: scale(1); }
+}
+
+/* ---- Progression : fine ligne en bas de l'écran -------------------------- */
+.np-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.np-progress i {
+  display: block;
+  height: 100%;
+  background: var(--grad-brand);
+  box-shadow: 0 0 12px rgba(53, 242, 242, 0.5);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ---- Compteur dégradé bas-droite, discret mais signature ------------------ */
+.np-loader-count {
+  position: absolute;
+  right: clamp(18px, 5vw, 66px);
+  bottom: clamp(16px, 5vh, 52px);
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'Gotham', system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 0.82;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: npRise 0.9s ease 0.4s forwards;
+}
+.np-loader-count span {
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  color: transparent;
+  background: linear-gradient(120deg, #35F2F2 0%, #D694F2 45%, #BC6BF2 70%, #35F2F2 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: npSheen 2.6s linear infinite;
+}
+@keyframes npSheen { to { background-position: -220% 0; } }
+.np-loader-count i {
+  font-style: normal;
+  font-weight: 300;
+  font-size: clamp(0.9rem, 2.4vw, 1.5rem);
+  color: var(--np-cyan);
+  margin-bottom: clamp(0.3rem, 1.2vw, 0.9rem);
+}
+@keyframes npRise { to { opacity: 1; transform: translateY(0); } }
+
+/* Compteur + ligne s'effacent avec le départ des colonnes (via une animation,
+   car npRise en fill:forwards écraserait un simple opacity). Le compteur
+   gonfle légèrement en partant — même langage « caméra » que le lockup. */
+.np-loader.is-done .np-loader-count {
+  transform-origin: 100% 100%;
+  animation: npCountExit 0.35s ease forwards;
+}
+.np-loader.is-done .np-progress {
+  animation: npFadeOut 0.3s ease forwards;
+}
+@keyframes npCountExit {
+  from { opacity: 1; }
+  to   { opacity: 0; transform: scale(1.12); }
+}
+@keyframes npFadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ---- Accessibilité : mouvement réduit → lockup complet, sortie en fondu --- */
+@media (prefers-reduced-motion: reduce) {
+  .np-brand-img {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 12% 0 14%);
+    transition: none;
+  }
+  .np-tagline { opacity: 1; transform: none; transition: none; }
+  .np-loader-count { animation: none; opacity: 1; transform: none; }
+  .np-loader-count span {
+    animation: none;
+    color: var(--np-cyan);
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+  .np-cols i { transition: opacity 0.3s linear; transition-delay: 0s; }
+  .np-loader.is-done .np-cols i { transform: none; opacity: 0; }
+  .np-loader.is-sign .np-brand-box { animation: none; }
+  .np-loader.is-done .np-brand-box { animation: npFadeOut 0.3s linear forwards; }
+  .np-loader.is-done .np-loader-count { animation: npFadeOut 0.3s linear forwards; }
+  html.np-reveal .hero-inner { animation: none; }
 }
