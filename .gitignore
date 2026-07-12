@@ -26,3 +26,21 @@ node_modules/
 assets/brand/PLAQUETTE_NEOPURECOM_2026.pdf
 assets/brand/__MACOSX/
 assets/brand/**/__MACOSX/
+
+# Sources de marque NON utilisées par le site (gardées localement, hors déploiement)
+# Le site n'utilise que Logo_N_Degrade_SF.png, LOGO_SF_BLANC.png et LOGO.png.
+assets/brand/NEOPURESOUNDS_MINI_CHARTESGRAPHIQUES.png
+assets/brand/NEOPURESOUNDS_PALETTE.jpeg
+assets/brand/SIGLE_BLANC_COM.jpg
+assets/brand/LOGO_NEOPURE.jpg
+assets/brand/PROFIL_LOGO.png
+assets/brand/Logo_Neopure Sounds.pdf
+assets/brand/LOGO_BLANC.png
+assets/brand/LOGO_SF.png
+assets/brand/LOGO_VIOLET.png
+assets/brand/Logo_N_Blanc.png
+assets/brand/Logo_N_Blanc_SF.png
+assets/brand/Logo_N_Degrade.png
+
+# Config locale Claude Code
+.claude/
