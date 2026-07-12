@@ -70,6 +70,8 @@
 
 <body>
   <!-- ====================== PRELOADER « LOGO BUILD » (intro de marque) ====================== -->
+  <!-- Sans JS, rien ne retirerait jamais l'overlay : on le neutralise. -->
+  <noscript><style>.np-loader { display: none; }</style></noscript>
   <div class="np-loader" id="npLoader" role="progressbar" aria-label="Chargement du site"
        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 
@@ -79,12 +81,21 @@
       <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i>
     </div>
 
+    <!-- Grain cinéma très subtil au-dessus de la scène -->
+    <div class="np-grain" aria-hidden="true"></div>
+
+    <!-- Méta de coins, langage éditorial d'agence -->
+    <span class="np-corner np-corner--tl" aria-hidden="true">Depuis 2022</span>
+    <span class="np-corner np-corner--tr" aria-hidden="true">Montpellier</span>
+
     <!-- Lockup de marque : le « .N » se balaie seul au centre, puis les lettres
          « eopure » sortent de derrière le signe (une seule image clippée →
          alignement parfait), enfin la signature se pose dessous. -->
     <div class="np-lockup" aria-hidden="true">
       <div class="np-brand-box">
         <img class="np-brand-img" src="assets/brand/LOGO_SF_BLANC.png" alt="" />
+        <!-- Reflet lumineux masqué par la silhouette exacte du logo -->
+        <span class="np-shine" aria-hidden="true"></span>
         <p class="np-tagline">Communication <b>×</b> Événementiel</p>
       </div>
     </div>
@@ -112,6 +123,30 @@
       var pageDone = false;    // window.load reçu ?
       var start    = Date.now();
       var MIN_MS   = 3200;     // signe → lettres → signature → respiration
+
+      // Signature : découpe en caractères pour une révélation en cascade
+      // (chaque caractère porte son délai ; le CSS anime, .is-sign déclenche).
+      var tagEl = document.querySelector(".np-tagline");
+      if (tagEl && !reduce) {
+        var nodes = Array.prototype.slice.call(tagEl.childNodes);
+        var ci = 0;
+        nodes.forEach(function (n) {
+          if (n.nodeType === 3) {                    // texte → un <i> par caractère
+            var frag = document.createDocumentFragment();
+            n.textContent.split("").forEach(function (ch) {
+              if (ch === " ") { frag.appendChild(document.createTextNode(" ")); return; }
+              var s = document.createElement("i");
+              s.textContent = ch;
+              s.style.transitionDelay = (ci++ * 18) + "ms";
+              frag.appendChild(s);
+            });
+            tagEl.replaceChild(frag, n);
+          } else {                                   // le <b>×</b> reste entier
+            n.classList.add("np-tag-ch");
+            n.style.transitionDelay = (ci++ * 18) + "ms";
+          }
+        });
+      }
 
       // Timeline de l'intro — les transitions CSS font le reste :
       // balayage du « .N » → lettres qui sortent de derrière le signe → signature.

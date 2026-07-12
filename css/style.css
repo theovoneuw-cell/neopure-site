@@ -3394,6 +3394,56 @@ html.np-loading, html.np-loading body { overflow: hidden; }
 }
 .np-loader.is-done .np-cols i { transform: translateY(-101%); }
 
+/* Bord de fuite : le bas de chaque colonne s'illumine d'une ligne dégradée
+   au moment où elle décolle (même délai que sa course). */
+.np-cols i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--grad-brand);
+  box-shadow: 0 0 18px rgba(53, 242, 242, 0.8), 0 0 34px rgba(188, 107, 242, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  transition-delay: inherit;
+}
+.np-loader.is-done .np-cols i::after { opacity: 1; }
+
+/* ---- Grain cinéma : texture animée quasi imperceptible sur la scène ------ */
+.np-grain {
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  animation: npGrain 0.9s steps(2) infinite;
+}
+@keyframes npGrain {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-2%, 1%); }
+  50%      { transform: translate(1%, -2%); }
+  75%      { transform: translate(-1%, 2%); }
+}
+
+/* ---- Méta de coins : micro-typo éditoriale, entrée douce ------------------ */
+.np-corner {
+  position: absolute;
+  top: clamp(16px, 3.5vh, 30px);
+  font-family: 'Gotham', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(0.55rem, 1.2vw, 0.66rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  opacity: 0;
+  transform: translateY(8px);
+}
+.np-corner--tl { left:  clamp(18px, 4vw, 46px); animation: npRise 0.9s ease 0.55s forwards; }
+.np-corner--tr { right: clamp(18px, 4vw, 46px); animation: npRise 0.9s ease 0.7s  forwards; }
+
 /* ---- Lockup de marque (au-dessus des colonnes) --------------------------- */
 .np-lockup {
   position: absolute;
@@ -3457,20 +3507,65 @@ html.np-loading, html.np-loading body { overflow: hidden; }
   text-transform: uppercase;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.55);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.np-loader.is-sign .np-tagline { opacity: 1; transform: translateY(0); }
+/* Révélation en cascade : le JS découpe la signature en caractères, chacun
+   portant son délai — .is-sign les fait monter l'un après l'autre. */
+.np-tagline i,
+.np-tagline .np-tag-ch {
+  display: inline-block;
+  font-style: normal;
+  opacity: 0;
+  transform: translateY(9px);
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.np-loader.is-sign .np-tagline i,
+.np-loader.is-sign .np-tagline .np-tag-ch {
+  opacity: 1;
+  transform: translateY(0);
+}
 /* Mobile : la signature est plus large que le lockup → on la centre dessous. */
 @media (max-width: 560px) {
   .np-tagline {
     right: 50%;
     font-size: 0.55rem;
     letter-spacing: 0.22em;
-    transform: translateX(50%) translateY(10px);
+    transform: translateX(50%);
   }
-  .np-loader.is-sign .np-tagline { transform: translateX(50%) translateY(0); }
+}
+
+/* ---- Reflet lumineux qui balaie les lettres une fois le lockup posé ------ */
+/* Même technique que le balayage : un faisceau réel qui court dans un calque
+   masqué par la silhouette exacte du logo → il épouse les glyphes. */
+.np-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url('../assets/brand/LOGO_SF_BLANC.png') center / 100% 100% no-repeat;
+          mask: url('../assets/brand/LOGO_SF_BLANC.png') center / 100% 100% no-repeat;
+  opacity: 0;
+}
+.np-loader.is-sign .np-shine { opacity: 1; }
+.np-shine::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 16%;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%);
+  transform: translateX(-130%) skewX(-14deg);
+}
+/* Un passage lent toutes les ~3 s : luxe discret, jamais insistant. */
+.np-loader.is-sign .np-shine::before {
+  animation: npShine 3s cubic-bezier(0.4, 0, 0.2, 1) 0.8s infinite;
+}
+@keyframes npShine {
+  0%   { transform: translateX(-130%) skewX(-14deg); }
+  42%  { transform: translateX(700%)  skewX(-14deg); }
+  100% { transform: translateX(700%)  skewX(-14deg); }
 }
 .np-tagline b {
   font-weight: 500;
@@ -3575,12 +3670,23 @@ html.np-reveal .hero-inner {
   transform-origin: 100% 100%;
   animation: npCountExit 0.35s ease forwards;
 }
-.np-loader.is-done .np-progress {
+.np-loader.is-done .np-progress,
+.np-loader.is-done .np-grain {
   animation: npFadeOut 0.3s ease forwards;
 }
+/* Les coins s'élèvent en partant. Transform défini aux DEUX bornes : sans ça,
+   remplacer npRise (fill: forwards) ferait retomber l'élément sur sa base
+   (translateY 8-12 px) → saut visible au premier frame de la sortie. */
+.np-loader.is-done .np-corner {
+  animation: npCornerExit 0.3s ease forwards;
+}
+@keyframes npCornerExit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
 @keyframes npCountExit {
-  from { opacity: 1; }
-  to   { opacity: 0; transform: scale(1.12); }
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(0) scale(1.12); }
 }
 @keyframes npFadeOut { from { opacity: 1; } to { opacity: 0; } }
 
@@ -3592,7 +3698,11 @@ html.np-reveal .hero-inner {
     clip-path: inset(0 12% 0 14%);
     transition: none;
   }
-  .np-tagline { opacity: 1; transform: none; transition: none; }
+  /* Ne pas toucher au transform du conteneur : il porte le centrage mobile. */
+  .np-tagline { opacity: 1; transition: none; }
+  .np-tagline i, .np-tagline .np-tag-ch { opacity: 1; transform: none; transition: none; }
+  .np-shine, .np-grain { display: none; }
+  .np-corner { animation: none; opacity: 1; transform: none; }
   .np-loader-count { animation: none; opacity: 1; transform: none; }
   .np-loader-count span {
     animation: none;
