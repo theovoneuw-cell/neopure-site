@@ -30,8 +30,16 @@
 
   function onScroll() { target = clamp(window.scrollY); }
 
-  function loop() {
-    current += (target - current) * 0.09;
+  var lastT = 0;
+  function loop(t) {
+    // Lissage normalisé par le temps écoulé : même vitesse de glisse sur un
+    // écran 60 Hz, 120 Hz ou 144 Hz (un facteur fixe par frame allait deux
+    // fois plus vite sur les écrans à haut rafraîchissement).
+    if (!lastT) lastT = t;
+    var dt = Math.min(64, t - lastT);
+    lastT = t;
+    var k = 1 - Math.exp(-dt / 180);   // ≈ 0.09 à 60 Hz
+    current += (target - current) * k;
     if (Math.abs(target - current) < 0.06) current = target;
     track.style.transform = "translate3d(" + (-current).toFixed(2) + "px,0,0)";
     rafId = window.requestAnimationFrame(loop);
@@ -84,6 +92,15 @@
   window.addEventListener("load", function () { if (enabled) { refreshPanels(); setHeights(); } });
 
   apply();
+
+  /* Trackpad : un swipe horizontal (deltaX) fait avancer la frise, comme le
+     scroll vertical — geste naturel sur pavé tactile / souris inclinable. */
+  window.addEventListener("wheel", function (e) {
+    if (!enabled) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      window.scrollBy(0, e.deltaX);
+    }
+  }, { passive: true });
 
   /* Liens d'ancrage : convertit la cible verticale en position horizontale --- */
   document.querySelectorAll('a[href^="#"]').forEach(function (a) {

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 
   <!-- ============ SEO de base ============ -->
@@ -37,12 +37,23 @@
   <!-- Les fontes sont chargées en self-host via @font-face dans css/style.css
        depuis assets/brand/Gotham/ - plus de dépendance Google Fonts. -->
 
+  <!-- ============ Préchargements critiques ============ -->
+  <!-- Le preloader affiche le wordmark + du texte Gotham dès le premier paint :
+       on précharge ces ressources pour éviter l'écran vide et le flash de police. -->
+  <link rel="preload" as="image" href="assets/brand/LOGO_SF_BLANC.png" />
+  <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Bold.otf" crossorigin />
+  <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Light.otf" crossorigin />
+  <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Black.otf" crossorigin />
+  <!-- La carte (Leaflet + tuiles CartoDB) part plus vite avec la connexion déjà ouverte -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" />
+
   <!-- ============ Carte (Leaflet) ============ -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260711a" />
+  <link rel="stylesheet" href="css/style.css?v=20260712b" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -185,6 +196,10 @@
         var elapsed = Date.now() - start;
         phase(elapsed);
         var timed = Math.min(94, (elapsed / (MIN_MS - 300)) * 94);
+        // Si la page tarde (vidéos, réseau lent) : le compteur continue de
+        // grimper doucement vers 99 au lieu de rester figé à 94 — un compteur
+        // immobile donne l'impression que le site a planté.
+        if (elapsed >= MIN_MS) timed = Math.min(99, 94 + (elapsed - MIN_MS) / 450);
         target = pageDone && elapsed >= MIN_MS ? 100 : Math.max(timed, progress);
         progress += (target - progress) * 0.14;
         if (progress > 99.5) progress = 100;
@@ -205,10 +220,12 @@
 
       // Filet de sécurité global : si "load" tarde (vidéo hero lente), on conclut
       // dans TOUS les modes (sans lui, le mode "mouvement réduit" resterait bloqué).
+      // 5 s max : au-delà, on révèle le site même si tout n'est pas téléchargé —
+      // les vidéos finiront de se charger derrière.
       window.setTimeout(function () {
         pageDone = true;
         if (reduce) finish();
-      }, 7000);
+      }, 5000);
 
       if (reduce) { render(0); }
       else { requestAnimationFrame(tick); }
@@ -877,8 +894,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-  <script src="js/main.js?v=20260710d" defer></script>
-  <script src="js/horizontal.js?v=20260710d" defer></script>
-  <script src="js/experience.js?v=20260710d" defer></script>
+  <script src="js/main.js?v=20260712a" defer></script>
+  <script src="js/horizontal.js?v=20260712a" defer></script>
+  <script src="js/experience.js?v=20260712a" defer></script>
 </body>
 </html>

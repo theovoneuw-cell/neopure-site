@@ -45,6 +45,41 @@
   }
 
   /* =======================================================================
+     1b. VIDÉOS : lecture uniquement à l'écran
+     Six vidéos en boucle simultanées (hero + galerie) saturaient le décodage
+     et faisaient ramer la navigation. On ne joue que ce qui est visible,
+     avec une marge pour que la lecture soit déjà lancée en arrivant dessus.
+     ======================================================================= */
+  var autoVids = document.querySelectorAll("video[autoplay]");
+  if (autoVids.length && "IntersectionObserver" in window) {
+    var vio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        v.dataset.vis = e.isIntersecting ? "1" : "";
+        if (e.isIntersecting) {
+          if (v.paused) {
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+        } else {
+          // Annule aussi l'autoplay DIFFÉRÉ : une vidéo encore en cours de
+          // téléchargement démarre toute seule dès qu'elle est prête, même
+          // hors écran — c'est ce qui faisait tourner les 5 vidéos en même
+          // temps et ramer la navigation.
+          v.autoplay = false;
+          if (!v.paused) v.pause();
+        }
+      });
+    }, { rootMargin: "30% 30% 30% 30%", threshold: 0 });
+    autoVids.forEach(function (v) {
+      vio.observe(v);
+      v.addEventListener("playing", function () {
+        if (v.dataset.vis === "") v.pause();
+      });
+    });
+  }
+
+  /* =======================================================================
      2. CARTE LEAFLET (attribution masquée comme demandé)
      ======================================================================= */
   function initMap() {

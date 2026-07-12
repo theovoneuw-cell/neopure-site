@@ -868,7 +868,9 @@ section { position: relative; }
   font-style: italic;
   font-weight: 600;
   color: transparent;
-  background: linear-gradient(100deg, var(--np-cyan) 0%, #7b2ff0 100%);
+  /* Fin du dégradé en lavande CLAIRE : le violet foncé (#7b2ff0) fondait
+     « fait briller » dans le fond magenta — illisible. */
+  background: linear-gradient(100deg, var(--np-cyan) 0%, #eabbf7 100%);
   -webkit-background-clip: text; background-clip: text;
 }
 
@@ -1171,7 +1173,9 @@ section { position: relative; }
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 4px 2px 12px;
+  /* 26 px en bas : les tuiles paires sont décalées de 20 px (zigzag) et
+     overflow-y:hidden rognait leur bas avec l'ancien padding de 12 px. */
+  padding: 4px 2px 26px;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
 }
@@ -1335,7 +1339,9 @@ section { position: relative; }
   font-style: normal;
   font-weight: 800;
   color: transparent;
-  background: linear-gradient(100deg, var(--np-cyan) 0%, #7b2ff0 100%);
+  /* Fin en lavande claire : le « ? » terminait en violet foncé et
+     disparaissait sur la zone magenta du fond. */
+  background: linear-gradient(100deg, var(--np-cyan) 0%, #eabbf7 100%);
   -webkit-background-clip: text; background-clip: text;
 }
 
@@ -1732,7 +1738,9 @@ section { position: relative; }
 }
 .chip.is-active {
   color: #151626;
-  background: linear-gradient(100deg, var(--np-cyan), #7b2ff0);
+  /* Fin en lavande claire : le texte sombre de la puce restait lisible sur
+     tout le dégradé (le violet foncé #7b2ff0 mangeait la moitié droite). */
+  background: linear-gradient(100deg, var(--np-cyan), var(--np-lavender));
   border-color: transparent;
   box-shadow: 0 6px 18px -4px rgba(188, 107, 242, 0.55);
 }
@@ -2069,8 +2077,9 @@ section { position: relative; }
 }
 .menu-foot a:hover { color: var(--np-pink); }
 
-/* 10i. Réseaux du hero (Instagram + WhatsApp) + réseaux du footer --------- */
-.hero-socials { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+/* 10i. Réseaux du hero : stylés en section 5 (HERO). L'ancienne règle ici
+   ajoutait un margin-top de 24px qui désalignait les icônes par rapport au
+   bouton « Voir nos réalisations » (centrage flex faussé). -------------- */
 
 /* 10j. NAV LATÉRALE ÉVOLUTIVE (desktop) — surligne la section courante ---- */
 .side-nav { display: none; }
@@ -2162,22 +2171,28 @@ section { position: relative; }
     rgba(53, 242, 242, 0.55) 100%);
   mix-blend-mode: color;
 }
-/* Deuxième voile très léger pour la profondeur (assombrit les bords) */
+/* Deuxième voile : assombrit franchement la carte (multiply) — les tuiles
+   CartoDB sont beige clair et, teintées seulement en hue, rendaient un panneau
+   blanc délavé qui jurait sur le site sombre et rendait le radar invisible. */
 .map-radar::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(90% 90% at 50% 45%, rgba(47, 23, 59, 0), rgba(47, 23, 59, 0.4) 100%);
+  background:
+    linear-gradient(160deg, rgba(112, 52, 168, 0.30) 0%, rgba(56, 24, 88, 0.44) 100%),
+    radial-gradient(90% 90% at 50% 45%, rgba(47, 23, 59, 0.05), rgba(47, 23, 59, 0.55) 100%);
+  mix-blend-mode: multiply;
 }
 #map {
   width: 100%;
   height: 100%;
   background: #3a1e5c;
   z-index: 0;
-  /* On désature un peu le beige d'origine pour que le voile charte prenne bien */
-  filter: saturate(0.6) brightness(0.95) contrast(1.02);
+  /* Désaturé + assombri : le voile violet (color) et le multiply au-dessus
+     donnent une carte profonde, charte, où le balayage cyan ressort. */
+  filter: saturate(0.5) brightness(0.8) contrast(1.06);
 }
 .leaflet-container { font-family: var(--font-body); background: #2a1e60; }
 
@@ -2220,9 +2235,10 @@ section { position: relative; }
 /* ===== Ondes concentriques émanant du point Montpellier (centre) ===== */
 .radar-rings {
   position: absolute;
-  /* Alignées sur la pointe du pin (au-dessus du nom de ville), pas sur le
-     centre géographique : les ondes n'éclatent plus sur les lettres. */
-  left: 50%; top: calc(50% - 34px);
+  /* Centrées sur la TÊTE du pin (le rond blanc du pointeur), pas sur sa
+     pointe : les ondes rayonnent depuis le pointeur lui-même, et non sur
+     le nom de la ville en dessous. */
+  left: 50%; top: calc(50% - 59px);
   z-index: 3;
   width: 0; height: 0;
   pointer-events: none;
@@ -2248,9 +2264,9 @@ section { position: relative; }
 /* ===== Cible lumineuse au centre géographique (« on fait mouche ») ===== */
 .radar-target {
   position: absolute;
-  /* Pile sous la pointe du pin (au-dessus du nom de ville) : « on fait mouche »
-     sans se poser sur les lettres. */
-  left: 50%; top: calc(50% - 34px);
+  /* Sur la tête du pointeur : le halo cyan pulse derrière le rond blanc du
+     pin — « on fait mouche » sur le pointeur, pas sur les lettres. */
+  left: 50%; top: calc(50% - 59px);
   z-index: 4;
   width: 9px; height: 9px;
   margin: -4.5px 0 0 -4.5px;
@@ -2413,14 +2429,23 @@ section { position: relative; }
     padding-top: 8vh;                 /* zone de sécurité sous le menu flottant */
     padding-bottom: 3vh;
   }
+  /* Titre + accroche ANCRÉS AU DÉBUT du panneau : centrés sur la largeur
+     totale de la frise (3000 px et plus), ils apparaissaient coupés au bord
+     de l'écran en entrant dans la section, et n'étaient lisibles qu'à
+     mi-parcours. Alignés à gauche, ils accueillent le visiteur dès l'entrée. */
   .h-active .gallery-section .gallery-heading {
-    margin: 0 auto;
-    text-align: center;
-    max-width: min(96vw, 1320px);      /* assez large pour tenir sur une ligne en desktop */
+    margin: 0;
+    align-self: flex-start;
+    text-align: left;
+    max-width: min(88vw, 1060px);
     font-size: clamp(1.15rem, 2.05vw, 1.8rem);
   }
-  /* Accroche centrée juste sous le titre (on annule la marge négative de base) */
-  .h-active .gallery-section .gallery-accroche { margin: 0 auto; max-width: 640px; }
+  .h-active .gallery-section .gallery-accroche {
+    margin: 0;
+    align-self: flex-start;
+    text-align: left;
+    max-width: 640px;
+  }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
@@ -2571,18 +2596,41 @@ section { position: relative; }
    pour que tout, bouton compris, tienne dans la hauteur visible. */
 @media (min-width: 1025px) and (max-height: 860px) {
   .h-active .contact .contact-inner {
-    padding-top: clamp(52px, 6.5vh, 72px);
-    padding-bottom: clamp(36px, 5vh, 60px);
+    /* 76 px mini en haut : en dessous, « Contacte-nous ! » passait SOUS la
+       barre de navigation flottante (top 22 px + ~44 px de hauteur). On
+       compense en serrant un peu plus le formulaire ci-dessous. */
+    padding-top: clamp(76px, 10vh, 88px);
+    padding-bottom: clamp(24px, 4vh, 48px);
   }
-  .h-active .contact .contact-title { margin-bottom: 14px; }
-  .h-active .contact .contact-form { gap: 10px; }
+  .h-active .contact .contact-title { margin-bottom: 12px; }
+  .h-active .contact .contact-form { gap: 8px; }
   .h-active .contact .field { gap: 4px; }
   .h-active .contact .field label { font-size: 0.82rem; }
   .h-active .contact .field input { min-height: 42px; padding: 9px 13px; }
-  .h-active .contact .field textarea { min-height: 60px; }
+  .h-active .contact .field textarea { min-height: 56px; }
   .h-active .contact .field--chips .chips { gap: 6px; }
   .h-active .contact .chip { padding: 6px 12px; }
   .h-active .contact .form-note { margin-top: 2px; }
+}
+
+/* Fenêtres vraiment courtes (petit laptop, fenêtre réduite) : le formulaire
+   se compacte encore d'un cran pour ne JAMAIS remonter sous le menu flottant
+   ni pousser le bouton « Envoyer » sous le pli. */
+@media (min-width: 1025px) and (max-height: 700px) {
+  .h-active .contact .contact-inner {
+    padding-top: 72px;
+    padding-bottom: 18px;
+  }
+  .h-active .contact .contact-title { font-size: 1.45rem; margin-bottom: 8px; }
+  .h-active .contact .contact-form { gap: 6px; }
+  .h-active .contact .field label { font-size: 0.76rem; }
+  .h-active .contact .field input { min-height: 34px; padding: 6px 12px; font-size: 0.9rem; }
+  .h-active .contact .field textarea { min-height: 42px; font-size: 0.9rem; }
+  .h-active .contact .field--chips .chips { gap: 5px; }
+  .h-active .contact .chip { padding: 4px 10px; font-size: 0.78rem; }
+  .h-active .contact .contact-form .btn { min-height: 40px; padding: 8px 20px; font-size: 0.9rem; }
+  .h-active .contact .form-note { font-size: 0.72rem; margin-top: 0; }
+  .h-active .contact .contact-info { padding: 22px 20px; }
 }
 
 /* 13. THÈME CONTINU (canvas unique, anti-compartiment) ===================== */
@@ -3365,8 +3413,12 @@ html.np-loading, html.np-loading body { overflow: hidden; }
   z-index: 100000;
   color: #fff;
   overflow: hidden;
-  pointer-events: none;
+  /* L'overlay INTERCEPTE les clics pendant le chargement : sans ça, un tap
+     traversait la scène et activait un lien/bouton invisible du site en dessous. */
+  pointer-events: auto;
 }
+/* Dès que le rideau part, les clics passent au site (les colonnes glissent encore) */
+.np-loader.is-done { pointer-events: none; }
 .np-loader.is-gone { display: none; }
 
 /* ---- Cinq colonnes qui, réunies, forment la scène sombre continue -------- */

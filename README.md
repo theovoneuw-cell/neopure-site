@@ -19,7 +19,7 @@ Une **expérience défilement horizontal en coverflow 3D** sur desktop, classiqu
 
 - HTML / CSS / JavaScript vanilla
 - [Leaflet](https://leafletjs.com/) (CDN) pour la carte
-- [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) via Google Fonts
+- Gotham auto-hébergée (`assets/brand/Gotham/`) — aucune dépendance Google Fonts
 
 ## Lancer le site en local
 
@@ -87,10 +87,11 @@ Le formulaire affiche un message de confirmation en JS quand on l'envoie (pas de
 
 | Token | Valeur |
 |---|---|
-| Magenta | `#E94FD8` |
-| Violet | `#A435F0` |
-| Cyan (accent) | `#22D3CE` |
-| Indigo (fond) | `#20184D` |
+| Cyan (accent) | `#35F2F2` |
+| Violet principal | `#BC6BF2` |
+| Lavande | `#D694F2` |
+| Rose pâle | `#F1C4F2` |
+| Indigo (fond) | `#151626` |
 
 ## Compatibilité
 

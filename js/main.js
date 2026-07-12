@@ -188,6 +188,15 @@
         el.loop = true;
         el.playsInline = true;
         el.setAttribute("playsinline", "");
+        // Certains navigateurs (iOS surtout) refusent l'autoplay AVEC son :
+        // la vidéo restait alors figée. On retente en muet — l'utilisateur
+        // a les contrôles pour remonter le son.
+        var pv = el.play && el.play();
+        if (pv && pv.catch) pv.catch(function () {
+          el.muted = true;
+          var p2 = el.play();
+          if (p2 && p2.catch) p2.catch(function () {});
+        });
       } else {
         el = document.createElement("img");
         el.src = m.src;
@@ -353,7 +362,13 @@
     pop.addEventListener("click", function (e) { e.stopPropagation(); });
     document.addEventListener("click", close);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-    window.addEventListener("resize", close);
+    // Fermeture au redimensionnement — mais seulement si la LARGEUR change :
+    // sur mobile, l'apparition/disparition de la barre d'adresse déclenche un
+    // resize vertical qui fermait la bulle dès qu'on scrollait d'un pixel.
+    var lastW = window.innerWidth;
+    window.addEventListener("resize", function () {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; close(); }
+    });
     // le scroll du site se fait via .h-viewport (horizontal) et window (vertical)
     window.addEventListener("scroll", close, true);
   })();
