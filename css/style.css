@@ -2157,6 +2157,13 @@ section { position: relative; }
   aspect-ratio: 4 / 3;
   border-radius: 22px;
   overflow: hidden;
+  /* iOS Safari / anciens Android : overflow:hidden + border-radius ne coupe PAS
+     un enfant qui a son propre transform 3D (les panes Leaflet #map utilisent
+     translate3d) → coins carrés sur téléphone. Un masque opaque force un rendu
+     dans un buffer clippé aux coins arrondis, sans changer l'apparence. */
+  -webkit-mask-image: -webkit-radial-gradient(white, white);
+  mask-image: radial-gradient(white, white);
+  transform: translateZ(0);
   /* Halo double charte (violet + cyan) : la carte rayonne comme les autres
      cartes du site, plus une aura scanner discrète. */
   box-shadow:
