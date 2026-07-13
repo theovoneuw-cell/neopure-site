@@ -2159,10 +2159,10 @@ section { position: relative; }
   overflow: hidden;
   /* iOS Safari / anciens Android : overflow:hidden + border-radius ne coupe PAS
      un enfant qui a son propre transform 3D (les panes Leaflet #map utilisent
-     translate3d) → coins carrés sur téléphone. Un masque opaque force un rendu
-     dans un buffer clippé aux coins arrondis, sans changer l'apparence. */
-  -webkit-mask-image: -webkit-radial-gradient(white, white);
-  mask-image: radial-gradient(white, white);
+     translate3d) → coins carrés sur téléphone. clip-path découpe TOUS les
+     descendants quels que soient leurs transforms → coins arrondis fiables. */
+  -webkit-clip-path: inset(0 round 22px);
+  clip-path: inset(0 round 22px);
   transform: translateZ(0);
   /* Halo double charte (violet + cyan) : la carte rayonne comme les autres
      cartes du site, plus une aura scanner discrète. */
