@@ -149,8 +149,8 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   /* Fond peint dès le 1er paint → pas de flash noir du navigateur (mode sombre OS)
-     entre le refresh et l'apparition du fond du body/world-bg. Base charte : #2f173b. */
-  background-color: #2f173b;
+     entre le refresh et l'apparition du fond du body/world-bg. Base : swatch violet. */
+  background-color: #bd57ec;
 }
 
 body {
@@ -2669,16 +2669,16 @@ section { position: relative; }
   position: fixed;
   inset: 0;
   z-index: -2;
-  /* Dégradé VERTICAL charte, fidèle à la maquette : magenta-violet vif en haut,
-     violet profond en bas. Dégradé pur (pas de halo) pour coller au swatch. */
-  background: linear-gradient(180deg,
-    #c21ff0 0%,
-    #b92afa 16%,
-    #a022de 38%,
-    #6f2aa0 62%,
-    #43205e 84%,
-    #2f173b 100%);
-  background-color: #2f173b;
+  /* Dégradé fidèle au swatch fourni : magenta-violet électrique vif en haut
+     (léger sheen vers le haut), qui s'éclaircit vers un lavande clair en bas.
+     Diagonale douce (~170deg) pour retrouver le point le plus vif en haut. */
+  background: linear-gradient(170deg,
+    #c31ff5 0%,
+    #bf3bef 22%,
+    #bd57ec 45%,
+    #c274e6 72%,
+    #ca88e1 100%);
+  background-color: #bd57ec;
 }
 
 /* Base sombre (charte : violet profond) */
