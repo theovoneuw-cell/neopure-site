@@ -175,9 +175,9 @@ h1, h2, h3, h4 {
   line-height: 1.1;
   margin: 0 0 0.4em;
   letter-spacing: -0.03em;
-  /* Léger relief : garde les titres lisibles quelle que soit la zone du
-     dégradé (vif ou profond) derrière eux. Ombre adoucie (retour client). */
-  text-shadow: 0 1px 10px rgba(15, 5, 26, 0.24);
+  /* Relief : garde les titres bien détachés sur le fond violet clair.
+     Double couche = un liseré serré pour le piqué + un halo doux pour la masse. */
+  text-shadow: 0 1px 1px rgba(15, 5, 26, 0.35), 0 2px 14px rgba(15, 5, 26, 0.45);
 }
 
 p { margin: 0 0 1rem; font-weight: 400; }
@@ -302,36 +302,41 @@ ul { margin: 0; padding: 0; list-style: none; }
      border transparent -> couleur pleine + background-clip padding-box pour
      supprimer le liseré clair ("blanc moche") sur le bord droit arrondi. */
   border: none;
-  background-image: linear-gradient(95deg, #d94fd0 0%, #b92afa 52%, #7b2ff0 100%);
+  /* Dégradé assombri d'un cran pour trancher franchement sur le fond violet clair. */
+  background-image: linear-gradient(95deg, #c92fbf 0%, #9d1ff0 52%, #6a1fe0 100%);
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
-  /* Ombre resserrée et franchement violette (fini le halo diffus qui bavait) +
+  /* Anneau clair fin (le décolle du fond) + ombre portée resserrée et profonde +
      léger reflet interne en haut pour un rendu "pilule" net. */
   box-shadow:
-    0 10px 28px -8px rgba(185, 42, 250, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 12px 30px -6px rgba(90, 20, 180, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 .btn-primary:hover {
   box-shadow:
-    0 14px 34px -8px rgba(185, 42, 250, 0.62),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    0 0 0 1px rgba(255, 255, 255, 0.34),
+    0 16px 38px -6px rgba(90, 20, 180, 0.68),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 /* Bouton "réserver un appel" — violet charte #BC6BF2, pensé pour ressortir */
 .btn-book {
   color: #fff;
   border: none;
-  background-image: linear-gradient(100deg, #BC6BF2 0%, #a24fe6 100%);
+  background-image: linear-gradient(100deg, #a24fe6 0%, #7d34d8 100%);
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
   box-shadow:
-    0 10px 30px -6px rgba(188, 107, 242, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 12px 32px -6px rgba(120, 40, 200, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 .btn-book:hover {
   box-shadow:
-    0 14px 38px -6px rgba(188, 107, 242, 0.72),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 0 1px rgba(255, 255, 255, 0.34),
+    0 16px 40px -6px rgba(120, 40, 200, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 .btn-book svg { width: 18px; height: 18px; }
 
@@ -2696,6 +2701,12 @@ body { background: transparent; color: var(--np-white); }
 .site-footer { background: transparent; }
 .contact { background: transparent; }
 
+/* Texte courant : léger relief pour rester net sur le fond violet clair. */
+.services p, .team-content p, .stat-label, .gallery-heading-strong,
+.contact p, .site-footer p, .marquee, .form-note {
+  text-shadow: 0 1px 8px rgba(15, 5, 26, 0.4);
+}
+
 /* Textes repassés en clair */
 .stat-label { color: rgba(255, 255, 255, 0.92); }
 .stat-label em { color: rgba(255, 255, 255, 0.55); }
@@ -2716,14 +2727,14 @@ body { background: transparent; color: var(--np-white); }
   text-shadow: 0 1px 6px rgba(20, 6, 32, 0.5);
 }
 .field input, .field textarea {
-  background: rgba(18, 8, 28, 0.38);
+  background: rgba(18, 8, 28, 0.52);
   backdrop-filter: blur(12px) saturate(140%);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.42);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 20px -10px rgba(20, 6, 32, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.58); }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.66); }
 .field input:focus, .field textarea:focus {
   border-color: var(--np-cyan);
   background: rgba(18, 8, 28, 0.5);
