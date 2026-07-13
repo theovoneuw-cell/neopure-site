@@ -99,15 +99,14 @@
       keyboard: false,
       touchZoom: false
     });
-    // Tuiles équilibrées (CartoDB Voyager, sans labels) — on les teinte ensuite en CSS
+    // Tuiles équilibrées (CartoDB Voyager, SANS labels) — on les teinte ensuite en CSS
     // pour les fondre dans l'univers violet du site.
+    // On n'ajoute PAS le calque de labels : son « Montpellier » gravé dans les
+    // tuiles tombait pile au centre et entrait en collision avec le pin et les
+    // ondes radar (d'où les décalages en pixels qu'on traînait). Le lieu est
+    // désormais nommé par notre propre étiquette .radar-label, propre et nette.
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
       maxZoom: 19
-    }).addTo(map);
-    // Calque transparent avec UNIQUEMENT les labels (noms de villes, rues principales)
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19,
-      pane: "markerPane"  // au-dessus des tuiles de base
     }).addTo(map);
     // Le centre exact (Montpellier) est marqué par .radar-core en CSS, pile au milieu du cadre.
   }

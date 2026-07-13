@@ -2200,16 +2200,38 @@ section { position: relative; }
 .radar-core {
   position: absolute;
   left: 50%; top: 50%;
-  width: 28px; height: 38px;
-  /* La pointe du pin remonte au-dessus du centre géographique pour laisser
-     le nom de la ville (au centre) parfaitement lisible ET dégagé — le pin
-     ne touche plus les lettres (retour client : « arrange »). */
-  transform: translate(-50%, calc(-100% - 34px));
-  z-index: 5;
+  width: 30px; height: 42px;
+  /* La POINTE du pin tombe pile sur le centre géographique (50%,50%) : c'est
+     de ce point unique qu'émanent les ondes, la cible et le balayage — une
+     seule origine, plus aucun décalage en pixels à entretenir. */
+  transform: translate(-50%, -100%);
+  z-index: 6;
   filter: drop-shadow(0 6px 16px rgba(53, 242, 242, 0.55))
           drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 .radar-core svg { display: block; width: 100%; height: 100%; }
+
+/* Étiquette de lieu, sous la pointe du pin — nette, maîtrisée, cohérente charte */
+.radar-label {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, 12px);
+  z-index: 6;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  padding: 5px 13px;
+  border-radius: 999px;
+  background: rgba(24, 12, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
 
 /* ===== Balayage radar : cône lumineux qui tourne autour du POINTEUR =====
    Même origine que les ondes et la cible (la tête du pin) : un seul foyer
@@ -2218,9 +2240,9 @@ section { position: relative; }
    pin, deux origines qui se chevauchaient visuellement. */
 .radar-sweep {
   position: absolute;
-  left: 50%; top: calc(50% - 59px);
-  /* Grand carré centré sur le pin : la rotation couvre toute la carte. */
-  width: 170%; aspect-ratio: 1;
+  left: 50%; top: 50%;
+  /* Grand carré centré sur le point (pointe du pin) : la rotation couvre toute la carte. */
+  width: 180%; aspect-ratio: 1;
   z-index: 2;
   pointer-events: none;
   background: conic-gradient(from 0deg at 50% 50%,
@@ -2240,10 +2262,8 @@ section { position: relative; }
 /* ===== Ondes concentriques émanant du point Montpellier (centre) ===== */
 .radar-rings {
   position: absolute;
-  /* Centrées sur la TÊTE du pin (le rond blanc du pointeur), pas sur sa
-     pointe : les ondes rayonnent depuis le pointeur lui-même, et non sur
-     le nom de la ville en dessous. */
-  left: 50%; top: calc(50% - 59px);
+  /* Origine unique : le point géographique (pointe du pin) au centre. */
+  left: 50%; top: 50%;
   z-index: 3;
   width: 0; height: 0;
   pointer-events: none;
@@ -2251,30 +2271,28 @@ section { position: relative; }
 .radar-rings i {
   position: absolute;
   left: 0; top: 0;
-  width: 30px; height: 30px;
-  margin: -15px 0 0 -15px;
+  width: 44px; height: 44px;
+  margin: -22px 0 0 -22px;
   border-radius: 50%;
-  border: 1.25px solid rgba(53, 242, 242, 0.55);
+  border: 1.5px solid rgba(53, 242, 242, 0.55);
   opacity: 0;
   animation: radarPing 4.2s ease-out infinite;
 }
 .radar-rings i:nth-child(2) { animation-delay: 1.4s; }
 .radar-rings i:nth-child(3) { animation-delay: 2.8s; }
-/* Expansion bornée à scale(3) = 45 px de rayon : l'onde s'éteint juste
-   AVANT d'atteindre le nom de la ville (à ~52 px sous la tête du pin) —
-   plus aucun cercle ne traverse les lettres ni ne déborde du pointeur. */
+/* Les ondes s'ouvrent largement (jusqu'à ~100 px de rayon) puis s'éteignent
+   bien avant les bords : un vrai radar qui balaie la zone, sans déborder. */
 @keyframes radarPing {
-  0%   { transform: scale(0.25); opacity: 0; border-color: rgba(53, 242, 242, 0.8); }
-  22%  { opacity: 0.7; }
-  100% { transform: scale(3); opacity: 0; border-color: rgba(188, 107, 242, 0.2); }
+  0%   { transform: scale(0.35); opacity: 0; border-color: rgba(53, 242, 242, 0.85); }
+  18%  { opacity: 0.7; }
+  100% { transform: scale(4.6); opacity: 0; border-color: rgba(188, 107, 242, 0.2); }
 }
 
 /* ===== Cible lumineuse au centre géographique (« on fait mouche ») ===== */
 .radar-target {
   position: absolute;
-  /* Sur la tête du pointeur : le halo cyan pulse derrière le rond blanc du
-     pin — « on fait mouche » sur le pointeur, pas sur les lettres. */
-  left: 50%; top: calc(50% - 59px);
+  /* Pile sur le point (pointe du pin) : le halo cyan pulse au centre exact. */
+  left: 50%; top: 50%;
   z-index: 4;
   width: 9px; height: 9px;
   margin: -4.5px 0 0 -4.5px;
@@ -2323,9 +2341,9 @@ section { position: relative; }
 /* Radar : mouvements figés si l'utilisateur réduit les animations */
 @media (prefers-reduced-motion: reduce) {
   .radar-sweep { animation: none; opacity: 0.4; }
-  /* Ondes figées DANS l'enveloppe animée (rayon max 45 px) : même en
-     statique, aucun cercle ne se pose sur le nom de la ville. */
-  .radar-rings i { animation: none; opacity: 0.3; transform: scale(1.8); }
+  /* Ondes concentriques figées, centrées sur le point : rendu radar propre
+     même sans animation. */
+  .radar-rings i { animation: none; opacity: 0.3; transform: scale(1.6); }
   .radar-rings i:nth-child(2) { transform: scale(2.8); opacity: 0.16; }
   .radar-rings i:nth-child(3) { display: none; }
   .radar-target { animation: none; }
@@ -3008,6 +3026,30 @@ body { background: transparent; color: var(--np-white); }
 .lb-prev:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--np-cyan); transform: translateY(-50%) scale(1.08); }
 .lb-next:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--np-cyan); transform: translateY(-50%) scale(1.08); }
 
+/* Bouton son (visionneuse vidéo) — même langage visuel que .lb-close */
+.lb-sound {
+  position: absolute;
+  bottom: clamp(14px, 3vw, 28px);
+  right: clamp(14px, 3vw, 32px);
+  z-index: 3;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+.lb-sound[hidden] { display: none; }
+.lb-sound svg { display: block; width: 24px; height: 24px; }
+.lb-sound:hover { background: rgba(255, 255, 255, 0.16); border-color: var(--np-cyan); transform: scale(1.06); }
+/* Son actif : le bouton s'allume en cyan pour signaler que le son est ON */
+.lb-sound.is-on { color: var(--np-cyan); border-color: var(--np-cyan); background: rgba(53, 242, 242, 0.16); }
+
 /* Compteur (n / total) */
 .lb-counter {
   position: absolute;
@@ -3030,6 +3072,8 @@ body { background: transparent; color: var(--np-white); }
 @media (max-width: 720px) {
   .lb-nav { width: 44px; height: 44px; font-size: 1.6rem; }
   .lb-close { width: 46px; height: 46px; font-size: 1.6rem; }
+  .lb-sound { width: 46px; height: 46px; }
+  .lb-sound svg { width: 22px; height: 22px; }
   .lb-stage img, .lb-stage video { max-height: 78vh; border-radius: 12px; }
 }
 
@@ -3206,19 +3250,8 @@ body { background: transparent; color: var(--np-white); }
 }
 .bubble--tag { padding: 7px 12px; font-size: 0.8rem; }
 
-/* Le contenu reste au-dessus des bulles */
+/* Le contenu reste au-dessus du décor */
 .contact-inner, .map-radar, .map-caption { position: relative; z-index: 2; }
-
-/* Positions : dans les bandes HAUTE et BASSE des panneaux (là où il n'y a pas
-   de contenu, celui-ci étant centré verticalement) → pas de chevauchement. */
-.contact .b-likes    { top: 3%;    left: 1%; }
-.contact .b-comments { top: 3%;    right: 1%; }
-.contact .b-follow   { bottom: 4%; left: 1%; }
-.contact .b-hashtag  { bottom: 4%; right: 2%; }
-.map-panel .b-views     { top: 3%;    left: 1%; }
-.map-panel .b-play      { top: 4%;    right: 2%; }
-.map-panel .b-story     { bottom: 4%; left: 1%; }
-.map-panel .b-followers { bottom: 4%; right: 1%; }
 
 /* Léger flottement (désactivé si l'utilisateur réduit les animations) */
 @media (prefers-reduced-motion: no-preference) {

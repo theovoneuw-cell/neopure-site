@@ -160,9 +160,15 @@
     var btnClose = document.getElementById("lbClose");
     var btnPrev = document.getElementById("lbPrev");
     var btnNext = document.getElementById("lbNext");
+    var btnSound = document.getElementById("lbSound");
     var items = Array.prototype.slice.call(document.querySelectorAll(".gallery-item"));
     if (!lb || !stage || !items.length) return;
     var lock = makeScrollLock();
+
+    // Icônes du bouton son (SVG inline pour rester net et sans requête réseau)
+    var SVG_ON  = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+    var SVG_OFF = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    var currentVideo = null;
 
     // Construit la liste des médias (type + source) à partir de la galerie
     var media = items.map(function (fig) {
@@ -174,26 +180,42 @@
 
     var current = -1;
 
+    function updateSoundBtn() {
+      if (!btnSound) return;
+      if (!currentVideo) { btnSound.hidden = true; return; }
+      var on = !currentVideo.muted;
+      btnSound.hidden = false;
+      btnSound.classList.toggle("is-on", on);
+      btnSound.setAttribute("aria-pressed", on ? "true" : "false");
+      btnSound.setAttribute("aria-label", on ? "Couper le son" : "Activer le son");
+      btnSound.innerHTML = on ? SVG_ON : SVG_OFF;
+    }
+
     function render(i) {
       var m = media[i];
       if (!m) return;
       stage.innerHTML = "";
+      currentVideo = null;
       var el;
       if (m.type === "video") {
         el = document.createElement("video");
         el.src = m.src;
         if (m.poster) el.poster = m.poster;
         el.controls = true;
-        el.autoplay = true;
         el.loop = true;
         el.playsInline = true;
         el.setAttribute("playsinline", "");
-        // Certains navigateurs (iOS surtout) refusent l'autoplay AVEC son :
-        // la vidéo restait alors figée. On retente en muet — l'utilisateur
-        // a les contrôles pour remonter le son.
+        currentVideo = el;
+        // Ouvrir une réalisation vidéo = geste utilisateur → on tente le son direct.
+        el.muted = false;
+        el.volume = 1;
         var pv = el.play && el.play();
         if (pv && pv.catch) pv.catch(function () {
+          // Autoplay AVEC son refusé (iOS surtout) : on démarre en muet pour
+          // que la vidéo ne reste pas figée, et le bouton son permet d'activer
+          // le son en un tap.
           el.muted = true;
+          updateSoundBtn();
           var p2 = el.play();
           if (p2 && p2.catch) p2.catch(function () {});
         });
@@ -203,6 +225,7 @@
         el.alt = m.alt || "Réalisation Neopure";
       }
       stage.appendChild(el);
+      updateSoundBtn();
       if (counter) counter.textContent = (i + 1) + " / " + media.length;
     }
 
@@ -218,6 +241,9 @@
       lb.setAttribute("aria-hidden", "true");
       lock.unlock();
       // stoppe toute vidéo en cours pour libérer le son
+      if (currentVideo) { try { currentVideo.pause(); } catch (e) {} }
+      currentVideo = null;
+      if (btnSound) btnSound.hidden = true;
       setTimeout(function () { stage.innerHTML = ""; }, 400);
       current = -1;
     }
@@ -233,6 +259,19 @@
     btnClose.addEventListener("click", close);
     btnPrev.addEventListener("click", function () { go(-1); });
     btnNext.addEventListener("click", function () { go(1); });
+    if (btnSound) {
+      btnSound.addEventListener("click", function (e) {
+        e.stopPropagation();               // ne pas fermer la visionneuse
+        if (!currentVideo) return;
+        currentVideo.muted = !currentVideo.muted;
+        if (!currentVideo.muted) {
+          currentVideo.volume = 1;
+          var p = currentVideo.play();     // relance si iOS avait mis en pause
+          if (p && p.catch) p.catch(function () {});
+        }
+        updateSoundBtn();
+      });
+    }
     // Clic sur le fond (hors média/boutons) → ferme
     lb.addEventListener("click", function (e) {
       if (e.target === lb || e.target === stage) close();

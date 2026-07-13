@@ -12,22 +12,33 @@
   <meta name="author" content="Neopure" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#2f173b" />
-  <link rel="canonical" href="https://neopure.fr/" />
+  <!-- URL réelle de publication (GitHub Pages). Les aperçus de partage
+       (iMessage, WhatsApp, Facebook…) doivent pouvoir CHARGER l'image :
+       tant que neopure.fr n'est pas branché, on pointe l'hôte réel, sinon
+       le robot ne trouve pas le logo et attrape une photo au hasard de la
+       page. Quand le domaine sera actif, remplacer par https://neopure.fr/ . -->
+  <link rel="canonical" href="https://theovoneuw-cell.github.io/neopure-site/" />
 
-  <!-- ============ Open Graph (Facebook, LinkedIn…) ============ -->
+  <!-- ============ Open Graph (Facebook, LinkedIn, iMessage, WhatsApp…) ============ -->
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:site_name" content="Neopure" />
   <meta property="og:title" content="Neopure — Agence de communication & événementiel" />
   <meta property="og:description" content="La Com' & L'Event : on fait briller ta marque sur les réseaux et on orchestre tes événements de A à Z." />
-  <meta property="og:url" content="https://neopure.fr/" />
-  <meta property="og:image" content="https://neopure.fr/assets/brand/LOGO.png" />
+  <meta property="og:url" content="https://theovoneuw-cell.github.io/neopure-site/" />
+  <meta property="og:image" content="https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png" />
+  <meta property="og:image:secure_url" content="https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="2611" />
+  <meta property="og:image:height" content="1867" />
+  <meta property="og:image:alt" content="Neopure — agence de communication & événementiel" />
 
   <!-- ============ Twitter Card ============ -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Neopure — Agence de communication & événementiel" />
   <meta name="twitter:description" content="La Com' & L'Event : on fait briller ta marque sur les réseaux et on orchestre tes événements de A à Z." />
-  <meta name="twitter:image" content="https://neopure.fr/assets/brand/LOGO.png" />
+  <meta name="twitter:image" content="https://theovoneuw-cell.github.io/neopure-site/assets/brand/LOGO.png" />
+  <meta name="twitter:image:alt" content="Neopure — agence de communication & événementiel" />
 
   <!-- ============ Favicon ============ -->
   <link rel="icon" type="image/png" href="assets/brand/Logo_N_Degrade_SF.png" />
@@ -459,11 +470,11 @@
         <div class="gallery">
           <!-- Vidéos en petites tuiles aux extrémités (jamais agrandies → restent nettes) -->
           <figure class="gallery-item is-video g-vid reveal">
-            <video src="assets/gallery/reel-01.mp4?v=3" poster="assets/gallery/reel-01-poster.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="assets/gallery/reel-01.mp4?v=4" poster="assets/gallery/reel-01-poster.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
           <figure class="gallery-item is-video g-vid reveal" data-delay="1">
-            <video src="assets/gallery/vid-02.mp4?v=2" poster="assets/gallery/g04.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="assets/gallery/vid-02.mp4?v=4" poster="assets/gallery/g04.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
 
@@ -475,11 +486,11 @@
 
           <!-- Vidéos en petites tuiles aux extrémités -->
           <figure class="gallery-item is-video g-vid reveal" data-delay="1">
-            <video src="assets/gallery/vid-01.mp4?v=2" poster="assets/gallery/g02.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="assets/gallery/vid-01.mp4?v=4" poster="assets/gallery/g02.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
           <figure class="gallery-item is-video g-vid reveal" data-delay="2">
-            <video src="assets/gallery/vid-03.mp4?v=2" poster="assets/gallery/g06.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="assets/gallery/vid-03.mp4?v=4" poster="assets/gallery/g06.jpg?v=2" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
         </div>
@@ -675,6 +686,8 @@
             <circle cx="15" cy="14" r="4.2" fill="#fff"/>
           </svg>
         </span>
+        <!-- Notre étiquette de lieu (remplace le label gravé des tuiles) -->
+        <span class="radar-label" aria-hidden="true">Montpellier</span>
         <!-- Cadre de marque : liseré dégradé cyan→violet + ligne d'accent (cohérence cartes du site) -->
         <span class="radar-frame" aria-hidden="true"></span>
       </div>
@@ -750,6 +763,10 @@
     <button class="lb-close" id="lbClose" aria-label="Fermer">&times;</button>
     <button class="lb-nav lb-prev" id="lbPrev" aria-label="Précédent">&#8249;</button>
     <button class="lb-nav lb-next" id="lbNext" aria-label="Suivant">&#8250;</button>
+    <!-- Bouton son maison : les contrôles natifs de <video> sont capricieux sur
+         iOS après un démarrage forcé en muet — ce bouton bascule le son de façon
+         fiable (geste utilisateur direct). -->
+    <button class="lb-sound" id="lbSound" type="button" aria-label="Activer le son" aria-pressed="false" hidden></button>
     <div class="lb-stage" id="lbStage"><!-- média injecté ici --></div>
     <div class="lb-counter" id="lbCounter"></div>
   </div>
