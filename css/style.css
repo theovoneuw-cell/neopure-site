@@ -1169,6 +1169,36 @@ section { position: relative; }
   color: rgba(255, 255, 255, 0.72);
 }
 
+/* Indice de swipe (mobile uniquement) : la rangée contient bien plus de médias
+   que l'écran n'en montre — sans indice, on croit qu'il n'y a que 2 vidéos. */
+.gallery-swipe {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px auto 0;
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+.gallery-swipe i {
+  font-style: normal;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--np-cyan);
+  animation: swipeNudge 1.5s var(--ease) infinite;
+}
+@keyframes swipeNudge {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50%      { transform: translateX(7px); opacity: 1; }
+}
+@media (max-width: 720px) {
+  .gallery-swipe { display: flex; }
+}
+
 /* Galerie compacte : UNE seule rangée horizontale qui défile (swipe) → peu de hauteur */
 .gallery {
   display: flex;
@@ -2462,7 +2492,9 @@ section { position: relative; }
     gap: 80px;
   }
   .h-active .stats-collab .stats { min-width: 280px; }
-  .h-active .stats-collab .collab { min-width: 360px; max-width: 420px; }
+  /* Assez large pour montrer 4 logos entiers (4 × 132 px + 3 × 20 px = 588 px,
+     plus la marge des fondus latéraux du masque). */
+  .h-active .stats-collab .collab { min-width: 560px; max-width: 700px; flex: 1 1 auto; }
   /* Le marquee a une largeur définie pour boucler proprement en horizontal */
   .h-active .stats-collab .collab-marquee { width: 100%; }
 
@@ -2496,6 +2528,8 @@ section { position: relative; }
     text-align: left;
     max-width: 640px;
   }
+  /* Retour client (desktop) : « Stop aux contenus sans fonds. » passe à la ligne */
+  .h-active .gallery-section .gallery-heading-strong { display: block; }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
@@ -2590,6 +2624,8 @@ section { position: relative; }
   .h-active .map-panel .map-radar { width: min(46vw, 620px); }
   .h-active .map-panel .map-caption { text-align: left; }
   .h-active .map-panel .map-cta { justify-content: flex-start; }
+  /* Retour client (desktop) : pas de phrase sous « Basés à Montpellier » */
+  .h-active .map-panel .map-caption-text { display: none; }
 
   /* Zone de sécurité en haut de chaque panneau : le contenu ne passe jamais
      sous la barre de navigation flottante (fixée à top:22px). Padding haut/bas
@@ -2830,7 +2866,8 @@ body { background: transparent; color: var(--np-white); }
     margin-bottom: 56px;
   }
   .hero-tag      { font-size: 0.72rem; letter-spacing: 0.18em; gap: 12px; }
-  .hero-tag-bar  { width: 26px; }
+  /* Retour client : pas de trait avant « Communication × Événementiel » sur mobile */
+  .hero-tag-bar  { display: none; }
   .hero-meta     { font-size: 0.7rem; letter-spacing: 0.16em; gap: 12px; opacity: 0.75; justify-content: center; }
 
   .hero-title    { font-size: clamp(3rem, 16vw, 5rem); margin-bottom: 24px; line-height: 0.95; }
@@ -2873,6 +2910,8 @@ body { background: transparent; color: var(--np-white); }
     width: auto;
     justify-content: center;
   }
+  /* Retour client : pas de barre séparatrice avant les icônes Insta / WhatsApp */
+  .hero-socials::before { display: none; }
   .hero-social { width: 48px; height: 48px; }
   .hero-social svg { width: 20px; height: 20px; }
 
@@ -2902,6 +2941,10 @@ body { background: transparent; color: var(--np-white); }
   .sector-bridge-mark { width: clamp(30px, 9vw, 40px); }
   .services-cta { gap: 16px 22px; margin-top: 32px; flex-direction: column; align-items: stretch; text-align: center; }
   .services-cta .btn-primary { width: 100%; }
+  /* Le lien « Réserver un appel » était étiré sur toute la largeur (align-items:
+     stretch) → son soulignement ::after traversait tout l'écran. Recentré à sa
+     largeur de texte : le trait ne dépasse plus du libellé. */
+  .services-cta .hero-link { align-self: center; width: auto; }
 
   /* TEAM ---------------------------------------------------------------- */
   .team-inner { gap: 28px; }
@@ -2919,11 +2962,10 @@ body { background: transparent; color: var(--np-white); }
   /* Chips : tap targets plus confortables */
   .chip { padding: 10px 16px; font-size: 0.88rem; }
   .field--chips .chips { gap: 8px; }
-  /* Carte info en compact */
-  .contact-info { padding: 28px 22px; border-radius: 18px; }
-  .contact-info h3 { font-size: 1.1rem; }
-  .contact-list a { font-size: 1rem; }
-  .contact-socials a { width: 46px; height: 46px; }
+  /* Retour client (mobile) : le formulaire va à l'essentiel — on retire la
+     note « On te répond sous 24 à 48h » et toute la carte Horaires/contacts. */
+  .form-note { display: none; }
+  .contact-info { display: none; }
 
   /* CARTE / LOCALISATION ----------------------------------------------- */
   .map-panel { gap: 34px; }
