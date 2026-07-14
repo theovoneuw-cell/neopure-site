@@ -2659,6 +2659,17 @@ section { position: relative; }
     width: auto;
     max-width: none;
   }
+  /* FILET DE SÉCURITÉ : le panneau fait 100vh et le scroll vertical pilote la
+     frise — tout contenu qui dépasse serait INATTEIGNABLE (bouton « Envoyer »
+     sous le pli, constaté en 1366×768 / 1440×900). Un scroll interne discret
+     rend toujours le bas du formulaire accessible : la molette fait défiler le
+     formulaire d'abord, puis enchaîne naturellement sur la frise. */
+  .h-active .contact .contact-inner {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
   .h-active .contact .contact-form-wrap { width: 420px; }
   /* La carte Horaires (courte) se centre verticalement par rapport au
      formulaire, sans déplacer l'ancrage haut de ce dernier. */
@@ -2728,18 +2739,23 @@ section { position: relative; }
 
 }
 
-/* 12b. DESKTOP PEU HAUT (ex. 1366×768) — le panneau Contact fait 100vh sans
-   scroll interne ; sur un écran court, le formulaire (haut) débordait et le
-   bouton « Envoyer » passait SOUS le pli, donc inatteignable (le scroll
-   vertical pilote l'horizontale). On compresse l'espacement du formulaire
-   pour que tout, bouton compris, tienne dans la hauteur visible. */
-@media (min-width: 1025px) and (max-height: 860px) {
+/* 12b. DESKTOP PEU HAUT (ex. 1366×768) — le panneau Contact fait 100vh ; sur
+   un écran court, le formulaire (haut) débordait et le bouton « Envoyer »
+   passait SOUS le pli (le scroll vertical pilote l'horizontale — un scroll
+   interne de secours existe, voir 12). On compresse l'espacement du formulaire
+   pour que tout, bouton compris, tienne dans la hauteur visible.
+   Seuil 960 (pas 860) : mesuré, le formulaire complet déborde déjà de ~40 px
+   à 900 px de haut (1440×900) et de ~70 px à 870 px. */
+@media (min-width: 1025px) and (max-height: 960px) {
   .h-active .contact .contact-inner {
     /* 76 px mini en haut : en dessous, « Contacte-nous ! » passait SOUS la
        barre de navigation flottante (top 22 px + ~44 px de hauteur). On
        compense en serrant un peu plus le formulaire ci-dessous. */
     padding-top: clamp(76px, 10vh, 88px);
-    padding-bottom: clamp(24px, 4vh, 48px);
+    /* Bas volontairement serré : le conteneur scrolle en interne (voir 12) —
+       un padding-bas trop grand crée 2-3 px de scroll « fantôme » qui fait
+       apparaître une barre de défilement pour rien. */
+    padding-bottom: clamp(20px, 3vh, 40px);
   }
   .h-active .contact .contact-title { margin-bottom: 12px; }
   .h-active .contact .contact-form { gap: 8px; }
@@ -2754,8 +2770,10 @@ section { position: relative; }
 
 /* Fenêtres vraiment courtes (petit laptop, fenêtre réduite) : le formulaire
    se compacte encore d'un cran pour ne JAMAIS remonter sous le menu flottant
-   ni pousser le bouton « Envoyer » sous le pli. */
-@media (min-width: 1025px) and (max-height: 700px) {
+   ni pousser le bouton « Envoyer » sous le pli.
+   Seuil 800 (pas 700) : mesuré, à 768 px de haut (1366×768) le palier
+   précédent laissait encore ~45 px du formulaire sous le pli. */
+@media (min-width: 1025px) and (max-height: 800px) {
   .h-active .contact .contact-inner {
     padding-top: 72px;
     padding-bottom: 18px;
