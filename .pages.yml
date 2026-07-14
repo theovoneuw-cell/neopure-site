@@ -1,0 +1,77 @@
+# Configuration Pages CMS (https://pagescms.org) — back-office d'édition.
+# Le client édite ces contenus sur app.pagescms.org ; chaque enregistrement
+# commite dans le repo, l'Action Eleventy reconstruit le site.
+
+media:
+  - name: clients-media
+    label: Logos clients
+    input: assets/clients
+    output: /assets/clients
+    extensions: [png, jpg, jpeg, webp, svg]
+  - name: gallery-media
+    label: Médias galerie
+    input: assets/gallery
+    output: /assets/gallery
+    extensions: [jpg, jpeg, png, webp, mp4]
+
+content:
+  - name: clients
+    label: Logos clients
+    type: file
+    path: src/_data/clients.json
+    list: true
+    # Glisser-déposer pour réordonner. Logo carré, min 500×500.
+    fields:
+      - { name: src, label: Logo (carré), type: image, options: { media: clients-media } }
+      - { name: alt, label: Nom du client, type: string }
+
+  - name: gallery
+    label: Galerie (photos & vidéos)
+    type: file
+    path: src/_data/gallery.json
+    list: true
+    # Glisser-déposer pour réordonner. Photo verticale 4:5, ou vidéo .mp4.
+    fields:
+      - { name: type, label: Type, type: select, options: { values: [image, video] } }
+      - { name: src, label: Fichier (photo ou vidéo), type: image, options: { media: gallery-media, extensions: [jpg, jpeg, png, webp, mp4] } }
+      - { name: poster, label: Vignette (pour une vidéo), type: image, options: { media: gallery-media } }
+      - { name: alt, label: Description (photo), type: string }
+      - { name: variant, label: "Format (vide / wide / tall / vid)", type: select, options: { values: ["", wide, tall, vid] } }
+      - { name: delay, label: "Délai d'apparition (0 à 2)", type: number }
+
+  - name: site
+    label: Textes du site
+    type: file
+    path: src/_data/site.json
+    fields:
+      - name: stats
+        label: Chiffres clés
+        type: object
+        list: true
+        fields:
+          - { name: num, label: "Affichage (ex : +35K)", type: string }
+          - { name: count, label: Valeur chiffrée, type: string }
+          - { name: prefix, label: Préfixe, type: string }
+          - { name: suffix, label: Suffixe, type: string }
+          - { name: delay, label: Délai, type: number }
+          - { name: label, label: Légende, type: string }
+      - name: servicesCom
+        label: "Services — La Com'"
+        type: object
+        list: true
+        fields:
+          - { name: key, label: Identifiant (ne pas changer), type: string }
+          - { name: label, label: Titre, type: string }
+          - { name: desc, label: Description, type: text }
+      - name: servicesEvent
+        label: "Services — L'Event"
+        type: object
+        list: true
+        fields:
+          - { name: key, label: Identifiant (ne pas changer), type: string }
+          - { name: label, label: Titre, type: string }
+          - { name: desc, label: Description, type: text }
+      - name: teamParagraphs
+        label: "Équipe — paragraphes"
+        type: string
+        list: true

@@ -17,6 +17,9 @@ npm-debug.log*
 # Dépendances (si jamais on en ajoute plus tard)
 node_modules/
 
+# Sortie du build Eleventy (générée, non versionnée)
+_site/
+
 # Fichiers de travail / backups
 *.bak
 *.tmp

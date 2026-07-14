@@ -1,0 +1,30 @@
+{
+  "stats": [
+    { "num": "+35K", "count": "35", "prefix": "+", "suffix": "K", "delay": null, "label": "abonnés <em>pour nos clients.</em>" },
+    { "num": "+800%", "count": "800", "prefix": "+", "suffix": "%", "delay": 1, "label": "de vues <em>sur les différents comptes.</em>" }
+  ],
+  "servicesCom": [
+    { "key": "com-1", "label": "Gestion des réseaux sociaux", "desc": "On prend les rênes de tes comptes : planification, publication, réponses aux messages et veille. Tu gardes la main sur ta marque, on fait tourner la machine au quotidien." },
+    { "key": "com-2", "label": "Création de contenus", "desc": "On vient tourner sur site — photo, vidéo, reels — puis on monte des contenus qui te ressemblent, prêts à poster. Concrètement : tu nous dis où et quand, on débarque avec le matos et l'œil." },
+    { "key": "com-3", "label": "Développement commercial", "desc": "On transforme ta visibilité en clients : offres claires, prise de contact, tunnels simples. L'objectif, c'est le business — pas juste les likes." },
+    { "key": "com-4", "label": "Stratégie digitale &amp; Ads", "desc": "On pose un plan clair et on lance des campagnes payantes ciblées (Meta, TikTok…) pour aller chercher la bonne audience, au bon moment, sans cramer ton budget." },
+    { "key": "com-5", "label": "Optimisation du profil", "desc": "On rend ton profil clair et vendeur : bio, mise en avant, identité visuelle, liens. La première impression qui donne envie de te suivre — et de te contacter." },
+    { "key": "com-6", "label": "Calendrier de contenus", "desc": "On planifie tes posts à l'avance : thèmes, formats, dates. Fini le « on poste quoi aujourd'hui ? » : tu sais exactement ce qui sort et quand." },
+    { "key": "com-7", "label": "Site web &amp; appli", "desc": "On conçoit ton site ou ton appli de A à Z : design à ton image, développement, mise en ligne et référencement. Rapide, élégant, pensé pour convertir — exactement comme le site que tu es en train de regarder." }
+  ],
+  "servicesEvent": [
+    { "key": "event-1", "label": "Coordination &amp; logistique", "desc": "On orchestre ton événement de A à Z : prestataires, planning, présence sur place le jour J. Toi tu profites, nous on gère les coulisses." },
+    { "key": "event-2", "label": "DJ &amp; animation", "desc": "On met l'ambiance : DJ, sono, animation calée sur ton public. Une soirée qui reste dans les têtes (et sur les stories)." },
+    { "key": "event-3", "label": "Photographe &amp; vidéaste", "desc": "On capte les meilleurs moments en photo et en vidéo, prêts à partager et à réutiliser ensuite en communication (aftermovie, reels, souvenirs)." },
+    { "key": "event-4", "label": "Team building &amp; séminaire", "desc": "On conçoit des moments qui soudent tes équipes : activités, format, lieu. Utile, fédérateur et mémorable — pas une réunion déguisée." },
+    { "key": "event-5", "label": "Communication évènementielle", "desc": "On fait connaître ton événement avant, pendant et après : teasing, couverture live, aftermovie. On remplit la salle et on prolonge l'impact." },
+    { "key": "event-6", "label": "Stratégie d'acquisition", "desc": "On remplit ta salle : ciblage, billetterie, campagnes. Des inscrits concrets, pas juste des vues qui font plaisir." }
+  ],
+  "teamParagraphs": [
+    "Chez Neopure, on n'est pas une agence qui balance des posts à la chaîne.",
+    "On est <strong>Charlène &amp; Axel</strong>, deux passionnés de <strong>com' et d'événementiel</strong> qui aiment bosser main dans la main avec leurs clients. Parce qu'une bonne com' (ou un bon event), c'est pas juste une facture : c'est <strong>une vraie collaboration</strong>.",
+    "<strong>Charlène</strong>, le cerveau (et le moteur) : stratège née, toujours en quête de l'idée juste, pour mettre en avant vos valeurs et vos projets.",
+    "<strong>Axel</strong>, le créatif touche-à-tout : artiste de musique, fan de visuel et de graphisme, il a l'œil qui transforme vos idées en contenus qui claquent.",
+    "Ensemble, <strong>on fait briller votre marque</strong> comme vous l'avez toujours voulu, et on crée une communication qui vous ressemble."
+  ]
+}
