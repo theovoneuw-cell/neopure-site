@@ -4,14 +4,14 @@
    l'ancien index.html écrit à la main (main.js/style.css inchangés).
    css/, js/, assets/ et les fichiers racine sont recopiés tels quels. */
 module.exports = function (eleventyConfig) {
-  ["css", "js", "assets", "robots.txt", "sitemap.xml", ".pages.yml"].forEach(
+  ["css", "js", "assets", "robots.txt", "sitemap.xml", ".pages.yml", "CNAME"].forEach(
     function (p) { eleventyConfig.addPassthroughCopy(p); }
   );
 
   // Pages CMS enregistre les chemins médias avec un « / » de tête
-  // (/assets/clients/x.png). Le site étant servi sous /neopure/ (project page
-  // GitHub Pages), un chemin absolu casse les images → on normalise en chemin
-  // relatif quel que soit le format saisi.
+  // (/assets/clients/x.png). On normalise en chemin relatif quel que soit le
+  // format saisi : ça reste correct sous le domaine racine (neopure-studio.fr)
+  // comme sous l'ancien sous-chemin /neopure/ (project page GitHub Pages).
   eleventyConfig.addFilter("rel", function (p) {
     return typeof p === "string" ? p.replace(/^\/+/, "") : p;
   });
