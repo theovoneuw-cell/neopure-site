@@ -1,34 +1,34 @@
 [
   {
-    "src": "/assets/clients/glow-up.png",
+    "src": "/assets/clients/glow-up.webp",
     "alt": "Glow Up"
   },
   {
-    "src": "/assets/clients/logo-carre.png",
+    "src": "/assets/clients/logo-carre.webp",
     "alt": "Logo Carré"
   },
   {
-    "src": "/assets/clients/pdp.png",
+    "src": "/assets/clients/pdp.webp",
     "alt": "PDP"
   },
   {
-    "src": "/assets/clients/client-01.png",
+    "src": "/assets/clients/client-01.webp",
     "alt": "Client Neopure"
   },
   {
-    "src": "/assets/clients/client-04.png",
+    "src": "/assets/clients/client-04.webp",
     "alt": "Client Neopure"
   },
   {
-    "src": "/assets/clients/client-05.png",
+    "src": "/assets/clients/client-05.webp",
     "alt": "Client Neopure"
   },
   {
-    "src": "/assets/clients/client-07.png",
+    "src": "/assets/clients/client-07.webp",
     "alt": "Client Neopure"
   },
   {
-    "src": "/assets/clients/client-08.jpg",
+    "src": "/assets/clients/client-08.webp",
     "alt": "Client Neopure"
   }
 ]

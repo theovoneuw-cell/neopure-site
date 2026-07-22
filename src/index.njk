@@ -62,7 +62,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260720a" />
+  <link rel="stylesheet" href="css/style.css?v=20260722a" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -95,11 +95,10 @@
   <div class="np-loader" id="npLoader" role="progressbar" aria-label="Chargement du site"
        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 
-    <!-- Cinq colonnes de fond : ensemble elles forment la scène sombre continue,
-         puis glissent vers le haut en cascade pour révéler le site. -->
-    <div class="np-cols" aria-hidden="true">
-      <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i>
-    </div>
+    <!-- Scène sombre d'un seul tenant (retour client : plus de « cubes » /
+         rectangles qui glissent). À la fin, elle s'ouvre en fondu pendant que
+         le lockup zoome : on plonge littéralement dans le site par le logo. -->
+    <div class="np-scene" aria-hidden="true"></div>
 
     <!-- Grain cinéma très subtil au-dessus de la scène -->
     <div class="np-grain" aria-hidden="true"></div>
@@ -420,12 +419,18 @@
             <p class="collab-title eyebrow">Ils nous font confiance</p>
             <div class="collab-marquee" aria-label="Nos clients">
               <ul class="collab-track">
+                <!-- Retour client : les logos mettaient longtemps à apparaître.
+                     `loading="lazy"` en était la cause — en frise horizontale le
+                     bandeau est hors du viewport au chargement, le navigateur ne
+                     déclenchait donc les requêtes qu'au moment où on arrivait
+                     dessus. Chargement immédiat pour la série réelle ; les
+                     doublons décoratifs restent paresseux (mêmes URL → cache). -->
                 {%- for c in clients %}
-                <li class="collab-card"><img src="{{ c.src | rel }}" alt="{{ c.alt }}" loading="lazy"></li>
+                <li class="collab-card"><img src="{{ c.src | rel }}" alt="{{ c.alt }}" decoding="async" fetchpriority="high"></li>
                 {%- endfor %}
                 <!-- Duplication pour boucle infinie en desktop (cachée en mobile) -->
                 {%- for c in clients %}
-                <li class="collab-card collab-card--dup" aria-hidden="true"><img src="{{ c.src | rel }}" alt="" loading="lazy"></li>
+                <li class="collab-card collab-card--dup" aria-hidden="true"><img src="{{ c.src | rel }}" alt="" loading="lazy" decoding="async"></li>
                 {%- endfor %}
               </ul>
             </div>
@@ -451,7 +456,10 @@
           <span class="gradient-text">Des images qui racontent</span>, des vidéos qui engagent. <span class="gallery-heading-strong">Stop aux contenus sans fonds.</span>
         </h2>
         <p class="gallery-accroche reveal" data-delay="1">Financer du contenu sans stratégie revient à crier dans le désert.</p>
-        <p class="gallery-selfnote reveal" data-delay="1">Et <b>ce site</b> que tu regardes ? C'est nous aussi.</p>
+        <!-- Retour client : le bloc de trois phrases empilées faisait lourd. La
+             troisième (« Et ce site que tu regardes ? ») est déplacée tout en
+             bas de page, dans le pied de page — elle y prend la valeur d'une
+             signature de fin plutôt que d'une ligne de plus dans un bloc. -->
 
         <div class="gallery">
           {%- for m in gallery %}
@@ -524,14 +532,27 @@
     </section>
 
     <!-- ====================== ÉQUIPE ====================== -->
-    <section class="team panel" id="equipe" aria-label="L'équipe Neopure">
+    <!-- À partir d'ici (demande client) : second chapitre du site. Le fond passe
+         du dégradé magenta de l'accueil au violet profond de la charte, avec nos
+         propres photos posées très discrètement en fond — la séparation entre
+         « qui on est / ce qu'on fait » et « comment nous joindre ». -->
+    <section class="team panel panel--deep panel--deep-start" id="equipe" aria-label="L'équipe Neopure">
       <span class="n-float n-float--d" aria-hidden="true"></span>
       <div class="container team-inner">
         <div class="team-visual reveal">
           <p class="team-kicker">Les visages derrière vos projets</p>
-          <!-- PLACEHOLDER — remplacer par une photo de l'équipe -->
-          <div class="team-photo">
-            <span>Charlène &amp; Axel</span>
+          <!-- Têtes détourées qui flottent doucement (demande client). Les PNG
+               sont recadrés sur la silhouette, halo blanc du détourage retiré ;
+               le bas est estompé en CSS pour masquer la coupe droite. -->
+          <div class="team-heads">
+            <figure class="team-head team-head--a">
+              <img src="assets/team/charlene-v3.png" alt="Charlène" width="466" height="531" decoding="async" />
+              <figcaption>Charlène</figcaption>
+            </figure>
+            <figure class="team-head team-head--b">
+              <img src="assets/team/axel-v3.png" alt="Axel" width="317" height="427" decoding="async" />
+              <figcaption>Axel</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -547,7 +568,7 @@
     </section>
 
     <!-- ====================== CONTACT ====================== -->
-    <section class="contact panel" id="contact" aria-label="Nous contacter">
+    <section class="contact panel panel--deep" id="contact" aria-label="Nous contacter">
       <span class="n-float n-float--c" aria-hidden="true"></span>
 
       <!-- Bulles d'engagement retirées ici (retour client : elles passaient
@@ -595,10 +616,18 @@
                 <button type="button" class="chip" data-value="Stratégie digitale"     role="radio" aria-checked="false">Stratégie digitale</button>
                 <button type="button" class="chip" data-value="Site web / Appli"       role="radio" aria-checked="false">Site web / Appli</button>
                 <button type="button" class="chip" data-value="Photo / Vidéo"          role="radio" aria-checked="false">Photo / Vidéo</button>
-                <button type="button" class="chip" data-value="Événement"              role="radio" aria-checked="false">Événement</button>
-                <button type="button" class="chip" data-value="DJ / Animation"         role="radio" aria-checked="false">DJ / Animation</button>
-                <button type="button" class="chip" data-value="Team building"          role="radio" aria-checked="false">Team building</button>
-                <button type="button" class="chip" data-value="Autre"                  role="radio" aria-checked="false">Autre</button>
+                <!-- Les choix suivants sont repliés par défaut : le panneau
+                     Contact fait 100 vh en frise, et ces quatre puces à elles
+                     seules ajoutaient deux lignes au formulaire. Ils sont
+                     dépliés par la puce « +4 » ci-dessous. -->
+                <button type="button" class="chip chip--extra" data-value="Événement"      role="radio" aria-checked="false">Événement</button>
+                <button type="button" class="chip chip--extra" data-value="DJ / Animation" role="radio" aria-checked="false">DJ / Animation</button>
+                <button type="button" class="chip chip--extra" data-value="Team building"  role="radio" aria-checked="false">Team building</button>
+                <button type="button" class="chip chip--extra" data-value="Autre"          role="radio" aria-checked="false">Autre</button>
+                <!-- Placée en DERNIER dans le DOM : quand les puces repliées
+                     sont masquées, elle se retrouve naturellement en bout de
+                     deuxième ligne ; une fois dépliée, elle passe à la fin. -->
+                <button type="button" class="chip chip--more" id="chipsMore" aria-expanded="false"></button>
               </div>
               <input type="hidden" id="f-nature" name="nature" value="" />
             </div>
@@ -651,7 +680,7 @@
     </section>
 
     <!-- ====================== CARTE RADAR ====================== -->
-    <section class="map-panel panel" id="localisation" aria-label="Où nous trouver">
+    <section class="map-panel panel panel--deep" id="localisation" aria-label="Où nous trouver">
 
       <!-- Bulles d'engagement retirées (retour client : ces petites cartes
            flottantes, positionnées en %, finissaient toujours par chevaucher
@@ -697,7 +726,7 @@
   </main>
 
   <!-- ====================== FOOTER ====================== -->
-  <footer class="site-footer panel">
+  <footer class="site-footer panel panel--deep">
     <div class="container footer-inner">
       <div class="footer-brand">
         <a href="#top" class="brand">
@@ -722,6 +751,14 @@
         <a href="#" data-legal="cookies">Politique de cookies</a>
       </nav>
     </div>
+    <!-- Signature de fin (déplacée depuis la galerie, retour client) : le site
+         lui-même est la démo du service « Site web & appli ». -->
+    <!-- La phrase est dans UN seul élément : les filets sont les deux autres
+         enfants flex. Sans ce span, chaque nœud de texte et le <b> devenaient
+         des éléments flex distincts — le `gap` s'insérait au milieu de la
+         phrase et « ce site » se retrouvait seul sur deux lignes. -->
+    <p class="site-selfnote"><span>Et <b>ce site</b> que tu regardes ? C'est nous aussi.</span></p>
+
     <div class="footer-bottom">
       <div class="container">
         <p>© <span id="year">2025</span> — Neopure Com'</p>
@@ -897,7 +934,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-  <script src="js/main.js?v=20260717a" defer></script>
+  <script src="js/main.js?v=20260722a" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>
   <script src="js/experience.js?v=20260712a" defer></script>
 

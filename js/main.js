@@ -99,6 +99,11 @@
       spyLinks.forEach(function (a) {
         a.classList.toggle("is-active", a.getAttribute("href") === activeId);
       });
+      // >>> EXPÉRIENCE négatif cyan : signale le 2e chapitre (Équipe → Contact,
+      // maintenu sur la carte/footer faute de cible spy) pour repeindre le menu
+      // + le point actif en magenta. Retirer cette ligne pour revenir en arrière.
+      document.documentElement.classList.toggle(
+        "deep", activeId === "#equipe" || activeId === "#contact");
     }
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -111,7 +116,9 @@
 
   /* 5. Chips « Nature du message » : sélection unique avec mise à jour du champ caché */
   (function () {
-    var chips = document.querySelectorAll(".field--chips .chip");
+    // La puce « +N » est exclue de la sélection : elle ne porte pas de
+    // data-value et ne doit jamais devenir la réponse du formulaire.
+    var chips = document.querySelectorAll(".field--chips .chip:not(.chip--more)");
     var hidden = document.getElementById("f-nature");
     if (!chips.length || !hidden) return;
     chips.forEach(function (c) {
@@ -125,6 +132,40 @@
         hidden.value = c.getAttribute("data-value") || "";
       });
     });
+  })();
+
+  /* 5b. Dépliage des choix supplémentaires ---------------------------------- */
+  /* Le bloc de puces tenait sur quatre lignes et poussait le bouton « Envoyer »
+     sous le pli du panneau Contact (100 vh en frise). On n'en montre que deux ;
+     le reste s'ouvre à la demande. Le libellé est calculé depuis le DOM pour
+     rester juste si on ajoute ou retire un choix dans le gabarit. */
+  (function () {
+    var more = document.getElementById("chipsMore");
+    var group = more && more.closest(".chips");
+    if (!more || !group) return;
+
+    var extras = group.querySelectorAll(".chip--extra");
+    if (!extras.length) { more.hidden = true; return; }
+
+    function render() {
+      var open = group.classList.contains("is-expanded");
+      more.textContent = open ? "− Réduire" : "+" + extras.length;
+      more.setAttribute("aria-expanded", open ? "true" : "false");
+      more.setAttribute("aria-label", open
+        ? "Réduire la liste des choix"
+        : "Afficher " + extras.length + " choix supplémentaires");
+    }
+
+    more.addEventListener("click", function () {
+      // On ne replie pas si un choix caché est sélectionné : il disparaîtrait
+      // de l'écran alors qu'il reste la valeur envoyée.
+      var hiddenSelected = group.querySelector(".chip--extra.is-active");
+      if (group.classList.contains("is-expanded") && hiddenSelected) return;
+      group.classList.toggle("is-expanded");
+      render();
+    });
+
+    render();
   })();
 
   /* 6. Formulaire de contact : envoi via Web3Forms, repli Formsubmit -------- */

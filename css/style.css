@@ -1169,17 +1169,33 @@ section { position: relative; }
   color: rgba(255, 255, 255, 0.72);
 }
 
-/* Clin d'œil auto-référentiel : le site lui-même est la démo du service web/appli.
-   Ligne discrète sous l'accroche, mot « ce site » en accent cyan de la charte. */
-.gallery-selfnote {
-  text-align: center;
-  margin: -16px auto 40px;              /* se tucke sous l'accroche, comme l'accroche sous le titre */
+/* Clin d'œil auto-référentiel : le site lui-même est la démo du service
+   web/appli. Retour client : sorti du bloc de la galerie, il est désormais posé
+   tout en bas de page, juste au-dessus de la barre de copyright — une phrase
+   de sortie, encadrée de deux filets fins. */
+.site-selfnote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 0;
+  padding: 10px 24px 20px;
   font-family: var(--font-head);
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  text-align: center;
   color: rgba(255, 255, 255, 0.6);
 }
-.gallery-selfnote b { color: var(--np-cyan); font-weight: 700; }
+.site-selfnote > span { flex: 0 1 auto; }        /* la phrase, d'un seul tenant */
+.site-selfnote::before,
+.site-selfnote::after {
+  content: "";
+  flex: 0 1 80px;
+  min-width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+.site-selfnote b { color: var(--np-cyan); font-weight: 700; }
 
 /* Indice de swipe (mobile uniquement) : la rangée contient bien plus de médias
    que l'écran n'en montre — sans indice, on croit qu'il n'y a que 2 vidéos. */
@@ -1620,17 +1636,23 @@ section { position: relative; }
   justify-content: center;
   padding: 0 32px;
 }
-/* Liaison entre les deux secteurs : un rond en dégradé (remplace la croix ×) */
+/* Liaison entre les deux secteurs : un simple filet vertical dégradé, éteint
+   à ses deux extrémités. Retour client : le rond précédent « dénotait avec le
+   reste » — ici la séparation existe sans jamais devenir un objet. */
 .sector-bridge-mark {
   display: block;
-  width: clamp(34px, 4vw, 52px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: linear-gradient(180deg, var(--np-cyan), var(--np-violet));
-  /* Anneau : on évide le centre */
-  -webkit-mask: radial-gradient(closest-side, transparent 60%, #000 62%);
-          mask: radial-gradient(closest-side, transparent 60%, #000 62%);
-  box-shadow: 0 0 22px rgba(188, 107, 242, 0.35);
+  width: 2px;
+  height: 210px;
+  border-radius: 2px;
+  /* Le blanc porte le trait (le cyan et le violet seuls disparaissaient sur le
+     magenta vif du fond) ; les deux teintes de la charte ne font que le
+     colorer à ses extrémités. */
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(53, 242, 242, 0.75) 18%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(188, 107, 242, 0.75) 82%,
+    transparent 100%);
   font-size: 0;            /* masque le glyphe × présent dans le HTML */
   user-select: none;
 }
@@ -1649,7 +1671,19 @@ section { position: relative; }
     overflow: visible;
   }
   .sector-bridge { padding: 8px 0; }
-  .sector-bridge-mark { transform: rotate(90deg); }
+  /* Empilé : le filet bascule à l'horizontale (on redéclare la géométrie
+     plutôt que de tourner la boîte — une rotation garderait une boîte de 1 px
+     de large et casserait le centrage). */
+  .sector-bridge-mark {
+    width: min(220px, 62%);
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(53, 242, 242, 0.75) 18%,
+      rgba(255, 255, 255, 0.85) 50%,
+      rgba(188, 107, 242, 0.75) 82%,
+      transparent 100%);
+  }
 }
 
 /* CTA des services : bouton + lien éditorial alignés */
@@ -1663,32 +1697,64 @@ section { position: relative; }
 }
 
 /* 7d. ÉQUIPE --------------------------------------------------------------- */
-.team { padding: 100px 0; background: var(--np-white); }
+/* Haut resserré (retour client) : 200 px séparaient le CTA des services des
+   têtes (100 de bas de section + 100 de haut de section). Ramené à 120, dont
+   56 après l'arête de rupture. */
+.team { padding: 56px 0 100px; background: var(--np-white); }
 .team-inner {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
   gap: 56px;
   align-items: center;
 }
-.team-photo {
-  aspect-ratio: 4 / 5;
-  border-radius: var(--r-lg);
-  background: var(--grad-brand);
-  display: grid;
-  place-items: center;
-  color: #fff;
+/* Têtes détourées qui flottent (demande client) : pas de cadre, pas de carte —
+   les deux visages se posent directement sur le fond. */
+.team-heads {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+.team-head {
+  margin: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.team-head img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Le détourage est coupé net en bas (buste) : on l'estompe pour que la tête
+     ait l'air de flotter au lieu d'être posée sur une arête droite. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0 66%, rgba(0, 0, 0, 0.5) 86%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0 66%, rgba(0, 0, 0, 0.5) 86%, transparent 100%);
+  filter: drop-shadow(0 24px 34px rgba(28, 6, 48, 0.45));
+  will-change: transform;
+  animation: teamFloat 7s ease-in-out infinite;
+}
+.team-head figcaption {
   font-family: var(--font-head);
   font-weight: 700;
-  font-size: 1.3rem;
-  box-shadow: var(--shadow-glow);
-  position: relative;
-  overflow: hidden;
+  font-size: 0.86rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
 }
-.team-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(60% 60% at 30% 20%, rgba(255,255,255,0.25), transparent 70%);
+/* Charlène devant, Axel légèrement en retrait et plus haut : la paire respire
+   au lieu de s'aligner comme deux vignettes d'annuaire. */
+.team-head--a { width: 58%; z-index: 2; }
+.team-head--b { width: 47%; margin-left: -9%; margin-bottom: 5%; z-index: 1; }
+.team-head--b img { animation-duration: 8.4s; animation-delay: -2.6s; }
+
+@keyframes teamFloat {
+  0%, 100% { transform: translateY(0)     rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(-0.8deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-head img { animation: none; }
 }
 .team-content h2 {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -1708,7 +1774,6 @@ section { position: relative; }
   margin: 0 0 14px;
   text-align: center;
 }
-.team-photo { width: 100%; }
 
 /* 7e. CONTACT -------------------------------------------------------------- */
 .contact {
@@ -1840,6 +1905,29 @@ section { position: relative; }
   outline-offset: 3px;
 }
 
+/* Choix repliés + puce « +N » qui les déplie. Objectif : garder le bloc
+   « Nature du message » sur deux lignes, pour que le formulaire tienne dans
+   la hauteur du panneau Contact (100 vh en frise). */
+.chip--extra { display: none; }
+.chips.is-expanded .chip--extra { display: inline-block; }
+/* La puce d'ouverture n'est pas un choix : trait discontinu et fond neutre
+   pour qu'on ne la confonde jamais avec une valeur sélectionnable. */
+.chip--more {
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  font-variant-numeric: tabular-nums;
+}
+.chip--more:hover {
+  background: rgba(18, 8, 28, 0.35);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
 /* Confirmation après envoi (remplace le formulaire) */
 .form-success {
   padding: 30px 0;
@@ -1897,9 +1985,19 @@ section { position: relative; }
 .contact-info:hover::after { left: 12px; right: 12px; }
 .contact-info > * { position: relative; z-index: 1; }
 .contact-info h3 { font-size: 1.2rem; margin-bottom: 12px; }
-.contact-hours { color: rgba(255, 255, 255, 0.85); margin-bottom: 24px; }
-.contact-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
-.contact-list li { display: flex; align-items: center; gap: 12px; }
+.contact-hours { color: rgba(255, 255, 255, 0.85); margin-bottom: 18px; }
+/* Retour client : téléphone et e-mail sur la MÊME ligne pour raccourcir la
+   carte — en frise le panneau fait 100vh, chaque ligne gagnée évite la barre
+   de défilement interne. `wrap` conserve l'empilement si la carte est étroite. */
+.contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin-bottom: 18px;
+}
+.contact-list li { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.contact-list a { font-size: 0.92rem; white-space: nowrap; }
 .ci-ico { display: grid; place-items: center; color: var(--np-cyan); }
 .ci-ico svg { width: 20px; height: 20px; }
 .contact-list a { color: #fff; font-weight: 500; transition: color 0.2s var(--ease); }
@@ -2581,8 +2679,6 @@ section { position: relative; }
   }
   /* Retour client (desktop) : « Stop aux contenus sans fonds. » passe à la ligne */
   .h-active .gallery-section .gallery-heading-strong { display: block; }
-  /* Clin d'œil « ce site c'est nous » : aligné à gauche comme le titre/accroche en frise */
-  .h-active .gallery-section .gallery-selfnote { margin: 0; align-self: flex-start; text-align: left; }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
@@ -2643,7 +2739,6 @@ section { position: relative; }
     max-width: none;
   }
   .h-active .team .team-content p { font-size: 0.95rem; margin-bottom: 0.7rem; }
-  .h-active .team .team-photo { max-height: 74vh; margin-inline: auto; }
 
   /* — CONTACT — */
   .h-active .contact .contact-inner {
@@ -2666,12 +2761,25 @@ section { position: relative; }
      formulaire d'abord, puis enchaîne naturellement sur la frise. */
   .h-active .contact .contact-inner {
     overflow-y: auto;
+    /* `overflow-y: auto` force le navigateur à rendre l'axe X « clippant » :
+       `visible` y devient automatiquement `auto`. Ce conteneur DÉCOUPE donc
+       tout ce qui dépasse latéralement — c'est lui qui tranchait net le halo
+       de la carte Horaires sur sa droite, pas le fond du panneau.
+       On ne peut pas retirer la découpe (elle est la contrepartie du scroll
+       de secours) : on lui donne de la marge intérieure pour que l'ombre
+       tienne DANS la boîte. Les 50 px sont repris sur le padding du panneau
+       juste en dessous, donc rien ne bouge à l'écran. */
     overflow-x: hidden;
+    padding-inline: 50px;
   }
+  .h-active .contact.panel { padding-inline: clamp(10px, 1.5vw, 60px); }
   .h-active .contact .contact-form-wrap { width: 420px; }
   /* La carte Horaires (courte) se centre verticalement par rapport au
      formulaire, sans déplacer l'ancrage haut de ce dernier. */
-  .h-active .contact .contact-info { width: 300px; align-self: center; }
+  /* 400 px (au lieu de 300) : c'est la largeur minimale pour que téléphone et
+     e-mail tiennent sur UNE ligne — on échange de la largeur (dont la frise
+     dispose) contre de la hauteur (dont elle manque). */
+  .h-active .contact .contact-info { width: 400px; align-self: center; }
 
   /* — CARTE RADAR → en ligne (radar | texte) — */
   .h-active .map-panel.panel {
@@ -2732,6 +2840,10 @@ section { position: relative; }
     gap: 22px;
     padding: 0;
   }
+  /* En frise, le pied de page est aligné à gauche : la signature de fin suit,
+     sans son filet de gauche (qui pendrait dans le vide au bord du panneau). */
+  .h-active .site-footer .site-selfnote { padding: 14px 0 0; justify-content: flex-start; }
+  .h-active .site-footer .site-selfnote::before { display: none; }
   .h-active .site-footer .footer-bottom { border: none; padding: 22px 0 0; }
   .h-active .site-footer .footer-bottom .container { padding-inline: 0; }
 
@@ -2822,6 +2934,81 @@ body { background: transparent; color: var(--np-white); }
 .map-panel,
 .site-footer { background: transparent; }
 .contact { background: transparent; }
+
+/* ===== SECOND CHAPITRE DU SITE (à partir d'Équipe) ========================
+   Demande client : « créer une séparation à partir de la page équipe », entre
+   les onglets de présentation de la boîte et ceux des coordonnées, avec « nos
+   photos, discrètement, sur un fond de la même couleur que l'accueil ».
+   Le dégradé magenta continue de courir derrière tout le site ; ces quatre
+   panneaux posent par-dessus le violet profond de l'accueil (mêmes halos que
+   l'écran d'intro) et laissent affleurer nos propres photos dans les marges.
+   ========================================================================= */
+.map-panel, .site-footer { isolation: isolate; }
+.site-footer { position: relative; }
+
+/* Le voile : la couleur de l'accueil, PLATE et identique sur les quatre
+   panneaux. C'est la condition d'un chapitre sans couture — une version
+   avec halos radiaux répétait le même dégradé dans chaque panneau, et
+   chaque frontière se voyait comme une barre nette. */
+.panel--deep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;                     /* derrière le contenu, comme .n-float */
+  pointer-events: none;
+  background-color: #241035;
+}
+
+/* PAS de photo en fond de chapitre. Essayé, puis retiré : chaque panneau est
+   une boîte distincte, donc toute image de fond s'y recadre indépendamment et
+   produit des rectangles et des bandes verticales visibles à chaque frontière
+   (très net en frise horizontale). `background-attachment: fixed` ne sauve
+   rien non plus — la piste de la frise porte un `transform`, ce qui rend le
+   fond solidaire d'une boîte de plusieurs milliers de pixels de large.
+   La séparation demandée est portée par la couleur seule : c'est net, continu,
+   et ça ne peut pas se dérégler selon la taille de l'écran. */
+
+/* Entrée du chapitre : RUPTURE FRANCHE, pas de fondu (choix client). Le rose
+   s'arrête net sur une arête, soulignée d'un trait aux couleurs de la charte.
+   Le voile n'a donc aucun masque : il est plein dès le bord du panneau. */
+.panel--deep-start::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--grad-brand);
+  box-shadow: 0 0 18px rgba(188, 107, 242, 0.5);
+}
+@media (min-width: 1025px) {
+  /* En frise, les panneaux sont séparés par 130 px de vide où le fond magenta
+     réapparaîtrait entre chaque section sombre. Le voile déborde de la moitié
+     du gap de chaque côté : les panneaux du chapitre se soudent en une seule
+     bande continue. */
+  /* Chaque voile comble l'écart qui le SUIT, jamais celui qui le précède.
+     Avec un débord des deux côtés, le panneau suivant (peint après, et isolé
+     dans son propre contexte) recouvrait tout ce qui dépassait du panneau
+     précédent — le halo de la carte Horaires se retrouvait tranché net sur sa
+     droite. En ne débordant que vers la droite, aucun voile ne passe jamais
+     par-dessus le contenu de son voisin. */
+  .h-active .panel--deep::before { top: 0; bottom: 0; left: 0; right: -134px; }
+
+  /* Rupture franche en frise aussi : la lecture est horizontale, donc l'arête
+     est VERTICALE — le voile démarre pile au bord gauche du panneau Équipe et
+     le trait de charte se dresse dessus, sur toute la hauteur. */
+  .h-active .panel--deep-start::before { left: 0; }
+  .h-active .panel--deep-start::after {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+}
 
 /* Plus d'ombre sur le texte courant blanc (retour client : inutile + peu
    esthétique). La lisibilité passe désormais par la couleur pleine du texte. */
@@ -3011,7 +3198,6 @@ body { background: transparent; color: var(--np-white); }
   .sector-tagline { font-size: 0.92rem; }
   .sector-list li { font-size: 0.96rem; padding: 14px 0; }
   .sector-bridge { padding: 14px 0; }
-  .sector-bridge-mark { width: clamp(30px, 9vw, 40px); }
   .services-cta { gap: 16px 22px; margin-top: 32px; flex-direction: column; align-items: stretch; text-align: center; }
   .services-cta .btn-primary { width: 100%; }
   /* Le lien « Réserver un appel » était étiré sur toute la largeur (align-items:
@@ -3022,7 +3208,6 @@ body { background: transparent; color: var(--np-white); }
   /* TEAM ---------------------------------------------------------------- */
   .team-inner { gap: 28px; }
   .team-visual { max-width: 280px; margin: 0 auto; width: 100%; }
-  .team-photo { aspect-ratio: 4 / 5; font-size: 1.1rem; }
   .team-content h2 { font-size: clamp(1.7rem, 7vw, 2.3rem); margin-bottom: 16px; }
   .team-content p { font-size: 0.96rem; }
 
@@ -3611,47 +3796,37 @@ html.np-loading, html.np-loading body { overflow: hidden; }
 .np-loader.is-done { pointer-events: none; }
 .np-loader.is-gone { display: none; }
 
-/* ---- Cinq colonnes qui, réunies, forment la scène sombre continue -------- */
-/* Même monde que le site (world-bg), un cran plus sombre. Chaque colonne
-   affiche SA tranche de la même image plein écran (position négative) →
-   scène parfaitement continue, aucune couture. 1vw de chevauchement à
-   droite pour qu'aucun liseré n'apparaisse entre colonnes. */
-.np-cols i {
+/* ---- Scène sombre d'un seul tenant --------------------------------------- */
+/* Retour client : l'ancienne sortie découpait l'écran en cinq colonnes qui
+   glissaient (« ce côté cube avec les rectangles »). La scène est désormais
+   une seule surface continue — même monde que le site (world-bg), un cran
+   plus sombre — qui s'efface d'un bloc en avançant vers le spectateur. */
+.np-scene {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 21vw;
-  left: calc(var(--i) * 20vw);
+  inset: 0;
   background-color: #23122f;
   background-image:
     radial-gradient(90% 70% at 50% -14%, rgba(194, 31, 240, 0.24), transparent 60%),
     radial-gradient(55% 50% at 16% 20%, rgba(53, 242, 242, 0.14), transparent 62%),
     radial-gradient(75% 62% at 86% 112%, rgba(120, 42, 165, 0.42), transparent 60%);
-  background-size: 100vw 100vh;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-position: calc(var(--i) * -20vw) 0;
-  will-change: transform;
-  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
-  transition-delay: calc(0.1s + var(--i) * 0.07s);
+  will-change: transform, opacity;
+  transform-origin: 50% 46%;        /* le point de fuite = le centre du lockup */
 }
-.np-loader.is-done .np-cols i { transform: translateY(-101%); }
-
-/* Bord de fuite : le bas de chaque colonne s'illumine d'une ligne dégradée
-   au moment où elle décolle (même délai que sa course). */
-.np-cols i::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 3px;
-  background: var(--grad-brand);
-  box-shadow: 0 0 18px rgba(53, 242, 242, 0.8), 0 0 34px rgba(188, 107, 242, 0.5);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  transition-delay: inherit;
+/* Sortie : la scène s'ouvre en avançant (dolly-in) et se dissout — le site
+   apparaît par-dessous sans aucune découpe géométrique. */
+.np-loader.is-done .np-scene {
+  animation: npSceneDive 1.1s cubic-bezier(0.5, 0, 0.2, 1) forwards;
 }
-.np-loader.is-done .np-cols i::after { opacity: 1; }
+/* La scène tient encore un instant à pleine opacité pendant que le logo prend
+   son élan, puis s'ouvre : le site n'apparaît pas avant que le mouvement soit
+   lancé. */
+@keyframes npSceneDive {
+  0%   { transform: scale(1);    opacity: 1; }
+  30%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1.34); opacity: 0; }
+}
 
 /* ---- Grain cinéma : texture animée quasi imperceptible sur la scène ------ */
 .np-grain {
@@ -3693,7 +3868,17 @@ html.np-loading, html.np-loading body { overflow: hidden; }
   display: grid;
   place-items: center;
 }
-.np-brand-box { position: relative; width: min(640px, 82vw); }
+.np-brand-box {
+  position: relative;
+  width: min(640px, 82vw);
+  /* `filter` et `will-change` sont posés DÈS LE DÉPART, avec des valeurs
+     neutres. Sans ça, l'apparition du flou à la sortie créait un nouveau
+     contexte de rendu en cours d'animation : le navigateur devait re-rastériser
+     la boîte (qui contient un calque masqué, .np-shine) et lâchait une image
+     incohérente — le « flash » avant que le logo avance. */
+  filter: blur(0px);
+  will-change: transform, opacity, filter;
+}
 
 /* Géométrie MESURÉE dans le canal alpha du PNG (2611 × 548) :
    point x 15,9→18,7 % · N x 20,5→37,8 % · lettres x 37,2→83,9 %.
@@ -3804,6 +3989,16 @@ html.np-loading, html.np-loading body { overflow: hidden; }
 .np-loader.is-sign .np-shine::before {
   animation: npShine 3s cubic-bezier(0.4, 0, 0.2, 1) 0.8s infinite;
 }
+/* COUPÉ NET à la sortie. Ce balayage blanc traversait le wordmark en boucle ;
+   s'il tombait au moment où le rideau s'ouvre, on voyait un éclair blanc juste
+   avant que le logo s'élance. Une animation doit exprimer une cause (règle
+   « motion-meaning ») — ici elle ne faisait qu'entrer en collision avec la
+   sortie. */
+.np-loader.is-done .np-shine {
+  opacity: 0;
+  animation: none;
+}
+.np-loader.is-done .np-shine::before { animation: none; }
 @keyframes npShine {
   0%   { transform: translateX(-130%) skewX(-14deg); }
   42%  { transform: translateX(700%)  skewX(-14deg); }
@@ -3827,28 +4022,57 @@ html.np-loading, html.np-loading body { overflow: hidden; }
   50%      { transform: scale(1.015); }
 }
 
-/* ---- Sortie « push caméra » : le lockup zoome vers le spectateur avec un
-   voile de flou pendant que les colonnes partent (déclarée APRÈS la
-   respiration pour la remplacer). ---- */
+/* ---- Sortie « on plonge dans le logo » (idée client) : le lockup fonce vers
+   le spectateur et le traverse, avec un flou de vitesse, pendant que la scène
+   s'efface derrière lui. Déclarée APRÈS la respiration pour la remplacer. --- */
 .np-loader.is-done .np-brand-box {
-  animation: npExitZoom 0.5s cubic-bezier(0.55, 0, 0.68, 0.19) forwards;
+  animation: npExitZoom 1.05s cubic-bezier(0.55, 0, 0.9, 0.15) forwards;
 }
+/* Le logo recule d'abord très légèrement (respiration avant l'élan), puis
+   accélère vers le spectateur. Ce contre-mouvement est ce qui rend la sortie
+   « posée » plutôt que brutale — sans lui, l'image part sèchement au premier
+   frame. L'échelle finale reste mesurée : on traverse le logo, on ne le fait
+   pas exploser. */
+/* L'opacité tombe BEAUCOUP plus tôt que l'échelle : le lockup se dissout en
+   accélérant, comme un objet qu'on traverse. Sans ça il restait net et opaque
+   pendant que la scène s'ouvrait — on lisait « Neopure » deux fois, celui de
+   l'intro par-dessus celui du site. */
 @keyframes npExitZoom {
-  to {
-    opacity: 0;
-    transform: scale(1.16) translateY(-8px);
-    filter: blur(8px);
-  }
+  0%   { opacity: 1;    transform: scale(1);     filter: blur(0); }
+  16%  { opacity: 1;    transform: scale(0.975); filter: blur(0); }
+  46%  { opacity: 0.72; transform: scale(1.42);  filter: blur(3px); }
+  74%  { opacity: 0;    transform: scale(2.3);   filter: blur(11px); }
+  100% { opacity: 0;    transform: scale(3.1);   filter: blur(16px); }
 }
 
-/* ---- Settle zoom : le hero se pose de 1.055 → 1 pendant la cascade des
-   colonnes (appliqué à .hero-inner : aucun enfant en position fixed). ---- */
+/* ---- Settle zoom : le hero se pose de 1.07 → 1 pendant que la scène se
+   dissout (appliqué à .hero-inner : aucun enfant en position fixed) — le
+   mouvement se poursuit sans rupture, on atterrit dans le site. ---- */
 html.np-reveal .hero-inner {
-  animation: npSettle 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  animation: npSettle 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 }
 @keyframes npSettle {
-  from { transform: scale(1.055); }
+  from { transform: scale(1.07); }
   to   { transform: scale(1); }
+}
+
+/* Le wordmark du hero et sa signature sont EXACTEMENT les mêmes visuels que
+   ceux de l'intro : révélés tout de suite, on les voyait en double pendant
+   que le lockup de l'intro fonçait vers le spectateur. Ils n'apparaissent
+   donc qu'une fois celui-ci dissous. `both` fait tenir l'état initial
+   (invisible) pendant le délai — sans lui, ils s'afficheraient au premier
+   frame, ce qui est précisément le défaut qu'on corrige. */
+html.np-reveal .hero-logo,
+html.np-reveal .hero-top .hero-tag {
+  animation: npHandover 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.62s both;
+}
+@keyframes npHandover {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.np-reveal .hero-logo,
+  html.np-reveal .hero-top .hero-tag { animation: none; }
 }
 
 /* ---- Progression : fine ligne en bas de l'écran -------------------------- */
@@ -3867,6 +4091,10 @@ html.np-reveal .hero-inner {
   box-shadow: 0 0 12px rgba(53, 242, 242, 0.5);
   transform: scaleX(0);
   transform-origin: left center;
+  /* Le JS pose scaleX(1) d'un coup à l'arrivée : sans transition, la barre
+     lumineuse bondissait sur toute la largeur de l'écran au moment précis où
+     le rideau s'ouvre — un deuxième éclair parasite. */
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ---- Compteur dégradé bas-droite, discret mais signature ------------------ */
@@ -3952,8 +4180,7 @@ html.np-reveal .hero-inner {
     background: none;
     -webkit-text-fill-color: currentColor;
   }
-  .np-cols i { transition: opacity 0.3s linear; transition-delay: 0s; }
-  .np-loader.is-done .np-cols i { transform: none; opacity: 0; }
+  .np-loader.is-done .np-scene { animation: npFadeOut 0.3s linear forwards; }
   .np-loader.is-sign .np-brand-box { animation: none; }
   .np-loader.is-done .np-brand-box { animation: npFadeOut 0.3s linear forwards; }
   .np-loader.is-done .np-loader-count { animation: npFadeOut 0.3s linear forwards; }
@@ -3983,3 +4210,347 @@ html.np-reveal .hero-inner {
   height: 0;
   display: none;
 }
+
+/* ==========================================================================
+   >>> EXPÉRIENCE : 2e CHAPITRE EN « NÉGATIF » CYAN (Équipe → Footer) <<<
+   Bloc AUTONOME et RÉVERSIBLE. Pour revenir en arrière : supprimer tout ce
+   bloc (des marqueurs >>> à <<<), restaurer css/style.css.bak-avant-negatif,
+   ET retirer le toggle `deep` ajouté dans js/main.js (cherche « html.deep »).
+   Le texte RESTE BLANC ; on n'ajoute que du contraste (ombres) + des accents
+   magenta pour rester lisible sur le fond cyan clair.
+   ========================================================================== */
+
+/* --- 1. LE FOND : dégradé cyan → cyan clair (SANS blanc pur, pour que le
+       texte blanc reste lisible partout, comme en haut de la section) ------- */
+.panel--deep::before {
+  background-color: #3BEFEF;
+  /* Transposition cyan du dégradé magenta .world-bg : chaque arrêt garde la
+     MÊME luminosité que son homologue (#c31ff5→#ca88e1), donc exactement le
+     même taux d'éclaircissement, mais en cyan. Vertical (180deg) pour rester
+     sans couture entre panneaux en frise. */
+  background-image: linear-gradient(180deg,
+    #1FF5F5 0%,
+    #3BEFEF 22%,
+    #57ECEC 45%,
+    #74E6E6 72%,
+    #88E1E1 100%);
+  /* Attaché au viewport : dégradé continu d'un panneau empilé à l'autre
+     (mobile / tablette), pas de couture aux frontières. */
+  background-attachment: fixed;
+}
+@media (min-width: 1025px) {
+  /* En frise, les panneaux portent un transform : `fixed` casse. On repasse
+     en `scroll` — chaque panneau fait 100vh, le dégradé vertical est identique
+     de part et d'autre de chaque arête verticale → toujours sans couture. */
+  .h-active .panel--deep::before { background-attachment: scroll; }
+}
+@media (max-width: 1024px) {
+  /* Mobile / tablette (jamais de frise) : `background-attachment: fixed` n'est
+     PAS fiable (iOS Safari l'ignore → il retombe en `scroll` et chaque section
+     empilée recommence son dégradé = coutures visibles). On force `scroll` avec
+     un dégradé DOUX (quasi uni) → aucune couture sur tous les navigateurs. */
+  .panel--deep::before {
+    background-attachment: scroll;
+    background-image: linear-gradient(180deg, #35F2F2 0%, #41EFEF 100%);
+  }
+}
+
+/* --- 2. MOTS IMPORTANTS : écriture BLANCHE + reflet VIOLET qui DÉFILE ------ */
+/* Exactement l'effet « sheen » du côté rose (une petite bande de couleur qui
+   glisse sur les lettres blanches), mais en violet de la charte au lieu du
+   cyan. L'animation headingSheen est héritée de la règle de base ; on
+   RÉAFFIRME background-size + background-clip:text (sinon gros rectangle). */
+.team-content h2 .gradient-text,
+.map-caption h2 .gradient-text,
+.contact-title.gradient-text {
+  background: linear-gradient(100deg,
+    #ffffff 0%, #ffffff 42%,
+    #E85EF5 55%,
+    #ffffff 70%, #ffffff 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+}
+
+/* --- 3. EYEBROWS + liens accent ------------------------------------------- */
+/* Eyebrow (« NEOPURE TEAM », « ON CAPTE… ») : violet de la charte, comme avant
+   (il n'était pas cyan à l'origine, donc pas concerné par le passage au rose). */
+.panel--deep .eyebrow { color: #bf3bef; }
+.panel--deep .consent a,
+.site-footer .footer-credit a,
+.site-footer .site-selfnote b {
+  color: #E85EF5;
+  -webkit-text-fill-color: currentColor;   /* annule le clip-text cyan d'origine */
+  background: none;
+}
+
+/* --- 5. FOOTER : remonter les opacités (le texte blanc était trop pâle) ---- */
+.site-footer .footer-brand p { color: rgba(255, 255, 255, 0.92); }
+.site-footer .footer-links a { color: rgba(255, 255, 255, 0.92); }
+.site-footer .footer-bottom p { color: rgba(255, 255, 255, 0.9); }
+.site-footer .footer-credit { color: rgba(255, 255, 255, 0.9) !important; }
+.site-footer .site-selfnote { color: rgba(255, 255, 255, 0.92); }
+.site-footer .footer-links a:hover { color: #fff; }
+
+/* --- 6. MENU DU HAUT plus visible + POINT ACTIF MAGENTA en chapitre 2 ------ */
+/* `html.deep` est posé par le scroll-spy (js/main.js) dès qu'on entre dans la
+   partie Équipe/Contact et jusqu'au footer. */
+@media (min-width: 1025px) {
+  html.deep .side-nav {
+    background: rgba(12, 74, 92, 0.22);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 30px rgba(6, 66, 82, 0.25);
+  }
+  html.deep .side-nav a { color: rgba(255, 255, 255, 0.85); }
+  html.deep .side-nav a:hover { color: #fff; }
+  html.deep .side-nav a.is-active { color: #fff; background: rgba(255, 255, 255, 0.22); }
+  html.deep .side-dot { background: rgba(255, 255, 255, 0.55); }
+  html.deep .side-nav a.is-active .side-dot {
+    background: #E85EF5;
+    box-shadow: 0 0 12px rgba(232, 94, 245, 0.9);
+  }
+}
+
+/* --- 7. CARTE : contour + curseur/pin → rose (accents qui étaient cyan) ---- */
+.map-radar .radar-frame::before {
+  background: linear-gradient(145deg, #E85EF5, #D93FEE);
+  opacity: 0.9;
+  padding: 2px;
+}
+.map-radar .radar-target {
+  background: #E85EF5;
+  box-shadow: 0 0 0 3px rgba(232, 94, 245, 0.22), 0 0 14px 2px rgba(232, 94, 245, 0.75);
+}
+.map-radar .radar-rings i { border-color: rgba(232, 94, 245, 0.6); }
+/* Le pin : recoloration des arrêts du dégradé SVG (reste en CSS,
+   donc réversible avec le bloc). */
+.map-radar .radar-core stop:first-child { stop-color: #E85EF5; }
+.map-radar .radar-core stop:last-child  { stop-color: #D93FEE; }
+.map-radar .radar-core {
+  filter: drop-shadow(0 6px 16px rgba(232, 94, 245, 0.5))
+          drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* --- 8. ICÔNES SVG de la carte Horaires (tél/mail) → rose ----------------- */
+.panel--deep .ci-ico { color: #E85EF5; }
+
+/* --- 9. FORMULAIRE : puce « Nature du message » sélectionnée --------------- */
+/* Le dégradé cyan→lavande d'origine se fondait dans le fond cyan. Puce
+   sélectionnée en rose (texte blanc) → elle ressort nettement. */
+.panel--deep .chip.is-active {
+  background: linear-gradient(100deg, #E85EF5, #D93FEE);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px -4px rgba(232, 94, 245, 0.55);
+}
+/* Focus clavier : le liseré cyan était invisible sur le cyan → rose. */
+.panel--deep .chip:focus-visible { outline-color: #E85EF5; }
+
+/* --- 10. FOOTER : le DÉCOLLER du fond (sans ombre) ------------------------- */
+/* Une surface teal profond posée PAR-DESSUS le voile cyan (::after, donc peinte
+   après ::before mais toujours derrière le contenu). Transparente en haut → se
+   fond dans le cyan de la carte ; soutenue en bas → le texte blanc repose sur
+   un support foncé et ressort tout seul, sans text-shadow. */
+.site-footer.panel--deep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(7, 58, 72, 0)    0%,
+    rgba(7, 58, 72, 0.45) 26%,
+    rgba(6, 50, 64, 0.62) 62%,
+    rgba(6, 46, 60, 0.66) 100%);
+}
+@media (min-width: 1025px) {
+  /* En frise le voile déborde de 134px à droite (soudure des panneaux) : la
+     surface du footer déborde pareil pour rester alignée. */
+  .h-active .site-footer.panel--deep::after { right: -134px; }
+}
+
+/* --- 11. Case à cocher « consentement » : contour parasite --------------- */
+/* La case est dans un `.field`, elle héritait donc du style des champs texte
+   (bordure claire + padding + min-height + halo au focus) → une boîte bizarre
+   autour de la case, très visible sur le cyan. On neutralise cet héritage :
+   case native propre, accent rose. */
+.panel--deep .consent input[type="checkbox"] {
+  padding: 0;
+  min-height: 0;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  accent-color: #E85EF5;
+}
+.panel--deep .consent input[type="checkbox"]:focus,
+.panel--deep .consent input[type="checkbox"]:focus-visible {
+  outline: 2px solid #E85EF5;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* --- 12. Signature de fin : le filet de DROITE pendait seul --------------- */
+/* En frise, le footer est aligné à gauche et le filet de gauche est déjà
+   masqué ; le filet de droite restait à traîner après la phrase. On le masque
+   aussi → signature nette, sans trait orphelin. */
+@media (min-width: 1025px) {
+  .h-active .site-footer .site-selfnote::after { display: none; }
+}
+
+/* --- 13. PORTRAITS ÉQUIPE : deux ronds nets empilés, cerclés de rose ------- */
+/* Fini le médaillon givré (le backdrop-blur = le « flou du bas ») et l'overlap
+   qui tassait. Ici : les deux visages sont EMPILÉS (l'un au-dessus de l'autre),
+   décalés gauche/droite. Le cercle RECADRE la photo (overflow), donc plus aucun
+   fondu ni flou en bas. Anneau dégradé rose + disque clair derrière la découpe.
+   Réglage taille : --tsz. */
+.panel--deep .team-heads {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  /* Espace au-dessus : la tête (contain, jusqu'en haut du cercle) + le
+     flottement montant ne doivent pas empiéter sur le kicker au-dessus. */
+  margin-top: 22px;
+  --tsz: 190px;
+}
+.panel--deep .team-head {
+  width: var(--tsz);
+  margin: 0;                       /* annule l'overlap d'origine */
+  gap: 12px;
+  /* Flotte comme UN SEUL bloc (photo + anneau + prénom) → une seule couche
+     composée GPU ; les filtres/masques des enfants sont rasterisés UNE fois,
+     pas à chaque frame → animation fluide (avant : photo + anneau animés
+     séparément, avec filtre/masque non compositables = saccades). */
+  will-change: transform;
+  animation: bubbleFloat 6.6s ease-in-out infinite;
+}
+/* Décalage quinconce via `left` (transform laissé libre pour le float) */
+.panel--deep .team-head--a { left: calc(var(--tsz) * -0.34); }
+.panel--deep .team-head--b {
+  left: calc(var(--tsz) * 0.34);
+  animation-duration: 8.2s;
+  animation-delay: -2.6s;
+}
+/* Le cercle-photo : la découpe est recadrée dans le rond, posée sur un disque
+   clair (les zones transparentes de la découpe deviennent ce disque). */
+/* Couche 1 — DISQUE PASTEL (fond de la bulle), derrière la photo */
+.panel--deep .team-head::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; margin: 0 auto;
+  width: var(--tsz); height: var(--tsz);
+  border-radius: 50%;
+  background: linear-gradient(160deg, #e2fbfb 0%, #b9f0f2 100%);
+  box-shadow: 0 16px 34px -14px rgba(6, 60, 74, 0.45);
+  z-index: 0;
+}
+/* Couche 2 — PHOTO dézoomée (contain = buste entier, plus petit que cover) ;
+   le bas se fond dans le disque via un fondu de transparence (pas de flou). */
+.panel--deep .team-head img {
+  position: relative;
+  z-index: 1;
+  width: var(--tsz);
+  height: var(--tsz);
+  border-radius: 50%;
+  object-fit: contain;
+  object-position: 50% 100%;       /* buste posé sur le bas du disque */
+  background: none;
+  filter: contrast(1.07) saturate(1.08);
+  -webkit-mask-image: none;
+          mask-image: none;        /* pas de fondu en bas */
+  /* CRUCIAL : couper l'animation `teamFloat` héritée de la règle de base —
+     sinon la photo flotte EN PLUS du parent → elle sort du liseret et son
+     mouvement diffère de l'anneau. Elle ne bouge plus que via le parent. */
+  animation: none;
+}
+/* Couche 3 — ANNEAU BLANC par-dessus */
+.panel--deep .team-head::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; margin: 0 auto;
+  width: var(--tsz); height: var(--tsz);
+  border-radius: 50%;
+  padding: 3px;
+  background: #ffffff;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-13px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel--deep .team-head { animation: none; }
+}
+.panel--deep .team-head figcaption { color: #fff; }
+@media (max-width: 720px) {
+  /* Colonne visuelle = 280px sous 720px → bulles + décalage doivent tenir
+     dedans (sinon débordement latéral). 150px : left ±51px, tout rentre. */
+  .panel--deep .team-heads { --tsz: 150px; }
+}
+
+/* --- 14. Textes Équipe : les faire ressortir SANS ombre (contraste pur) ---- */
+/* Le TITRE n'est pas touché. Le kicker était à 62% d'opacité (gris délavé sur
+   le cyan) → blanc plein + un poil plus dense ; texte courant en blanc quasi
+   plein pour qu'il « décolle » du fond sans aucune ombre. */
+.panel--deep .team-kicker {
+  color: #fff;
+  font-weight: 700;
+}
+/* :not(.eyebrow) — sinon cette règle (plus spécifique que .panel--deep .eyebrow)
+   repeignait « NEOPURE TEAM » en blanc au lieu du violet. */
+.panel--deep .team-content p:not(.eyebrow) { color: rgba(255, 255, 255, 0.97); }
+.panel--deep .team-content p strong { color: #fff; }
+
+/* --- 15. Bouton d'accueil flottant (.brand-float) — GLOBAL (tout le site) -- */
+/* Pastille VERRE TEAL FONCÉ + logo agrandi : le logo dégradé ressort bien, et
+   ce rendu marche aussi bien sur le magenta que sur le cyan → appliqué partout
+   (choix validé). */
+.brand-float {
+  background: rgba(6, 60, 74, 0.38);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 30px -12px rgba(6, 60, 74, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.brand-float:hover { background: rgba(6, 60, 74, 0.48); }
+.brand-float-logo { height: 46px; }
+@media (max-width: 720px) {
+  .brand-float-logo { height: 36px; }
+}
+
+/* --- 16. Filigranes « N » flottants : les rendre visibles sur le cyan ------ */
+/* Le N dégradé cyan→magenta à 5% se noyait dans le cyan. On le repeint en blanc
+   via un masque (tout le N ressort uniformément) à faible opacité → filigrane
+   discret mais présent, comme côté magenta. Scoped aux sections cyan. */
+.panel--deep .n-float {
+  background: #ffffff;
+  -webkit-mask: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
+          mask: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
+  opacity: 0.13;
+}
+
+/* --- 17. Zone « Ton message » : hauteur fixe, non redimensionnable -------- */
+/* Plus de poignée de redimension ; la zone ne grandit jamais ; un message long
+   défile via une barre interne. Hauteur en clamp() → s'adapte à tout écran
+   (petit mobile → grand écran) sans jamais déborder le panneau. */
+.panel--deep .contact-form textarea {
+  resize: none;
+  height: clamp(92px, 13vh, 128px);
+  min-height: 0;                  /* annule le min-height:110px hérité */
+  overflow-y: auto;               /* texte long → scroll interne */
+}
+
+/* --- 18. Contact en frise : recentrer le bloc formulaire + carte ---------- */
+/* Il était packé à gauche (justify-content par défaut = flex-start) → grand
+   vide à droite. On centre horizontalement dans le panneau (l'axe main est
+   horizontal ; n'affecte pas l'ancrage vertical de sécurité en flex-start). */
+@media (min-width: 1025px) {
+  .h-active .contact .contact-inner { justify-content: center; }
+}
+/* >>> FIN EXPÉRIENCE 2e CHAPITRE NÉGATIF CYAN <<< */
