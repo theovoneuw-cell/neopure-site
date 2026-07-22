@@ -101,5 +101,19 @@
       "desc": "Artiste de musique, fan de visuel et de graphisme, il a l'œil qui transforme vos idées en contenus qui claquent."
     }
   ],
-  "teamOutro": "Ensemble, <strong>on fait briller votre marque</strong> comme vous l'avez toujours voulu, et on crée une communication qui vous ressemble."
+  "teamOutro": "Ensemble, <strong>on fait briller votre marque</strong> comme vous l'avez toujours voulu, et on crée une communication qui vous ressemble.",
+  "content": {
+    "heroSlogan": "Ton algorithme nous kiffe déjà.",
+    "statsHeading": "Ils nous font confiance, <em>on les fait briller</em>.",
+    "galleryHeading": "<span class=\"gradient-text\">Des images qui racontent</span>, des vidéos qui engagent. <span class=\"gallery-heading-strong\">Stop aux contenus sans fonds.</span>",
+    "galleryAccroche": "Financer du contenu sans stratégie revient à crier dans le désert.",
+    "servicesLead": "<span class=\"services-lead-q\">L'algo ?</span> C'est notre pote.",
+    "servicesTitle": "On te <span class=\"gradient-text\">propose</span> quoi ?",
+    "mapEyebrow": "On capte ton audience où qu'elle soit",
+    "mapHeading": "Basés à <span class=\"gradient-text\">Montpellier</span>,<br />on rayonne partout.",
+    "mapText": "Ton audience, on sait où la capter. On scanne, on cible, on fait mouche.",
+    "contactTitle": "Contacte-nous !",
+    "contactNote": "On te répond sous 24 à 48h. Tes infos restent entre nous.",
+    "footerTagline": "Agence de communication &amp; événementiel.<br />On fait briller ta marque, on orchestre tes événements."
+  }
 }

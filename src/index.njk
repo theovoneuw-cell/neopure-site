@@ -345,9 +345,7 @@
           <img class="hero-logo" src="assets/brand/LOGO_SF_BLANC.png" alt="Neopure" />
         </h1>
 
-        <p class="hero-slogan reveal" data-delay="2">
-          Ton algorithme nous kiffe déjà.
-        </p>
+        <p class="hero-slogan reveal" data-delay="2">{{ site.content.heroSlogan | safe }}</p>
 
         <ul class="hero-sectors reveal" data-delay="2" aria-label="Nos deux secteurs">
           <li class="hero-sector hero-sector--com">
@@ -399,9 +397,7 @@
             <span class="hero-tag-bar" aria-hidden="true"></span>
             <span>Confiance <span class="hero-tag-x">×</span> Résultats</span>
           </span>
-          <h2 class="stats-collab-heading">
-            Ils nous font confiance, <em>on les fait briller</em>.
-          </h2>
+          <h2 class="stats-collab-heading">{{ site.content.statsHeading | safe }}</h2>
         </header>
 
         <div class="stats-collab-body">
@@ -452,10 +448,8 @@
     <!-- ====================== GALERIE ====================== -->
     <section class="gallery-section panel" id="realisations" aria-label="Nos réalisations">
       <div class="container">
-        <h2 class="gallery-heading reveal">
-          <span class="gradient-text">Des images qui racontent</span>, des vidéos qui engagent. <span class="gallery-heading-strong">Stop aux contenus sans fonds.</span>
-        </h2>
-        <p class="gallery-accroche reveal" data-delay="1">Financer du contenu sans stratégie revient à crier dans le désert.</p>
+        <h2 class="gallery-heading reveal">{{ site.content.galleryHeading | safe }}</h2>
+        <p class="gallery-accroche reveal" data-delay="1">{{ site.content.galleryAccroche | safe }}</p>
         <!-- Retour client : le bloc de trois phrases empilées faisait lourd. La
              troisième (« Et ce site que tu regardes ? ») est déplacée tout en
              bas de page, dans le pied de page — elle y prend la valeur d'une
@@ -484,8 +478,8 @@
     <section class="services panel" id="services" aria-label="Nos services">
       <span class="n-float n-float--c" aria-hidden="true"></span>
       <div class="container">
-        <p class="services-lead reveal"><span class="services-lead-q">L'algo ?</span> C'est notre pote.</p>
-        <h2 class="services-title reveal" data-delay="1">On te <span class="gradient-text">propose</span> quoi ?</h2>
+        <p class="services-lead reveal">{{ site.content.servicesLead | safe }}</p>
+        <h2 class="services-title reveal" data-delay="1">{{ site.content.servicesTitle | safe }}</h2>
 
         <div class="sectors">
           <!-- ===== SECTEUR 1 : LA COM' ===== -->
@@ -576,7 +570,7 @@
 
       <div class="container contact-inner">
         <div class="contact-form-wrap reveal">
-          <h2 class="contact-title gradient-text">Contacte-nous !</h2>
+          <h2 class="contact-title gradient-text">{{ site.content.contactTitle | safe }}</h2>
           <!-- Envoi principal via Web3Forms (gratuit, sans serveur, fiable) :
                le JS lit la clé publique dans data-w3f-key et POST en AJAX vers
                api.web3forms.com → le message arrive dans neopurecom@gmail.com.
@@ -642,7 +636,7 @@
             </div>
             <p class="form-error" id="formError" role="alert" hidden></p>
             <button type="submit" class="btn btn-primary">Envoyer</button>
-            <p class="form-note">On te répond sous 24 à 48h. Tes infos restent entre nous.</p>
+            <p class="form-note">{{ site.content.contactNote | safe }}</p>
           </form>
         </div>
 
@@ -714,9 +708,9 @@
         <span class="radar-frame" aria-hidden="true"></span>
       </div>
       <div class="map-caption reveal" data-delay="1">
-        <p class="eyebrow">On capte ton audience où qu'elle soit</p>
-        <h2>Basés à <span class="gradient-text">Montpellier</span>,<br />on rayonne partout.</h2>
-        <p class="map-caption-text">Ton audience, on sait où la capter. On scanne, on cible, on fait mouche.</p>
+        <p class="eyebrow">{{ site.content.mapEyebrow | safe }}</p>
+        <h2>{{ site.content.mapHeading | safe }}</h2>
+        <p class="map-caption-text">{{ site.content.mapText | safe }}</p>
         <div class="map-cta">
           <a href="tel:+33611670705" class="btn btn-primary">Appelle-nous</a>
           <a href="https://calendly.com/neopurecom/30min" target="_blank" rel="noopener" class="btn btn-book" data-calendly>Réserver un appel</a>
@@ -734,7 +728,7 @@
         <a href="#top" class="brand">
           <img class="brand-logo" src="assets/brand/LOGO_SF_BLANC.png" alt="Neopure" />
         </a>
-        <p>Agence de communication &amp; événementiel.<br />On fait briller ta marque, on orchestre tes événements.</p>
+        <p>{{ site.content.footerTagline | safe }}</p>
         <div class="footer-socials">
           <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram @neopure_com">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>

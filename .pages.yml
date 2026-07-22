@@ -13,6 +13,11 @@ media:
     input: assets/gallery
     output: /assets/gallery
     extensions: [jpg, jpeg, png, webp, mp4]
+  - name: team-media
+    label: Photos équipe
+    input: assets/team
+    output: /assets/team
+    extensions: [png, jpg, jpeg, webp]
 
 content:
   - name: clients
@@ -71,7 +76,38 @@ content:
           - { name: key, label: Identifiant (ne pas changer), type: string }
           - { name: label, label: Titre, type: string }
           - { name: desc, label: Description, type: text }
-      - name: teamParagraphs
-        label: "Équipe — paragraphes"
-        type: string
+      - name: teamLead
+        label: "Équipe — phrase d'intro"
+        type: text
+      - name: teamMembers
+        label: "Équipe — membres (cards)"
+        type: object
         list: true
+        fields:
+          - { name: name, label: Prénom, type: string }
+          - { name: role, label: "Rôle (ex : Le cerveau & le moteur)", type: string }
+          - { name: photo, label: Photo (tête détourée PNG), type: image, options: { media: team-media } }
+          - { name: desc, label: Description, type: text }
+      - name: teamOutro
+        label: "Équipe — phrase de fin"
+        type: text
+
+      # Textes marketing des sections. ⚠️ Certains contiennent des balises de
+      # mise en forme (ex. <span class="gradient-text">…</span> pour le dégradé,
+      # <em>…</em>, <br />) : les GARDER telles quelles, éditer seulement le texte.
+      - name: content
+        label: Textes principaux
+        type: object
+        fields:
+          - { name: heroSlogan,      label: "Accueil — slogan", type: string }
+          - { name: statsHeading,    label: "Confiance — titre (garder <em>)", type: text }
+          - { name: galleryHeading,  label: "Galerie — titre (garder les <span>)", type: text }
+          - { name: galleryAccroche, label: "Galerie — accroche", type: text }
+          - { name: servicesLead,    label: "Services — accroche (garder le <span>)", type: text }
+          - { name: servicesTitle,   label: "Services — titre (garder le <span>)", type: text }
+          - { name: mapEyebrow,      label: "Carte — sur-titre", type: string }
+          - { name: mapHeading,      label: "Carte — titre (garder <span> et <br />)", type: text }
+          - { name: mapText,         label: "Carte — texte", type: text }
+          - { name: contactTitle,    label: "Contact — titre", type: string }
+          - { name: contactNote,     label: "Contact — note sous le formulaire", type: text }
+          - { name: footerTagline,   label: "Pied de page — description (garder <br />)", type: text }
