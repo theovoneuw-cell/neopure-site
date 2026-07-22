@@ -892,13 +892,7 @@ section { position: relative; }
 .map-panel   > .deco-pill--c { top: 62%; left: -6%;  transform: rotate(-3deg); }
 .site-footer > .deco-pill--e { top: 14%; left: 42%;  transform: rotate(2deg); }
 @media (max-width: 1300px) { .deco-pill { display: none; } }
-@media (prefers-reduced-motion: no-preference) {
-  .deco-pill { animation: decoFloat 6.4s ease-in-out infinite; }
-  .contact > .deco-pill--d { animation-duration: 7.4s; animation-delay: -2s; }
-  .map-panel > .deco-pill--c { animation-duration: 7s; animation-delay: -1.4s; }
-  .site-footer > .deco-pill--e { animation-duration: 6.8s; animation-delay: -1s; }
-}
-@keyframes decoFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+/* Pastilles FIGÉES (retour client) : plus d'animation flottante. */
 
 /* 7a. STATS + COLLABORATIONS ---------------------------------------------- */
 .stats-collab { padding: 96px 0; background: var(--np-white); }
@@ -4539,7 +4533,11 @@ html.np-reveal .hero-top .hero-tag {
      un dégradé DOUX (quasi uni) → aucune couture sur tous les navigateurs. */
   .panel--deep::before {
     background-attachment: scroll;
-    background-image: linear-gradient(180deg, #201334 0%, #4e3a74 100%);
+    /* Mobile : sections EMPILÉES → un dégradé marqué recommence à chaque section
+       (coutures visibles à chaque frontière). On repasse à un dégradé DOUX,
+       quasi uni → continu à l'œil, plus aucune rupture entre sections.
+       (Le desktop/frise garde le dégradé marqué qui s'éclaircit vers le bas.) */
+    background-image: linear-gradient(180deg, #241638 0%, #2b1a44 100%);
   }
 }
 
