@@ -189,17 +189,33 @@
     }
 
     function showSuccess(nom) {
+      var prenom = nom ? nom.trim().split(" ")[0] : "";
+      // Le prénom vient d'une saisie libre → on échappe avant l'injection HTML.
+      var safe = prenom.replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
       var ok = document.createElement("div");
       ok.className = "form-success";
       ok.setAttribute("role", "status");
-      var h = document.createElement("h3");
-      var prenom = nom ? nom.trim().split(" ")[0] : "";
-      h.textContent = prenom ? "Merci " + prenom + " !" : "Merci !";
-      var p = document.createElement("p");
-      p.textContent = "On a bien reçu ton message. On te recontacte très vite — promis.";
-      ok.appendChild(h);
-      ok.appendChild(p);
+      ok.setAttribute("tabindex", "-1");
+      ok.innerHTML =
+        '<span class="fs-badge" aria-hidden="true">' +
+          '<svg viewBox="0 0 52 52">' +
+            '<defs><linearGradient id="fsGrad" x1="0" y1="0" x2="1" y2="1">' +
+              '<stop offset="0" stop-color="#35F2F2"/><stop offset="1" stop-color="#BC6BF2"/>' +
+            '</linearGradient></defs>' +
+            '<circle class="fs-ring" cx="26" cy="26" r="24"/>' +
+            '<path class="fs-check" d="M16 27l7 7 13-14"/>' +
+          '</svg>' +
+        '</span>' +
+        '<h3 class="fs-title">' +
+          (safe ? 'Merci <span class="fs-name">' + safe + "</span> !" : "Merci !") +
+        "</h3>" +
+        '<p class="fs-text">On a bien reçu ton message.<br>On te recontacte sous ' +
+          "<b>24 à 48 h</b> — promis.</p>";
       form.replaceWith(ok);
+      // On pose le focus sur le bloc : le lecteur d'écran annonce la confirmation.
+      if (ok.focus) { try { ok.focus(); } catch (e) {} }
     }
 
     /* Envoi n°1 : Web3Forms. Payload construit à la main : les champs

@@ -1928,18 +1928,66 @@ section { position: relative; }
   color: #fff;
 }
 
-/* Confirmation après envoi (remplace le formulaire) */
+/* Confirmation après envoi (remplace le formulaire).
+   Carte sombre autonome : le fond garantit le contraste quel que soit ce qui
+   passe derrière (l'ancien titre en dégradé disparaissait sur le cyan). */
 .form-success {
-  padding: 30px 0;
+  text-align: center;
+  padding: clamp(30px, 5vw, 46px) clamp(22px, 4vw, 34px);
+  background: rgba(19, 16, 32, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 22px;
+  box-shadow: 0 26px 70px -34px rgba(0, 0, 0, 0.85);
+  outline: none;
+  animation: fs-in 0.55s var(--ease) both;
 }
-.form-success h3 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  margin-bottom: 10px;
+@keyframes fs-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Pastille de coche : anneau dégradé + coche blanche qui se dessinent */
+.fs-badge { display: inline-flex; margin-bottom: 18px; }
+.fs-badge svg { width: clamp(64px, 14vw, 78px); height: clamp(64px, 14vw, 78px); }
+.fs-ring {
+  fill: none; stroke: url(#fsGrad); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 151; stroke-dashoffset: 151;
+  transform: rotate(-90deg); transform-origin: 50% 50%;
+  animation: fs-draw 0.7s var(--ease) 0.08s forwards;
+}
+.fs-check {
+  fill: none; stroke: #fff; stroke-width: 4;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 40; stroke-dashoffset: 40;
+  animation: fs-draw 0.42s var(--ease) 0.62s forwards;
+}
+@keyframes fs-draw { to { stroke-dashoffset: 0; } }
+
+.fs-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 5.2vw, 2.15rem);
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin: 0 0 10px;
+}
+.fs-name {
   background: var(--grad-brand);
   -webkit-background-clip: text; background-clip: text;
   color: transparent;
 }
-.form-success p { color: rgba(255, 255, 255, 0.72); margin: 0; max-width: 42ch; }
+.fs-text {
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.65;
+  max-width: 34ch;
+  margin: 0 auto;
+}
+.fs-text b { color: #fff; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .form-success { animation: none; }
+  .fs-ring, .fs-check { animation: none; stroke-dashoffset: 0; }
+}
 
 .contact-info {
   position: relative;
